@@ -42,7 +42,7 @@ export const NotificationProvider = ({children}) => {
     });
 
 
-    const showNotification = ({message, severity = 'info', duration = 900000}) => {
+    const showNotification = ({message, severity = 'info', duration = 9000}) => {
         setNotification({
             open: true,
             message,
@@ -59,40 +59,35 @@ export const NotificationProvider = ({children}) => {
         setNotification((prev) => ({...prev, open: false}));
     };
 
-
-    const smallStyle = {
-        marginBottom: 7,
-    }
-
-    const bigStyle = {
-        marginTop: 7,
-    }
-
-    const showWarn = (warning) => {
+    const showWarn = (warning, duration=9000) => {
         showNotification({
             message: warning,
             severity: 'warning',
+            duration: duration
         })
     }
 
-    const showInfo = (info) => {
+    const showInfo = (info, duration=9000) => {
         showNotification({
             message: info,
             severity: 'info',
+            duration: duration
         })
     }
 
-    const showSuccess = (success) => {
+    const showSuccess = (success, duration=9000) => {
         showNotification({
             message: success,
             severity: 'success',
+            duration: duration
         })
     }
 
-    const showError = (error) => {
+    const showError = (error, duration=9000) => {
         showNotification({
             message: error,
             severity: 'error',
+            duration: duration
         })
     }
 
@@ -100,19 +95,15 @@ export const NotificationProvider = ({children}) => {
         <NotificationContext.Provider value={{showNotification, showWarn, showInfo, showSuccess, showError}}>
             {children}
 
-            {/* Snackbar с уведомлением */}
             <Snackbar
                 open={notification.open}
-
-                // onClose={closeNotification}
+                onClose={closeNotification}
                 anchorOrigin={{vertical:'bottom' , horizontal: 'right'}}
                 TransitionComponent={SlideTransition}
             >
-
                 <Alert
                     variant='filled'
-
-                    // onClose={closeNotification}
+                    onClose={closeNotification}
                     severity={notification.severity}
                     sx={{
                         backdropFilter: 'blur(5px)',

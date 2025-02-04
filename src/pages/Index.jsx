@@ -1,11 +1,8 @@
-import reactLogo from "./assets/react.svg";
-import {Box, Button, Card, Container, Paper} from "@mui/material";
-import {useCustomThemeContext} from "./context/GlobalThemeContext/CustomThemeProvider.jsx";
+import {Card, Container} from "@mui/material";
 import {useState} from "react";
 
-export default function Test() {
+export default function Index() {
 
-    const {toggleTheme} = useCustomThemeContext();
     const [count, setCount] = useState(0);
 
     return (
@@ -95,25 +92,10 @@ export default function Test() {
                         q q q q q q q q q q q q q
 
                     </p>
-                    <a href="https://vite.dev" target="_blank">
 
-                    </a>
-                    <a href="https://react.dev" target="_blank">
-                        <img src={reactLogo} className="logo react" alt="React logo"/>
-                    </a>
                 </div>
                 <h1>Vite + React</h1>
                 <div className="card">
-
-                    <Button onClick={() => toggleTheme()}>here</Button>
-
-                    <Box
-                        sx={(theme) => ({
-                            backgroundColor: 'okra.light'
-                        })}
-                    >
-                        Responsive Hover
-                    </Box>
 
 
                     <button onClick={() => setCount((count) => count + 1)}>

@@ -9,6 +9,8 @@ import ValidatedAvatarInput from "../components/InputElements/AvatarInput/Valida
 import ValidatedPasswordConfirmField from "../components/InputElements/TextField/ValidatedPasswordConfirmField.jsx";
 import {CircularLoading} from "../components/Loading/CircularLoading/CircularLoading.jsx";
 import {useNotification} from "../context/Notification/NotificationProvider.jsx";
+import {sendRegistrationForm} from "../services/fetch/unauth/SendRegistrationForm.js";
+import ConflictException from "../exception/ConflictException.jsx";
 
 
 export const SignUp = () => {
@@ -26,7 +28,7 @@ export const SignUp = () => {
     const [registrationLoading, setRegistrationLoading] = useState(false);
     const navigate = useNavigate();
 
-    const {showNotification,showSuccess, showError,showWarn, showInfo} = useNotification();
+    const { showError, showWarn, showSuccess} = useNotification();
     const handleSubmit = async () => {
         if (usernameError || passwordError || confirmPasswordError) {
             return;
@@ -39,26 +41,29 @@ export const SignUp = () => {
         };
 
         try {
-            // setRegistrationLoading(true);
-            // await sendRegistrationForm(requestData);
-            //
-            // navigate("/weather-app/login");
-            //
-            // showNotification({
-            //     message: "You've successfully signed up. Now you can log in to your account.",
-            //     severity: "success"
-            // });
-            showError("test dsf sfdfs fsd sdaf sfasd asdf saf ");
+            setRegistrationLoading(true);
+            await sendRegistrationForm(requestData);
+
+            navigate("/cloud-storage/login");
+
+            showSuccess("You've successfully signed up. Now you can log in to your account.");
 
         } catch (error) {
+            console.log(error);
             switch (true) {
+                case error instanceof ConflictException:
+                    showWarn(error.message);
+                    setUsernameError(error.message);
+                    break;
+
                 // case error instanceof UserAlreadyExistException:
                 //     setUsernameError(error.message);
                 //     break;
 
                 default:
+                    showError("Failed to sign up! Try again please.");
                     console.log('Unknown error occurred! ');
-                    // window.location.reload();
+                // window.location.reload();
             }
         }
         setRegistrationLoading(false);
@@ -102,7 +107,6 @@ export const SignUp = () => {
                 Sign up
             </Typography>
             <form onSubmit={handleSubmit}>
-
 
 
                 <Box

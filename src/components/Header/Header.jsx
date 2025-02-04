@@ -7,13 +7,12 @@ import Typography from "@mui/material/Typography";
 import SearchIcon from '@mui/icons-material/Search';
 import {InputSearch} from "./InputSearch.jsx";
 import {RegistrationSettings} from "./RegistrationSettings.jsx";
+import {useAuthContext} from "../../context/Auth/AuthContext.jsx";
 
-
-function SearchRoundedIcon() {
-    return null;
-}
 
 export default function Header() {
+
+    const {auth} = useAuthContext();
 
 
     return (
@@ -31,21 +30,19 @@ export default function Header() {
                 height: "64px",
             }}
         >
-<Container disableGutters>
-            <Toolbar sx={{height: "65px",}} disableGutters>
-                <MainLabel/>
+            <Container disableGutters>
+                <Toolbar sx={{height: "65px",}} disableGutters>
+                    <MainLabel/>
 
-                <Box sx={{flexGrow: 1, height: 1}}/>
+                    <Box sx={{flexGrow: 1, height: 1}}/>
 
-                <InputSearch/>
+                    {auth.isAuthenticated && <InputSearch/>}
 
-                <DarkModeSwitcher/>
+                    <DarkModeSwitcher/>
 
-                {/*<AccountSettings/>*/}
-                <RegistrationSettings/>
-
-            </Toolbar>
-</Container>
+                    {auth.isAuthenticated ? <AccountSettings/> : <RegistrationSettings/>}
+                </Toolbar>
+            </Container>
         </AppBar>
     )
 };

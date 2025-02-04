@@ -1,6 +1,6 @@
-import UserNotFoundException from "./UserNotFoundException.jsx";
+import UnauthorizedException from "./UnauthorizedException.jsx";
 import IncorrectPasswordException from "./IncorrectPasswordException.jsx";
-import UserAlreadyExistException from "./UserAlreadyExistException.jsx";
+import ConflictException from "./ConflictException.jsx";
 import SessionNotFoundException from "./SessionNotFoundException.jsx";
 import WeatherApiException from "./WeatherApiException.jsx";
 import LocationAlreadySavedException from "./LocationAlreadySavedException.jsx";
@@ -8,26 +8,11 @@ import LocationAlreadySavedException from "./LocationAlreadySavedException.jsx";
 
 export const throwSpecifyException = (error) => {
 
-    switch (error.title) {
-        case 'UserNotFoundException':
-            throw new UserNotFoundException(error.detail);
-        case 'IncorrectPasswordException':
-            throw new IncorrectPasswordException(error.detail);
-
-        case 'UserAlreadyExistsException':
-            throw new UserAlreadyExistException(error.detail);
-
-        case 'SessionNotFoundException':
-            throw new SessionNotFoundException(error.detail);
-
-        case 'MissingServletRequestParameterException':
-        case 'OpenWeatherApiException':
-            throw new WeatherApiException(error.detail);
-
-        case 'LocationAlreadySavedException':
-            throw new LocationAlreadySavedException(error.detail);
-
-
+    switch (error.status) {
+        case 401:
+            throw new UnauthorizedException(error.detail);
+        case 409:
+            throw new ConflictException(error.detail);
         default:
             throw new Error('Unknown error');
     }

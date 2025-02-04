@@ -5,12 +5,10 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import * as React from "react";
 import {useState} from "react";
-import FormLabel from "@mui/material/FormLabel";
-import {CircularProgress, Divider, FormHelperText} from "@mui/material";
+import {Divider, FormHelperText} from "@mui/material";
 import {uploadAvatar} from "../../../services/fetch/unauth/UploadAvatar.js";
 import {CircularLoading} from "../../Loading/CircularLoading/CircularLoading.jsx";
-// import {uploadAvatar} from "../../../services/fetch/unauth/UploadAvatar.js";
-// import {useNotification} from "../../../context/Notification/NotificationProvider.jsx";
+import {useNotification} from "../../../context/Notification/NotificationProvider.jsx";
 
 
 export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '', avatarLoading, setAvatarLoading}) {
@@ -18,7 +16,8 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
     const [avatarError, setAvatarError] = useState(false);
     const [avatarErrorMessage, setAvatarErrorMessage] = useState('');
 
-    // const {showWarn} = useNotification();
+    const { showError, showSuccess} = useNotification();
+
 
     const validateAvatar = (file) => {
         const acceptedFileTypes = ["image/jpeg", "image/png", "image/jpg"];
@@ -58,16 +57,18 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                 setAvatarError(false)
                 setAvatarErrorMessage('')
                 console.log(avatar);
+                showSuccess("Avatar uploaded successfully.", 5000);
             } catch (error) {
                 console.log(error.message);
                 setAvatarError(true);
                 setAvatarErrorMessage('Failed to upload avatar');
-                // showWarn('Failed to upload avatar');
+                showError('Failed to upload avatar', 5000);
+                handleDeleteAvatar();
+                setAvatarLoading(false);
             }
         }
 
         setTimeout(() => {setAvatarLoading(false);}, 3500);
-        // setAvatarLoading(false);
     };
 
     const handleDeleteAvatar = () => {

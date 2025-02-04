@@ -8,6 +8,7 @@ export const checkSession = async () => {
         method: 'GET',
         credentials: 'include'
     });
+    console.log('Checking session');
 
     if (!response.ok) {
         const error = await response.json();

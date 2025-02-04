@@ -1,6 +1,10 @@
 import {Avatar, Box, Divider, Drawer, IconButton, ListItemIcon, Menu, MenuItem, Slide, Tooltip} from "@mui/material";
 import {Logout, PersonAdd, Settings, AccountCircle, Help, GitHub} from "@mui/icons-material";
 import {useState} from "react";
+import {sendLogout} from "../../services/fetch/auth/SendLogout.js";
+import {useAuthContext} from "../../context/Auth/AuthContext.jsx";
+import {useNavigate} from "react-router-dom";
+import {useNotification} from "../../context/Notification/NotificationProvider.jsx";
 
 
 export const AccountSettings = () => {
@@ -13,6 +17,31 @@ export const AccountSettings = () => {
         setAnchorEl(null);
     };
 
+    const {auth, logout} = useAuthContext();
+    const navigate = useNavigate();
+    const {showInfo, showWarn} = useNotification();
+
+
+    const [loading, setLoading] = useState(false);
+
+    const handleLogout = async () => {
+
+        try {
+            setLoading(true);
+            await sendLogout();
+            logout();
+            setTimeout(() => {
+                navigate("/cloud-storage/login");
+                showInfo("You've successfully logged out.", 4000);
+            }, 400);
+
+
+            handleCloseUserMenu()
+        } catch (error) {
+            console.log('Unknown error occurred! ');
+        }
+        setLoading(false);
+    }
 
     const menuItems = () => {
 
@@ -43,7 +72,7 @@ export const AccountSettings = () => {
                     Source code
                 </MenuItem>
                 <Divider/>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
                         <Logout fontSize="small"/>
                     </ListItemIcon>
@@ -118,7 +147,7 @@ export const AccountSettings = () => {
                 PaperProps={{
                     elevation: 0,
                     sx: {
-                    // Для Safari
+                        // Для Safari
                         backdropFilter: 'blur(5px)',
                         WebkitBackdropFilter: 'blur(5px)', // Для Safari
                         border: '1px solid',
@@ -145,7 +174,11 @@ export const AccountSettings = () => {
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                     >
-                        <Avatar sx={{width: 32, height: 32, fontWeight: "400", fontSize: "17px"}}>Ma</Avatar>
+                        <Avatar sx={{width: 32, height: 32, fontWeight: "400", fontSize: "17px"}}
+                                alt={auth.user.username}
+                                style={{width: 42, height: 42}}
+                                src={auth.user.avatarUrl}
+                        > {auth.user.username.slice(0, 3)}</Avatar>
                     </IconButton>
                 </Tooltip>
             </Box>

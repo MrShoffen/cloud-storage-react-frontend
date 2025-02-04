@@ -5,10 +5,14 @@ import ValidatedUsernameTextField from "../components/InputElements/TextField/Va
 import ValidatedPasswordField from "../components/InputElements/TextField/ValidatedPasswordField.jsx";
 import AnimatedElement from "../components/InputElements/AnimatedElement.jsx";
 import {useNavigate} from "react-router-dom";
+import {sendLoginForm} from "../services/fetch/unauth/SendLoginForm.js";
+import {useAuthContext} from "../context/Auth/AuthContext.jsx";
+import {useNotification} from "../context/Notification/NotificationProvider.jsx";
+import UnauthorizedException from "../exception/UnauthorizedException.jsx";
 
 
 export const SignIn = () => {
-    // const {login} = useAuthContext();
+    const {login} = useAuthContext();
 
     const [username, setUsername] = useState('');
     const [usernameError, setUsernameError] = useState('');
@@ -18,7 +22,7 @@ export const SignIn = () => {
 
     const [loading, setloading] = useState(false);
 
-    // const {showNotification, showWarn} = useNotification();
+    const {showError, showInfo, showWarn} = useNotification();
 
 
     const handleSubmit = async () => {
@@ -33,24 +37,20 @@ export const SignIn = () => {
 
         try {
             setloading(true);
-            // const profile = await sendLoginForm(requestData);
-            // login(profile);
-            // showNotification({ message: "You've successfully logged in", severity: "info", duration: 2000 });
+            const profile = await sendLoginForm(requestData);
+            console.log(profile);
+            login(profile);
+            showInfo("You've successfully logged in", 4000);
         } catch (error) {
             switch (true) {
-                // case error instanceof UserNotFoundException:
-                //     setUsernameError(error.message);
-                //     break;
-                // case error instanceof IncorrectPasswordException:
-                //     console.log(error.message);
-                //     setPasswordError(error.message);
-                //     break;
-                // case error instanceof SessionNotFoundException:
-                //     console.log(error.message);
-                //     await handleSubmit();
-                //     break;
-                // default:
-                //     showWarn("Failed to log in! Try again please.");
+                case error instanceof UnauthorizedException:
+                    showWarn(error.message);
+                    setUsernameError(error.message);
+                    break;
+                default:
+                    showError("Failed to sign up! Try again please.");
+                    console.log('Unknown error occurred! ');
+
             }
         }
         setloading(false);
@@ -84,14 +84,14 @@ export const SignIn = () => {
                   },
                   margin: 'auto',
 
-                  height:  shouldShowPasswordField ? '335px' : '240px',
+                  height: shouldShowPasswordField ? '335px' : '240px',
                   transition: 'height 0.5s ease',
               }}>
 
             <Typography
                 component="h1"
                 variant="h4"
-                sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)',  textAlign: 'center'}}
+                sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)', textAlign: 'center'}}
             >
                 Sign in
             </Typography>
@@ -167,8 +167,6 @@ export const SignIn = () => {
                         </Typography>
 
                     </Zoom>
-
-
 
 
                 </Box>

@@ -1,10 +1,14 @@
 import './App.css'
-import Test from "./Test.jsx";
+
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {BaseLayout} from "./pages/BaseLayout.jsx";
 import {GlobalProvider} from "./context/GlobalProvider.jsx";
 import {SignIn} from "./pages/SignIn.jsx";
 import {SignUp} from "./pages/SignUp.jsx";
+import Index from "./pages/Index.jsx";
+import UnavailableAfterLoginRoute from "./context/Auth/UnavailableAfterLoginRoute.jsx";
+import AvailableAfterLoginRoute from "./context/Auth/AvailableAfterLoginRoute.jsx";
+import Files from "./pages/Files.jsx";
 
 function App() {
 
@@ -13,10 +17,33 @@ function App() {
             <GlobalProvider>
                 <Routes>
                     <Route path="cloud-storage" element={<BaseLayout/>}>
-                        <Route index element={<Test/>}/>
+                        <Route index element={<Index/>}/>
 
-                        <Route path="login" element={<SignIn/>}/>
-                        <Route path="registration" element={<SignUp/>}/>
+
+                        {/*available before login only*/}
+                        <Route path="login"
+                               element={
+                                   <UnavailableAfterLoginRoute>
+                                       <SignIn/>
+                                   </UnavailableAfterLoginRoute>
+                               }/>
+
+                        <Route path="registration"
+                               element={
+                                   <UnavailableAfterLoginRoute>
+                                       <SignUp/>
+                                   </UnavailableAfterLoginRoute>
+                               }/>
+
+                        {/*available after login only*/}
+
+                        <Route path="home"
+                               element={
+                                   <AvailableAfterLoginRoute>
+                                       <Files/>
+                                   </AvailableAfterLoginRoute>
+                               }/>
+
                     </Route>
                 </Routes>
             </GlobalProvider>
