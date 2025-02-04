@@ -36,20 +36,23 @@ export const CustomThemeProvider = ({children}) => {
                     MuiButton: {
                         styleOverrides: {
                             root: {
-                                '&.MuiButton-contained': {
-                                    backgroundImage: isDarkMode ? 'linear-gradient(90deg, rgba(28,73,163,1) 0%, rgba(16,113,175,1) 100%)' : 'linear-gradient(90deg, #2760d3,#1283ca)',
-                                    textShadow: 'rgba(0, 0, 0, 0.25) 0 3px 8px',
-                                    color: '#FFFFFF',
-                                    '&:hover': {
-                                        boxShadow: 'rgba(80, 63, 205, 0.5) 0 1px 20px',
-                                    }
+                                '&:not(.MuiButton-loading)': {
+                                    '&.MuiButton-contained': {
+                                        backgroundImage: isDarkMode ? 'linear-gradient(90deg, rgba(28,73,163,1) 0%, rgba(16,113,175,1) 100%)' : 'linear-gradient(90deg, #2760d3,#1283ca)',
+                                        textShadow: 'rgba(0, 0, 0, 0.25) 0 3px 8px',
+                                        color: '#FFFFFF',
+                                        '&:hover': {
+                                            boxShadow: 'rgba(80, 63, 205, 0.5) 0 1px 20px',
+                                        }
 
-                                },
-                                '&:focus': {outline: 'none'},
+                                    },
+                                    '&:focus': {outline: 'none'},
+                                }
                             }
                         }
                     }
                 },
+
                 palette: {
                     mode: isDarkMode ? 'dark' : 'light',
                     header: isDarkMode ? "rgba(15, 18, 20, 0.8)" : "rgba(240,240,240,0.5)",
@@ -58,8 +61,6 @@ export const CustomThemeProvider = ({children}) => {
                     background: {
                         default: isDarkMode ? 'black' : 'white',
                     },
-
-
                 },
             }),
         [isDarkMode]

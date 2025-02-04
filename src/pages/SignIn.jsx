@@ -91,7 +91,7 @@ export const SignIn = () => {
             <Typography
                 component="h1"
                 variant="h4"
-                sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}
+                sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)',  textAlign: 'center'}}
             >
                 Sign in
             </Typography>
@@ -143,9 +143,6 @@ export const SignIn = () => {
                     <Zoom
                         in={!shouldShowButton}
                         timeout={300}
-
-                        unmountOnExit
-                        mountOnEnter
                     >
 
                         <Typography
@@ -153,11 +150,10 @@ export const SignIn = () => {
                             component="p"
                             sx={{
                                 position: 'absolute',
-                                // transform: 'translateX(-50%)',
-                                // left: '50%',
                                 left: 0,
                                 width: '100%',
-                                bottom: 10
+                                bottom: 10,
+                                textAlign: 'center'
                             }}
 
                         >

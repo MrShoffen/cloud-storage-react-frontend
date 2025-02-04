@@ -7,14 +7,16 @@ import * as React from "react";
 import {useState} from "react";
 import FormLabel from "@mui/material/FormLabel";
 import {CircularProgress, Divider, FormHelperText} from "@mui/material";
+import {uploadAvatar} from "../../../services/fetch/unauth/UploadAvatar.js";
+import {CircularLoading} from "../../Loading/CircularLoading/CircularLoading.jsx";
 // import {uploadAvatar} from "../../../services/fetch/unauth/UploadAvatar.js";
 // import {useNotification} from "../../../context/Notification/NotificationProvider.jsx";
 
 
 export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '', avatarLoading, setAvatarLoading}) {
     const [avatarPreview, setAvatarPreview] = useState(initialAvatarUrl || null);
-    const [avatarError, setAvatarError] = React.useState(false);
-    const [avatarErrorMessage, setAvatarErrorMessage] = React.useState('');
+    const [avatarError, setAvatarError] = useState(false);
+    const [avatarErrorMessage, setAvatarErrorMessage] = useState('');
 
     // const {showWarn} = useNotification();
 
@@ -51,10 +53,11 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
             formData.append('image', file);
 
             try {
-                // const avatar = await uploadAvatar(formData);
-                // setAvatarUrl(avatar.imageUrl);
+                const avatar = await uploadAvatar(formData);
+                setAvatarUrl(avatar.imageUrl);
                 setAvatarError(false)
                 setAvatarErrorMessage('')
+                console.log(avatar);
             } catch (error) {
                 console.log(error.message);
                 setAvatarError(true);
@@ -63,7 +66,8 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
             }
         }
 
-        setAvatarLoading(false);
+        setTimeout(() => {setAvatarLoading(false);}, 3500);
+        // setAvatarLoading(false);
     };
 
     const handleDeleteAvatar = () => {
@@ -88,14 +92,16 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                         width: 70,
                         height: 70,
                         position: "relative",
-                        border: avatarPreview ? "none" : "2px dashed #bbb",
+                        border: avatarPreview ? "2px solid" : "2px dashed",
+                        borderColor: avatarPreview ? "divider" : "#bbb",
                         justifyContent: "center",
-                        borderRadius: "6px",
+                        borderRadius: 2,
                         backgroundColor: avatarPreview ? "#fff" : "transparent",
+                        textAlign: 'center',
 
                         "&:hover": {
                             cursor: "pointer",
-                            borderColor: 'text.primary',
+                            borderColor: avatarPreview ? "divider" : "text.primary",
                             "& > label > svg": {
                                 color: 'text.primary',
                                 cursor: "pointer",
@@ -120,9 +126,11 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                             <AddIcon
                                 sx={{
                                     fontSize: 42,
+                                    height: 58,
+                                    width: 58,
                                     color: "#bbb",
                                     alignItems: "center",
-                                    marginTop: "12px",
+                                    marginTop: "3px",
 
                                 }}
                             />
@@ -139,9 +147,16 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                                         borderRadius: "6px"
                                     }}
                                 />
-                                {avatarLoading &&
-                                    <CircularProgress size={50} sx={{top: 10, left: 10, position: "absolute"}}/>
-                                }
+
+                                <Box
+                                    sx={{
+                                        position: 'absolute',
+                                        top: 3,
+                                        left: 3
+                                    }}
+                                >
+                                    <CircularLoading loading={avatarLoading} />
+                                </Box>
                             </>
                         )}
 
@@ -181,7 +196,7 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
             >
                 {avatarErrorMessage}
             </FormHelperText>
-<Divider/>
+            <Divider/>
         </FormControl>
     )
 }

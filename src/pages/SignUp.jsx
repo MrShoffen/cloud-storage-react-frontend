@@ -7,6 +7,8 @@ import AnimatedElement from "../components/InputElements/AnimatedElement.jsx";
 import {useNavigate} from "react-router-dom";
 import ValidatedAvatarInput from "../components/InputElements/AvatarInput/ValidatedAvatarInput.jsx";
 import ValidatedPasswordConfirmField from "../components/InputElements/TextField/ValidatedPasswordConfirmField.jsx";
+import {CircularLoading} from "../components/Loading/CircularLoading/CircularLoading.jsx";
+import {useNotification} from "../context/Notification/NotificationProvider.jsx";
 
 
 export const SignUp = () => {
@@ -24,7 +26,7 @@ export const SignUp = () => {
     const [registrationLoading, setRegistrationLoading] = useState(false);
     const navigate = useNavigate();
 
-    // const {showNotification} = useNotification();
+    const {showNotification,showSuccess, showError,showWarn, showInfo} = useNotification();
     const handleSubmit = async () => {
         if (usernameError || passwordError || confirmPasswordError) {
             return;
@@ -45,7 +47,8 @@ export const SignUp = () => {
             // showNotification({
             //     message: "You've successfully signed up. Now you can log in to your account.",
             //     severity: "success"
-            // })
+            // });
+            showError("test dsf sfdfs fsd sdaf sfasd asdf saf ");
 
         } catch (error) {
             switch (true) {
@@ -55,7 +58,7 @@ export const SignUp = () => {
 
                 default:
                     console.log('Unknown error occurred! ');
-                    window.location.reload();
+                    // window.location.reload();
             }
         }
         setRegistrationLoading(false);
@@ -94,11 +97,12 @@ export const SignUp = () => {
             <Typography
                 component="h1"
                 variant="h4"
-                sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}
+                sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)', textAlign: 'center'}}
             >
                 Sign up
             </Typography>
             <form onSubmit={handleSubmit}>
+
 
 
                 <Box
@@ -155,7 +159,10 @@ export const SignUp = () => {
                                 fullWidth
                                 type="submit"
                                 variant="contained"
-                                onClick={handleSubmit}
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    handleSubmit()
+                                }}
                                 loading={registrationLoading || avatarLoading}
                                 loadingPosition="center"
                             >
@@ -168,9 +175,6 @@ export const SignUp = () => {
                     <Zoom
                         in={!shouldShowButton}
                         timeout={300}
-
-                        unmountOnExit
-                        mountOnEnter
                     >
                         <Typography
                             variant="body1"
@@ -179,7 +183,8 @@ export const SignUp = () => {
                                 position: 'absolute',
                                 left: 0,
                                 width: '100%',
-                                bottom: 10
+                                bottom: 10,
+                                textAlign: 'center'
                             }}
 
                         >

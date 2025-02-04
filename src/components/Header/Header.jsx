@@ -6,6 +6,7 @@ import MainLabel from "./MainLabel.jsx";
 import Typography from "@mui/material/Typography";
 import SearchIcon from '@mui/icons-material/Search';
 import {InputSearch} from "./InputSearch.jsx";
+import {RegistrationSettings} from "./RegistrationSettings.jsx";
 
 
 function SearchRoundedIcon() {
@@ -40,7 +41,8 @@ export default function Header() {
 
                 <DarkModeSwitcher/>
 
-                <AccountSettings/>
+                {/*<AccountSettings/>*/}
+                <RegistrationSettings/>
 
             </Toolbar>
 </Container>
