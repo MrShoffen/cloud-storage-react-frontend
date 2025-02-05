@@ -16,7 +16,7 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
     const [avatarError, setAvatarError] = useState(false);
     const [avatarErrorMessage, setAvatarErrorMessage] = useState('');
 
-    const { showError, showSuccess} = useNotification();
+    const {showError, showSuccess} = useNotification();
 
 
     const validateAvatar = (file) => {
@@ -38,9 +38,9 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
     }
 
     const handleAvatarChange = async (e) => {
-        setAvatarLoading(true);
         const file = e.target.files[0];
         if (file && validateAvatar(file)) {
+            setAvatarLoading(true);
 
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -57,18 +57,21 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                 setAvatarError(false)
                 setAvatarErrorMessage('')
                 console.log(avatar);
-                showSuccess("Avatar uploaded successfully.", 5000);
+                setTimeout(() => {
+                    setAvatarLoading(false);
+                    showSuccess("Avatar uploaded successfully.", 5000);
+                }, 3500);
             } catch (error) {
                 console.log(error.message);
                 setAvatarError(true);
                 setAvatarErrorMessage('Failed to upload avatar');
-                showError('Failed to upload avatar', 5000);
                 handleDeleteAvatar();
-                setAvatarLoading(false);
+                setTimeout(() => {
+                    setAvatarLoading(false);
+                    showError('Failed to upload avatar', 5000);
+                }, 3500);
             }
         }
-
-        setTimeout(() => {setAvatarLoading(false);}, 3500);
     };
 
     const handleDeleteAvatar = () => {
@@ -78,9 +81,7 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
 
 
     return (
-        <FormControl style={{marginBottom: 10, marginTop: 5}}
-                     variant='outlined'
-        >
+        <Box sx={{pb: 1, position: 'relative'}}>
             <Box
                 sx={{
                     display: "flex",
@@ -156,7 +157,7 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                                         left: 3
                                     }}
                                 >
-                                    <CircularLoading loading={avatarLoading} />
+                                    <CircularLoading loading={avatarLoading}/>
                                 </Box>
                             </>
                         )}
@@ -188,16 +189,10 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                 </Box>
             </Box>
 
-            <FormHelperText
-                error={avatarError}
-                sx={{
-                    mt: 1,
-                    color: avatarError ? 'error.main' : 'text.secondary',
-                }}
-            >
+            <FormHelperText error={avatarError}
+                            sx={{position: 'absolute', width: '100%', textAlign: 'center', bottom: -10}}>
                 {avatarErrorMessage}
             </FormHelperText>
-            <Divider/>
-        </FormControl>
+        </Box>
     )
 }

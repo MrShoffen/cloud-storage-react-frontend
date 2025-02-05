@@ -34,9 +34,6 @@ export const AccountSettings = () => {
                 navigate("/cloud-storage/login");
                 showInfo("You've successfully logged out.", 4000);
             }, 400);
-
-
-            handleCloseUserMenu()
         } catch (error) {
             console.log('Unknown error occurred! ');
         }

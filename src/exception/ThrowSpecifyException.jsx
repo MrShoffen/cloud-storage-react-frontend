@@ -1,9 +1,5 @@
 import UnauthorizedException from "./UnauthorizedException.jsx";
-import IncorrectPasswordException from "./IncorrectPasswordException.jsx";
 import ConflictException from "./ConflictException.jsx";
-import SessionNotFoundException from "./SessionNotFoundException.jsx";
-import WeatherApiException from "./WeatherApiException.jsx";
-import LocationAlreadySavedException from "./LocationAlreadySavedException.jsx";
 
 
 export const throwSpecifyException = (error) => {

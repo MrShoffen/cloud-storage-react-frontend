@@ -1,4 +1,4 @@
-import {Box, Button, Card, Link, Zoom} from "@mui/material";
+import {Box, Button, Card, Divider, Link, Zoom} from "@mui/material";
 import {useState} from "react";
 import Typography from "@mui/material/Typography";
 import ValidatedUsernameTextField from "../components/InputElements/TextField/ValidatedUsernameTextField.jsx";
@@ -11,10 +11,12 @@ import {CircularLoading} from "../components/Loading/CircularLoading/CircularLoa
 import {useNotification} from "../context/Notification/NotificationProvider.jsx";
 import {sendRegistrationForm} from "../services/fetch/unauth/SendRegistrationForm.js";
 import ConflictException from "../exception/ConflictException.jsx";
+import * as React from "react";
 
 
 export const SignUp = () => {
     const [avatarUrl, setAvatarUrl] = useState('');
+    const [avatarLoading, setAvatarLoading] = useState(false);
 
     const [username, setUsername] = useState('')
     const [usernameError, setUsernameError] = useState('');
@@ -26,50 +28,36 @@ export const SignUp = () => {
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
     const [registrationLoading, setRegistrationLoading] = useState(false);
-    const navigate = useNavigate();
 
-    const { showError, showWarn, showSuccess} = useNotification();
+    const navigate = useNavigate();
+    const {showError, showWarn, showSuccess} = useNotification();
+
     const handleSubmit = async () => {
         if (usernameError || passwordError || confirmPasswordError) {
             return;
         }
 
-        const requestData = {
-            username,
-            password,
-            avatarUrl
-        };
+        const requestData = {username, password, avatarUrl};
 
         try {
             setRegistrationLoading(true);
             await sendRegistrationForm(requestData);
-
             navigate("/cloud-storage/login");
-
-            showSuccess("You've successfully signed up. Now you can log in to your account.");
-
+            showSuccess("You've successfully signed up. Now you can log in to your account.", 5000);
         } catch (error) {
-            console.log(error);
             switch (true) {
                 case error instanceof ConflictException:
                     showWarn(error.message);
                     setUsernameError(error.message);
                     break;
-
-                // case error instanceof UserAlreadyExistException:
-                //     setUsernameError(error.message);
-                //     break;
-
                 default:
                     showError("Failed to sign up! Try again please.");
                     console.log('Unknown error occurred! ');
-                // window.location.reload();
             }
         }
         setRegistrationLoading(false);
     };
 
-    const [avatarLoading, setAvatarLoading] = useState(false);
 
     const shouldShowPasswordField = !usernameError && username.length > 0;
     const shouldShowValidatePasswordField = !passwordError && shouldShowPasswordField && password.length > 0;
@@ -77,57 +65,36 @@ export const SignUp = () => {
     return (
         <Card variant="outlined"
               sx={{
-                  padding: 4,
-                  paddingTop: 3,
-                  paddingBottom: 2,
+                  padding: 3,
                   boxShadow: 3,
                   position: 'fixed',
                   top: '18%',
                   backgroundColor: 'searchInput',
-                  display: 'flex',
-                  flexDirection: 'column',
                   alignSelf: 'center',
                   borderRadius: 2,
-                  width: {
-                      xs: '85%',
-                      sm: '400px'
-                  },
-                  margin: 'auto',
-                  height: shouldShowButton ? '500px' : shouldShowValidatePasswordField ? '480px' : shouldShowPasswordField ? '450px' : '350px',
+                  width: {xs: '85%', sm: '400px'},
+                  height: shouldShowButton ? '500px' : shouldShowValidatePasswordField ? '480px' : shouldShowPasswordField ? '425px' : '340px',
                   transition: 'height 0.5s ease',
-                  marginBottom: '200px',
-
               }}>
 
-            <Typography
-                component="h1"
-                variant="h4"
-                sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)', textAlign: 'center'}}
-            >
+            <Typography component="h1" variant="h4" sx={{textAlign: 'center'}}>
                 Sign up
             </Typography>
+
             <form onSubmit={handleSubmit}>
+                <Box sx={{display: 'flex', flexDirection: 'column', gap: 2,}}>
 
-
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '100%',
-                        gap: 2,
-
-                    }}
-                >
                     <ValidatedAvatarInput
                         setAvatarUrl={setAvatarUrl}
                         avatarLoading={avatarLoading}
                         setAvatarLoading={setAvatarLoading}
                     />
 
+                    <Divider sx={{mt: -0.8, mb: 1}}/>
+
                     <ValidatedUsernameTextField
                         username={username}
                         setUsername={setUsername}
-
                         usernameError={usernameError}
                         setUsernameError={setUsernameError}
                     />
@@ -137,7 +104,6 @@ export const SignUp = () => {
                         <ValidatedPasswordField
                             password={password}
                             setPassword={setPassword}
-
                             passwordError={passwordError}
                             setPasswordError={setPasswordError}
                         />
@@ -148,10 +114,8 @@ export const SignUp = () => {
                         <ValidatedPasswordConfirmField
                             confirmPassword={confirmPassword}
                             setConfirmPassword={setConfirmPassword}
-
                             confirmPasswordError={confirmPasswordError}
                             setConfirmPasswordError={setConfirmPasswordError}
-
                             originalPassword={password}
                         />
                     </AnimatedElement>
@@ -163,10 +127,7 @@ export const SignUp = () => {
                                 fullWidth
                                 type="submit"
                                 variant="contained"
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    handleSubmit()
-                                }}
+                                onClick={handleSubmit}
                                 loading={registrationLoading || avatarLoading}
                                 loadingPosition="center"
                             >
@@ -176,26 +137,18 @@ export const SignUp = () => {
                     </AnimatedElement>
 
 
-                    <Zoom
-                        in={!shouldShowButton}
-                        timeout={300}
-                    >
-                        <Typography
-                            variant="body1"
-                            component="p"
-                            sx={{
-                                position: 'absolute',
-                                left: 0,
-                                width: '100%',
-                                bottom: 10,
-                                textAlign: 'center'
-                            }}
-
-                        >
+                    <Zoom in={!shouldShowButton} timeout={300}>
+                        <Typography variant="body1" component="p"
+                                    sx={{
+                                        position: 'absolute',
+                                        left: 0,
+                                        width: '100%',
+                                        bottom: 10,
+                                        textAlign: 'center'
+                                    }}>
                             Already have an account?{' '}
-                            <Link
-                                onClick={() => navigate("/cloud-storage/login")}
-                                sx={{color: '#1976d2', cursor: 'pointer'}}>
+                            <Link sx={{color: '#1976d2', cursor: 'pointer'}}
+                                  onClick={() => navigate("/cloud-storage/login")}>
                                 Sign in
                             </Link>
                         </Typography>
