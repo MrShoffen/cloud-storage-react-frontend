@@ -1,13 +1,14 @@
 import {AppBar, Box, Container, IconButton, Input, Toolbar, Tooltip} from "@mui/material";
-import {AccountSettings} from "./AccountSettings.jsx";
+import {accountMenuItems} from "./SettingsMenu/AccountMenuItems.jsx";
 import {DarkMode} from "@mui/icons-material";
 import DarkModeSwitcher from "./DarkModeSwitcher.jsx";
 import MainLabel from "./MainLabel.jsx";
 import Typography from "@mui/material/Typography";
 import SearchIcon from '@mui/icons-material/Search';
 import {InputSearch} from "./InputSearch.jsx";
-import {RegistrationSettings} from "./RegistrationSettings.jsx";
+import {authenticationMenuItems} from "./SettingsMenu/AuthenticationMenuItems.jsx";
 import {useAuthContext} from "../../context/Auth/AuthContext.jsx";
+import {Settings} from "./SettingsMenu/Settings.jsx";
 
 
 export default function Header() {
@@ -26,7 +27,6 @@ export default function Header() {
                 borderBottom: "1px solid ",
                 backgroundColor: 'header',
                 borderColor: 'divider',
-                // transition: "transform 0.3s linear",
                 height: "64px",
             }}
         >
@@ -40,7 +40,8 @@ export default function Header() {
 
                     <DarkModeSwitcher/>
 
-                    {auth.isAuthenticated ? <AccountSettings/> : <RegistrationSettings/>}
+                   <Settings/>
+
                 </Toolbar>
             </Container>
         </AppBar>

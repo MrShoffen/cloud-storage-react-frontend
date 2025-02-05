@@ -1,5 +1,6 @@
 import {createContext, useContext, useMemo, useState} from "react";
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
+import {BackgroundWrapper} from "./BackgroundWrapper.jsx";
 
 
 const ThemeContext = createContext();
@@ -69,8 +70,10 @@ export const CustomThemeProvider = ({children}) => {
     return (
         <ThemeContext.Provider value={{isDarkMode, toggleTheme}}>
             <ThemeProvider theme={theme}>
-                <CssBaseline/>
-                {children}
+                <CssBaseline enableColorScheme/>
+                <BackgroundWrapper>
+                    {children}
+                </BackgroundWrapper>
             </ThemeProvider>
         </ThemeContext.Provider>
     );
