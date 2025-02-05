@@ -1,11 +1,10 @@
-import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import * as React from "react";
 import {useState} from "react";
-import {Divider, FormHelperText} from "@mui/material";
+import {FormHelperText} from "@mui/material";
 import {uploadAvatar} from "../../../services/fetch/unauth/UploadAvatar.js";
 import {CircularLoading} from "../../Loading/CircularLoading/CircularLoading.jsx";
 import {useNotification} from "../../../context/Notification/NotificationProvider.jsx";
@@ -17,7 +16,6 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
     const [avatarErrorMessage, setAvatarErrorMessage] = useState('');
 
     const {showError, showSuccess} = useNotification();
-
 
     const validateAvatar = (file) => {
         const acceptedFileTypes = ["image/jpeg", "image/png", "image/jpg"];
@@ -33,15 +31,14 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
             setAvatarError(true)
             return false;
         }
-
         return true;
     }
 
     const handleAvatarChange = async (e) => {
         const file = e.target.files[0];
+
         if (file && validateAvatar(file)) {
             setAvatarLoading(true);
-
             const reader = new FileReader();
             reader.onloadend = () => {
                 setAvatarPreview(reader.result);
@@ -82,13 +79,7 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
 
     return (
         <Box sx={{pb: 1, position: 'relative'}}>
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    p: 1,
-                }}
-            >
+            <Box sx={{display: "flex", justifyContent: "center", p: 1}}>
                 <Box
                     sx={{
                         width: 70,
@@ -96,20 +87,14 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                         position: "relative",
                         border: avatarPreview ? "2px solid" : "2px dashed",
                         borderColor: avatarPreview ? "divider" : "#bbb",
-                        justifyContent: "center",
                         borderRadius: 2,
                         backgroundColor: avatarPreview ? "#fff" : "transparent",
                         textAlign: 'center',
-
                         "&:hover": {
                             cursor: "pointer",
                             borderColor: avatarPreview ? "divider" : "text.primary",
-                            "& > label > svg": {
-                                color: 'text.primary',
-                                cursor: "pointer",
-                            }
+                            "& > label > svg": {color: 'text.primary', cursor: "pointer"}
                         }
-
                     }}
                 >
                     <input
@@ -120,6 +105,7 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                         onChange={handleAvatarChange}
                         disabled={avatarPreview}
                     />
+
                     <label
                         htmlFor="avatar-upload"
                         style={{width: "100%", height: "100%", borderRadius: "50%"}}
@@ -133,59 +119,39 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                                     color: "#bbb",
                                     alignItems: "center",
                                     marginTop: "3px",
-
-                                }}
-                            />
-                        )}
-                        {avatarPreview && (<>
-                                <Box
-                                    component="img"
-                                    src={avatarPreview}
-                                    alt="Avatar Preview"
-                                    sx={{
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "cover",
-                                        borderRadius: "6px"
-                                    }}
-                                />
-
-                                <Box
-                                    sx={{
-                                        position: 'absolute',
-                                        top: 3,
-                                        left: 3
-                                    }}
-                                >
-                                    <CircularLoading loading={avatarLoading}/>
-                                </Box>
-                            </>
+                                }}/>
                         )}
 
+                        {avatarPreview && <>
+                            <Box component="img" src={avatarPreview} alt="Avatar Preview"
+                                 sx={{
+                                     width: "100%",
+                                     height: "100%",
+                                     objectFit: "cover",
+                                     borderRadius: "6px"
+                                 }}/>
 
+                            <Box sx={{position: 'absolute', top: 3, left: 3}}>
+                                <CircularLoading loading={avatarLoading}/>
+                            </Box>
+                        </>}
                     </label>
 
-                    {avatarPreview && !avatarLoading && (
-                        <IconButton
-                            aria-label="close"
-                            size="small"
-                            onClick={handleDeleteAvatar}
-
-                            sx={{
-                                position: "absolute",
-                                top: 3,
-                                right: 3,
-                                width: "15px",
-                                height: "15px",
-                                backgroundColor: "rgba(151,151,151,0.77)",
-                                "&:hover": {
-                                    backgroundColor: "rgba(244, 67, 54, 0.3)",
-                                },
-                            }}
-                        >
+                    {avatarPreview && !avatarLoading &&
+                        <IconButton aria-label="close" size="small"
+                                    onClick={handleDeleteAvatar}
+                                    sx={{
+                                        position: "absolute",
+                                        top: 3,
+                                        right: 3,
+                                        width: "15px",
+                                        height: "15px",
+                                        backgroundColor: "rgba(151,151,151,0.77)",
+                                        "&:hover": {backgroundColor: "rgba(244, 67, 54, 0.3)",}
+                                    }}>
                             <CloseIcon sx={{fontSize: "17px"}}/>
                         </IconButton>
-                    )}
+                    }
                 </Box>
             </Box>
 

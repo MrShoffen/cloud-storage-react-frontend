@@ -1,20 +1,13 @@
-import {AppBar, Box, Container, IconButton, Input, Toolbar, Tooltip} from "@mui/material";
-import {accountMenuItems} from "./SettingsMenu/AccountMenuItems.jsx";
-import {DarkMode} from "@mui/icons-material";
+import {AppBar, Box, Container, Toolbar} from "@mui/material";
 import DarkModeSwitcher from "./DarkModeSwitcher.jsx";
 import MainLabel from "./MainLabel.jsx";
-import Typography from "@mui/material/Typography";
-import SearchIcon from '@mui/icons-material/Search';
 import {InputSearch} from "./InputSearch.jsx";
-import {authenticationMenuItems} from "./SettingsMenu/AuthenticationMenuItems.jsx";
 import {useAuthContext} from "../../context/Auth/AuthContext.jsx";
 import {Settings} from "./SettingsMenu/Settings.jsx";
 
 
 export default function Header() {
-
     const {auth} = useAuthContext();
-
 
     return (
         <AppBar
@@ -32,6 +25,7 @@ export default function Header() {
         >
             <Container disableGutters>
                 <Toolbar sx={{height: "65px",}} disableGutters>
+
                     <MainLabel/>
 
                     <Box sx={{flexGrow: 1, height: 1}}/>
@@ -40,7 +34,7 @@ export default function Header() {
 
                     <DarkModeSwitcher/>
 
-                   <Settings/>
+                    <Settings/>
 
                 </Toolbar>
             </Container>

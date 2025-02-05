@@ -7,7 +7,8 @@ import {Box} from "@mui/material";
 export default function MainLabel() {
     const navigate = useNavigate();
 
-    return (<Box
+    return (
+        <Box
             sx={{
                 display: "flex",
                 alignItems: "center",
@@ -28,28 +29,18 @@ export default function MainLabel() {
                         ml: 2,
                         mt: "2px",
                         color: 'rgba(47,155,255,0.8)',
-                        fontSize: {
-                            xs: '45px',
-                            md: '32px',
-
-                        }
+                        fontSize: {xs: '45px', md: '32px',}
                     }}/>
                 <VpnKeyIcon
                     sx={{
                         position: 'absolute',
                         color: 'background.paper',
                         top: 27,
-                        fontSize: {
-                            xs: '20px',
-                            md: '15px',
-                        },
-                        left: {
-                            xs: 28,
-                            md: 24
-                        }
-                    }}
-                />
+                        fontSize: {xs: '20px', md: '15px'},
+                        left: {xs: 28, md: 24}
+                    }}/>
             </Box>
+
             <Typography
                 variant="h6"
                 sx={{
@@ -58,13 +49,8 @@ export default function MainLabel() {
                     letterSpacing: '.2rem',
                     color: 'text.primary',
                     textDecoration: 'none',
-                    display: {
-                        xs: 'none',
-                        md: 'flex'
-                    }
-                }}
-            >
-
+                    display: {xs: 'none', md: 'flex'}
+                }}>
                 CLOUD STORAGE
             </Typography>
         </Box>
