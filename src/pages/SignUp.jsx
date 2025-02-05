@@ -1,4 +1,5 @@
 import {Box, Button, Card, Divider, Link, Zoom} from "@mui/material";
+import * as React from "react";
 import {useState} from "react";
 import Typography from "@mui/material/Typography";
 import ValidatedUsernameTextField from "../components/InputElements/TextField/ValidatedUsernameTextField.jsx";
@@ -7,11 +8,9 @@ import AnimatedElement from "../components/InputElements/AnimatedElement.jsx";
 import {useNavigate} from "react-router-dom";
 import ValidatedAvatarInput from "../components/InputElements/AvatarInput/ValidatedAvatarInput.jsx";
 import ValidatedPasswordConfirmField from "../components/InputElements/TextField/ValidatedPasswordConfirmField.jsx";
-import {CircularLoading} from "../components/Loading/CircularLoading/CircularLoading.jsx";
 import {useNotification} from "../context/Notification/NotificationProvider.jsx";
 import {sendRegistrationForm} from "../services/fetch/unauth/SendRegistrationForm.js";
 import ConflictException from "../exception/ConflictException.jsx";
-import * as React from "react";
 
 
 export const SignUp = () => {
@@ -99,8 +98,7 @@ export const SignUp = () => {
                         setUsernameError={setUsernameError}
                     />
 
-                    <AnimatedElement
-                        condition={shouldShowPasswordField}>
+                    <AnimatedElement condition={shouldShowPasswordField}>
                         <ValidatedPasswordField
                             password={password}
                             setPassword={setPassword}
@@ -109,8 +107,7 @@ export const SignUp = () => {
                         />
                     </AnimatedElement>
 
-                    <AnimatedElement
-                        condition={shouldShowValidatePasswordField}>
+                    <AnimatedElement condition={shouldShowValidatePasswordField}>
                         <ValidatedPasswordConfirmField
                             confirmPassword={confirmPassword}
                             setConfirmPassword={setConfirmPassword}
@@ -120,8 +117,7 @@ export const SignUp = () => {
                         />
                     </AnimatedElement>
 
-                    <AnimatedElement
-                        condition={shouldShowButton}>
+                    <AnimatedElement condition={shouldShowButton}>
                         <div>
                             <Button
                                 fullWidth
