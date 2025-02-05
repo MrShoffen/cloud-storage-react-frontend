@@ -26,19 +26,19 @@ export const accountMenuItems = () => {
 
     return (
         <>
-            <MenuItem >
+            <MenuItem>
                 <ListItemIcon>
                     <AccountCircle fontSize="small"/>
                 </ListItemIcon> Profile
             </MenuItem>
-            <MenuItem >
+            <MenuItem>
                 <ListItemIcon>
                     <Settings fontSize="small"/>
                 </ListItemIcon>
                 Security settings
             </MenuItem>
             <Divider/>
-            <MenuItem >
+            <MenuItem>
                 <ListItemIcon>
                     <Help fontSize="small"/>
                 </ListItemIcon>
@@ -49,12 +49,7 @@ export const accountMenuItems = () => {
                 href="https://github.com/MrShoffen/cloud-storage-rest-api"
                 target="_blank"
                 rel="noopener noreferrer"
-                sx={{
-                    '&:hover': {
-                        textDecoration: 'none',
-                        color: 'inherit',
-                    },
-                }}
+                sx={{'&:hover': {textDecoration: 'none', color: 'inherit',}}}
             >
                 <ListItemIcon>
                     <GitHub fontSize="small"/>

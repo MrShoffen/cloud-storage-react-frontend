@@ -10,42 +10,39 @@ export const authenticationMenuItems = () => {
 
     return (
         <>
-            <MenuItem onClick={() => {navigate("/cloud-storage/login"); handleClose()}}>
+            <MenuItem onClick={() => {
+                navigate("/cloud-storage/login");
+                handleClose()
+            }}>
                 <ListItemIcon>
                     <LoginIcon fontSize="small"/>
                 </ListItemIcon> Login
             </MenuItem>
-            <MenuItem onClick={() => {navigate("/cloud-storage/registration"); handleClose()}}>
+            <MenuItem onClick={() => {
+                navigate("/cloud-storage/registration");
+                handleClose()
+            }}>
                 <ListItemIcon>
                     <PersonAddIcon fontSize="small"/>
                 </ListItemIcon>
                 Registration
             </MenuItem>
             <Divider/>
-            <MenuItem >
+            <MenuItem>
                 <ListItemIcon>
                     <Help fontSize="small"/>
                 </ListItemIcon>
                 Help
             </MenuItem>
-            <MenuItem
-                component="a"
-                href="https://github.com/MrShoffen/cloud-storage-rest-api"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                    '&:hover': {
-                        textDecoration: 'none',
-                        color: 'inherit',
-                    },
-                }}
+            <MenuItem component="a" href="https://github.com/MrShoffen/cloud-storage-rest-api"
+                      target="_blank" rel="noopener noreferrer"
+                      sx={{'&:hover': {textDecoration: 'none', color: 'inherit',}}}
             >
                 <ListItemIcon>
                     <GitHub fontSize="small"/>
                 </ListItemIcon>
                 Source code
             </MenuItem>
-
         </>
     )
 }

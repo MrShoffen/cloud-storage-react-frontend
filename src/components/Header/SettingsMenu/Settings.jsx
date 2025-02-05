@@ -1,8 +1,6 @@
 import {Avatar, Box, Drawer, IconButton, Menu, Slide, Tooltip} from "@mui/material";
 import {useState} from "react";
 import {useAuthContext} from "../../../context/Auth/AuthContext.jsx";
-import {useNavigate} from "react-router-dom";
-import {useNotification} from "../../../context/Notification/NotificationProvider.jsx";
 import {accountMenuItems} from "./AccountMenuItems.jsx";
 import {authenticationMenuItems} from "./AuthenticationMenuItems.jsx";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -13,21 +11,17 @@ export const Settings = () => {
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
-    };
+    }
     const handleClose = () => {
         setAnchorEl(null);
-    };
+    }
 
-    const {auth, logout} = useAuthContext();
-    const navigate = useNavigate();
-    const {showInfo, showWarn} = useNotification();
-
+    const {auth} = useAuthContext();
 
     const getMenuVariant = () => {
         return (
             <Menu
                 anchorEl={anchorEl}
-                id="account-menu"
                 open={open}
                 onClose={handleClose}
                 onClick={handleClose}
@@ -41,11 +35,11 @@ export const Settings = () => {
                             borderColor: 'divider',
                             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                             backdropFilter: 'blur(5px)',
-                            WebkitBackdropFilter: 'blur(5px)', // Для Safari
+                            WebkitBackdropFilter: 'blur(5px)',
                             backgroundColor: 'menu',
                             mt: 1.5,
-                        },
-                    },
+                        }
+                    }
                 }}
                 transformOrigin={{horizontal: 'right', vertical: 'top'}}
                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
@@ -92,13 +86,9 @@ export const Settings = () => {
 
     return (
         <>
-            <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
-                <Tooltip title="Account settings">
-                    <IconButton
-                        onClick={handleClick}
-                        size="small"
-                        sx={{mr: "8px"}}
-                    >
+            <Box>
+                <Tooltip title="Menu">
+                    <IconButton onClick={handleClick} size="small" sx={{mr: "8px"}}>
                         {auth.isAuthenticated
                             ?
                             <Avatar sx={{width: 32, height: 32, fontWeight: "400", fontSize: "17px"}}
@@ -111,7 +101,6 @@ export const Settings = () => {
                                 <MenuIcon/>
                             </Box>
                         }
-
                     </IconButton>
                 </Tooltip>
             </Box>
