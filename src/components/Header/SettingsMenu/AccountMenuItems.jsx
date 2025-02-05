@@ -4,9 +4,11 @@ import {sendLogout} from "../../../services/fetch/auth/SendLogout.js";
 import {useAuthContext} from "../../../context/Auth/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 import {useNotification} from "../../../context/Notification/NotificationProvider.jsx";
+import {useState} from "react";
+import ProfileModal from "../../../modals/ProfileModal/ProfileModal.jsx";
 
 
-export const accountMenuItems = () => {
+export const accountMenuItems = (openModal) => {
     const {logout} = useAuthContext();
     const navigate = useNavigate();
     const {showInfo} = useNotification();
@@ -24,9 +26,10 @@ export const accountMenuItems = () => {
         }
     }
 
+
     return (
         <>
-            <MenuItem>
+            <MenuItem onClick={openModal}>
                 <ListItemIcon>
                     <AccountCircle fontSize="small"/>
                 </ListItemIcon> Profile

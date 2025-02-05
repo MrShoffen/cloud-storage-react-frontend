@@ -8,7 +8,6 @@ const AuthContext = createContext();
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthProvider = ({children}) => {
-    const [savedLocations, setSavedLocations] = useState([]);
 
     const [auth, setAuth] = useState(extractAuthUser);
 
@@ -17,46 +16,31 @@ export const AuthProvider = ({children}) => {
         const userData = localStorage.getItem("user");
 
         if (isAuth && userData) {
-            return {
-                isAuthenticated: true,
-                user: JSON.parse(userData),
-            };
+            return {isAuthenticated: true, user: JSON.parse(userData)};
         }
-
-        return {
-            isAuthenticated: false,
-            user: null
-        };
+        return {isAuthenticated: false, user: null};
     }
 
     const login = (userInfo) => {
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("user", JSON.stringify(userInfo));
-        setAuth({
-            isAuthenticated: true,
-            user: userInfo,
-        });
-    };
+        setAuth({isAuthenticated: true, user: userInfo});
+    }
 
     const logout = () => {
         localStorage.removeItem("isAuthenticated");
         localStorage.removeItem("user");
-        setAuth({
-            isAuthenticated: false,
-            user: null,
-        });
-        setSavedLocations([]);
-    };
+        setAuth({isAuthenticated: false, user: null});
+    }
 
 
     const urlLocation = useLocation();
     const [pageVisits, setPageVisits] = useState(0);
     const navigate = useNavigate();
 
-    const {showNotification, showError} = useNotification();
+    const {showError} = useNotification();
     const validateSession = async () => {
         if (auth.isAuthenticated) {
-            console.log('validating session....')
             try {
                 const user = await checkSession();
                 if (user !== auth.user) {
@@ -64,18 +48,24 @@ export const AuthProvider = ({children}) => {
                     login(user);
                 }
             } catch (error) {
-                if (auth.isAuthenticated) {
-                    logout();
+                logout();
+                setTimeout(() => {
+                    navigate("/cloud-storage/login");
+                    showError("Session is expired! Please login again", 4000)
+                }, 300)
+            }
+        }
+    };
 
-                    setTimeout(() => {
-                            navigate("/cloud-storage/login");
-
-                            showError("Session is expired! Please login again", 4000)
-
-                        }
-                    , 300)
-
+    const validateCookieIsAlive = async () => {
+        if (!auth.isAuthenticated) {
+            try {
+                const user = await checkSession();
+                if (user) {
+                    login(user);
                 }
+            } catch (error) {
+                console.log('Session not present')
             }
         }
     };
@@ -90,19 +80,6 @@ export const AuthProvider = ({children}) => {
     }, [urlLocation.pathname]);
 
 
-    const validateCookieIsAlive = async () => {
-        if (!auth.isAuthenticated) {
-            try {
-                const user = await checkSession();
-                if (user) {
-                    login(user);
-                }
-            } catch (error) {
-                logout();
-            }
-        }
-    };
-
     useEffect(() => {
         validateSession();
         validateCookieIsAlive();
@@ -110,7 +87,7 @@ export const AuthProvider = ({children}) => {
 
 
     return (
-        <AuthContext.Provider value={{auth, login, logout, validateSession, savedLocations, setSavedLocations}}>
+        <AuthContext.Provider value={{auth, login, logout}}>
             {children}
         </AuthContext.Provider>
     );

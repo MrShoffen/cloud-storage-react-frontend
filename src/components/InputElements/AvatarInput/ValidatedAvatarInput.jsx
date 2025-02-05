@@ -3,11 +3,12 @@ import AddIcon from "@mui/icons-material/Add";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {FormHelperText} from "@mui/material";
 import {uploadAvatar} from "../../../services/fetch/unauth/UploadAvatar.js";
 import {CircularLoading} from "../../Loading/CircularLoading/CircularLoading.jsx";
 import {useNotification} from "../../../context/Notification/NotificationProvider.jsx";
+import {useAuthContext} from "../../../context/Auth/AuthContext.jsx";
 
 
 export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '', avatarLoading, setAvatarLoading}) {
@@ -39,6 +40,7 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
 
         if (file && validateAvatar(file)) {
             setAvatarLoading(true);
+            setOpacity(1);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setAvatarPreview(reader.result);
@@ -76,6 +78,10 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
         setAvatarUrl('');
     };
 
+    const [opacity, setOpacity] = useState(0);
+    useEffect(() => {
+        setTimeout(() => {setOpacity(1)}, 4000)
+    })
 
     return (
         <Box sx={{pb: 1, position: 'relative'}}>
@@ -130,10 +136,10 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                                      objectFit: "cover",
                                      borderRadius: "6px"
                                  }}/>
-
-                            <Box sx={{position: 'absolute', top: 3, left: 3}}>
+                            {
+                            <Box  sx={{position: 'absolute', opacity: opacity, top: 3, left: 3, }}>
                                 <CircularLoading loading={avatarLoading}/>
-                            </Box>
+                            </Box>}
                         </>}
                     </label>
 

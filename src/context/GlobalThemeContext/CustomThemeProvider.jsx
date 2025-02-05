@@ -37,9 +37,10 @@ export const CustomThemeProvider = ({children}) => {
                     MuiButton: {
                         styleOverrides: {
                             root: {
-                                '&:not(.MuiButton-loading)': {
+                                '&:not(.MuiLoadingButton-loading):not(.Mui-disabled)': {
                                     '&.MuiButton-contained': {
                                         backgroundImage: isDarkMode ? 'linear-gradient(90deg, rgba(28,73,163,1) 0%, rgba(16,113,175,1) 100%)' : 'linear-gradient(90deg, #2760d3,#1283ca)',
+                                        backgroundColor: 'rgba(255, 255, 255, 0.12)',
                                         textShadow: 'rgba(0, 0, 0, 0.25) 0 3px 8px',
                                         color: '#FFFFFF',
                                         '&:hover': {
@@ -59,6 +60,7 @@ export const CustomThemeProvider = ({children}) => {
                     header: isDarkMode ? "rgba(15, 18, 20, 0.8)" : "rgba(240,240,240,0.5)",
                     searchInput: isDarkMode ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.3)",
                     menu: isDarkMode ? 'rgba(0,0,0,0.8)' : "white",
+                    modal: isDarkMode ? "rgba(0,0,0,0.4)" : "white",
                     background: {
                         default: isDarkMode ? 'black' : 'white',
                     },

@@ -1,5 +1,6 @@
 import './Circular.css'
 import {useEffect, useState} from "react";
+import {useAuthContext} from "../../../context/Auth/AuthContext.jsx";
 
 
 export const CircularLoading = ({loading}) => {
@@ -7,8 +8,10 @@ export const CircularLoading = ({loading}) => {
     const [state, setState] = useState("hide-my");
 
     useEffect(() => {
+
         setState(loading ? "progress-my" : "ready-my");
     }, [loading])
+
 
     useEffect(() => {
         if (state === "ready-my") {
@@ -17,6 +20,7 @@ export const CircularLoading = ({loading}) => {
             }, 3000)
         }
     }, [state])
+
 
     return (
         <svg className={state} id="check" version="1.1" xmlns="http://www.w3.org/2000/svg"

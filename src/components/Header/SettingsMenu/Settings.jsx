@@ -4,27 +4,37 @@ import {useAuthContext} from "../../../context/Auth/AuthContext.jsx";
 import {accountMenuItems} from "./AccountMenuItems.jsx";
 import {authenticationMenuItems} from "./AuthenticationMenuItems.jsx";
 import MenuIcon from "@mui/icons-material/Menu";
+import ProfileModal from "../../../modals/ProfileModal/ProfileModal.jsx";
 
 
 export const Settings = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
+    const handleOpenMenu = (event) => {
         setAnchorEl(event.currentTarget);
     }
-    const handleClose = () => {
+    const handleCloseMenu = () => {
         setAnchorEl(null);
     }
 
     const {auth} = useAuthContext();
+
+    const [isProfileModalOpen, setProfileModalOpen] = useState(false);
+    const handleOpenProfileModal = async () => {
+        setProfileModalOpen(true);
+    }
+    const handleCloseProfileModal = () => {
+        setProfileModalOpen(false);
+    };
+
 
     const getMenuVariant = () => {
         return (
             <Menu
                 anchorEl={anchorEl}
                 open={open}
-                onClose={handleClose}
-                onClick={handleClose}
+                onClose={handleCloseMenu}
+                onClick={handleCloseMenu}
                 sx={{display: {xs: 'none', md: 'block',}, zIndex: 2}}
                 slotProps={{
                     paper: {
@@ -45,7 +55,7 @@ export const Settings = () => {
                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                 TransitionComponent={Slide}
             >
-                {auth.isAuthenticated ? accountMenuItems() : authenticationMenuItems()}
+                {auth.isAuthenticated ? accountMenuItems(handleOpenProfileModal) : authenticationMenuItems()}
             </Menu>
         )
     }
@@ -57,8 +67,8 @@ export const Settings = () => {
                 anchor='right'
                 id="account-menu"
                 open={open}
-                onClose={handleClose}
-                onClick={handleClose}
+                onClose={handleCloseMenu}
+                onClick={handleCloseMenu}
                 sx={{
                     display: {
                         xs: 'block',
@@ -79,7 +89,7 @@ export const Settings = () => {
                     }
                 }}
             >
-                {auth.isAuthenticated ? accountMenuItems() : authenticationMenuItems()}
+                {auth.isAuthenticated ? accountMenuItems(handleOpenProfileModal) : authenticationMenuItems()}
             </Drawer>
         )
     }
@@ -88,7 +98,7 @@ export const Settings = () => {
         <>
             <Box>
                 <Tooltip title="Menu">
-                    <IconButton onClick={handleClick} size="small" sx={{mr: "8px"}}>
+                    <IconButton onClick={handleOpenMenu} size="small" sx={{mr: "8px"}}>
                         {auth.isAuthenticated
                             ?
                             <Avatar sx={{width: 32, height: 32, fontWeight: "400", fontSize: "17px"}}
@@ -106,6 +116,8 @@ export const Settings = () => {
             </Box>
             {getMenuVariant()}
             {getDrawerVariant()}
+            <ProfileModal open={isProfileModalOpen} onClose={handleCloseProfileModal}/>
+
         </>
     )
 

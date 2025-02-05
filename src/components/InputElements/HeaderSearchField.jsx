@@ -1,7 +1,7 @@
 import {Box, IconButton, Input} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-export const InputSearch = () => {
+export const HeaderSearchField = () => {
     return (
         <Box
             sx={{
