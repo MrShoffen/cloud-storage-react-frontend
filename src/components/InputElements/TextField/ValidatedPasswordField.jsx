@@ -41,13 +41,10 @@ export default function ValidatedPasswordField({password, setPassword,
         <ValidatedTextField
             id="password"
             label={label}
-            autoComplete="current-password"
             placeholder="Latin latters and numbers"
             type="password"
-
             value={password}
             onChange={(e) => validatePassword(e.target.value)}
-            error={passwordError}
             helperText={passwordError}
 
         />

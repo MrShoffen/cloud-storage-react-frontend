@@ -4,6 +4,9 @@ import Alert from '@mui/material/Alert';
 import {AlertTitle, Slide} from "@mui/material";
 
 
+const NotificationContext = createContext();
+export const useNotification = () => useContext(NotificationContext);
+
 const backgroundColors = {
     success: "rgba(70,182,0,0.3)",
     info: "rgba(0,129,255,0.3)",
@@ -17,36 +20,18 @@ const colors = {
     success: "rgba(70,182,0,0.8)",
     warning: "rgba(255,136,0,0.8)",
 }
-const NotificationContext = createContext();
-
-export const useNotification = () => {
-    return useContext(NotificationContext);
-};
-
-function SlideTransition(props) {
-    // const {windowWidth} = useCustomThemeContext();
-    // const isSmall = windowWidth < 1050;
-    return <Slide {...props}
-
-                  // direction={isSmall ? "up" : "down"}
-
-    />;
-}
 
 
 export const NotificationProvider = ({children}) => {
-    const [notification, setNotification] = useState({
-        open: false,
-        message: '',
-        severity: 'info',
-    });
+    const SlideTransition = (props) => <Slide {...props}/>;
 
+    const [notification, setNotification] = useState({
+        open: false, message: '', severity: 'info',
+    });
 
     const showNotification = ({message, severity = 'info', duration = 9000}) => {
         setNotification({
-            open: true,
-            message,
-            severity,
+            open: true, message, severity,
         });
 
         setTimeout(() => {
@@ -59,46 +44,37 @@ export const NotificationProvider = ({children}) => {
         setNotification((prev) => ({...prev, open: false}));
     };
 
-    const showWarn = (warning, duration=9000) => {
+    const showWarn = (warning, duration = 9000) => {
         showNotification({
-            message: warning,
-            severity: 'warning',
-            duration: duration
+            message: warning, severity: 'warning', duration: duration
         })
     }
 
-    const showInfo = (info, duration=9000) => {
+    const showInfo = (info, duration = 9000) => {
         showNotification({
-            message: info,
-            severity: 'info',
-            duration: duration
+            message: info, severity: 'info', duration: duration
         })
     }
 
-    const showSuccess = (success, duration=9000) => {
+    const showSuccess = (success, duration = 9000) => {
         showNotification({
-            message: success,
-            severity: 'success',
-            duration: duration
+            message: success, severity: 'success', duration: duration
         })
     }
 
-    const showError = (error, duration=9000) => {
+    const showError = (error, duration = 9000) => {
         showNotification({
-            message: error,
-            severity: 'error',
-            duration: duration
+            message: error, severity: 'error', duration: duration
         })
     }
 
-    return (
-        <NotificationContext.Provider value={{showNotification, showWarn, showInfo, showSuccess, showError}}>
+    return (<NotificationContext.Provider value={{showWarn, showInfo, showSuccess, showError}}>
             {children}
 
             <Snackbar
                 open={notification.open}
                 onClose={closeNotification}
-                anchorOrigin={{vertical:'bottom' , horizontal: 'right'}}
+                anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
                 TransitionComponent={SlideTransition}
             >
                 <Alert
@@ -107,7 +83,7 @@ export const NotificationProvider = ({children}) => {
                     severity={notification.severity}
                     sx={{
                         backdropFilter: 'blur(5px)',
-                        WebkitBackdropFilter: 'blur(5px)', // Для Safari
+                        WebkitBackdropFilter: 'blur(5px)',
                         width: '100%',
                         fontSize: '15px',
                         alignItems: 'center',
@@ -123,6 +99,5 @@ export const NotificationProvider = ({children}) => {
                 </Alert>
 
             </Snackbar>
-        </NotificationContext.Provider>
-    );
+        </NotificationContext.Provider>);
 };

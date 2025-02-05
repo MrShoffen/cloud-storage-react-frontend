@@ -1,11 +1,9 @@
 #tick {
-    /*stroke: rgba(28, 73, 163, 1) ;*/
     stroke-width: 8;
     transition: all 1s;
 }
 
 #circle {
-    /*stroke: #015fbc;*/
     stroke-width: 8;
     transform-origin: 50px 50px 0;
     transition: all 1s;
@@ -34,7 +32,6 @@
 }
 
 .progress-my #circle {
-    /*stroke: rgba(16, 113, 175, 1);*/
     stroke-dasharray: 314;
     stroke-dashoffset: 1000;
     animation: spin 3s linear infinite;
@@ -43,7 +40,6 @@
 .ready-my #circle {
     stroke-dashoffset: 66;
     stroke:url(#grad2) ;
-
 }
 
 #circle {

@@ -3,9 +3,7 @@ import * as React from "react";
 import {useEffect} from "react";
 
 
-export default function ValidatedUsernameTextField({username, setUsername,
-                                                   usernameError, setUsernameError,
-                                                   label='Username'}) {
+export default function ValidatedUsernameTextField({username, setUsername, usernameError, setUsernameError, label='Username'}) {
 
     const validateUsername = (value) => {
         let isValid = true;
@@ -41,7 +39,6 @@ export default function ValidatedUsernameTextField({username, setUsername,
         <ValidatedTextField
             id="username"
             label={label}
-            autoComplete="username"
             placeholder="Latin letters and underline"
             type="text"
 

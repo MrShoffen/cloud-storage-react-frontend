@@ -118,18 +118,16 @@ export const SignUp = () => {
                     </AnimatedElement>
 
                     <AnimatedElement condition={shouldShowButton}>
-                        <div>
-                            <Button
-                                fullWidth
-                                type="submit"
-                                variant="contained"
-                                onClick={handleSubmit}
-                                loading={registrationLoading || avatarLoading}
-                                loadingPosition="center"
-                            >
-                                Sign up
-                            </Button>
-                        </div>
+                        <Button
+                            fullWidth
+                            type="submit"
+                            variant="contained"
+                            onClick={handleSubmit}
+                            loading={registrationLoading || avatarLoading}
+                            loadingPosition="center"
+                        >
+                            Sign up
+                        </Button>
                     </AnimatedElement>
 
 

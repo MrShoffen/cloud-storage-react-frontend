@@ -92,19 +92,16 @@ export const SignIn = () => {
                     </AnimatedElement>
 
                     <AnimatedElement condition={shouldShowButton}>
-                        <div>
-                            <Button
-                                loadingPosition="center"
-                                fullWidth
-                                type="submit"
-                                variant="contained"
-                                onClick={handleSubmit}
-                                loading={loading}
-                            >
-                                Sign in
-                            </Button>
-                        </div>
-
+                        <Button
+                            loadingPosition="center"
+                            fullWidth
+                            type="submit"
+                            variant="contained"
+                            onClick={handleSubmit}
+                            loading={loading}
+                        >
+                            Sign in
+                        </Button>
                     </AnimatedElement>
 
                     <Zoom in={!shouldShowButton} timeout={300}>

@@ -36,13 +36,10 @@ export default function ValidatedPasswordConfirmField({
         <ValidatedTextField
             id="password_confirm"
             label={label}
-            autoComplete="off"
             placeholder="Latin latters and numbers"
             type="password_confirm"
-
             value={confirmPassword}
             onChange={(e) => validatePasswordConfirm(e.target.value)}
-            error={confirmPasswordError}
             helperText={confirmPasswordError}
         />
     )
