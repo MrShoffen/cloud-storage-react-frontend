@@ -8,7 +8,7 @@ import {useState} from "react";
 import ProfileModal from "../../../modals/ProfileModal/ProfileModal.jsx";
 
 
-export const accountMenuItems = (openModal) => {
+export const accountMenuItems = (openProfileModal, openSecurityModal) => {
     const {logout} = useAuthContext();
     const navigate = useNavigate();
     const {showInfo} = useNotification();
@@ -29,12 +29,12 @@ export const accountMenuItems = (openModal) => {
 
     return (
         <>
-            <MenuItem onClick={openModal}>
+            <MenuItem onClick={openProfileModal}>
                 <ListItemIcon>
                     <AccountCircle fontSize="small"/>
                 </ListItemIcon> Profile
             </MenuItem>
-            <MenuItem>
+            <MenuItem onClick={openSecurityModal}>
                 <ListItemIcon>
                     <Settings fontSize="small"/>
                 </ListItemIcon>

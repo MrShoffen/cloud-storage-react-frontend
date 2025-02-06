@@ -2,53 +2,22 @@ import React, {useState} from "react";
 import {Box, Button, Divider, Modal, Slide, Typography} from "@mui/material";
 import {useAuthContext} from "../../context/Auth/AuthContext.jsx";
 import AnimatedElement from "../../components/InputElements/AnimatedElement.jsx";
-import LoadingButton from "@mui/lab/LoadingButton";
 import {useNavigate} from "react-router-dom";
 import {styled} from "@mui/material/styles";
-import MuiCard from "@mui/material/Card";
+import Card from "@mui/material/Card";
 import ValidatedPasswordField from "../../components/InputElements/TextField/ValidatedPasswordField.jsx";
 import ValidatedPasswordConfirmField from "../../components/InputElements/TextField/ValidatedPasswordConfirmField.jsx";
-import IncorrectPasswordException from "../../exception/IncorrectPasswordException.jsx";
-import {sendEdit} from "../../services/fetch/auth/SendEdit.js";
-import {sendDeleteUser} from "../../services/fetch/auth/SendDeleteUser.js";
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import {useNotification} from "../../context/Notification/NotificationProvider.jsx";
-
-
-const Card = styled(MuiCard)(({theme}) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignSelf: 'center',
-    width: '90%',
-    maxWidth: '90%',
-    gap: theme.spacing(2),
-    margin: 'auto',
-    [theme.breakpoints.up('sm')]: {
-        width: '400px',
-
-        maxWidth: '400px',
-    },
-}));
+import {sendEdit} from "../../services/fetch/auth/SendEdit.js";
+import ForbiddenException from "../../exception/ForbiddenException.jsx";
+import UnauthorizedException from "../../exception/UnauthorizedException.jsx";
 
 
 export default function SecurityModal({open, onClose}) {
 
-    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-
-    const handleDeleteClick = () => {
-        setDeleteConfirmOpen(true);
-    };
-
-    const handleDeleteCancel = () => {
-        setDeleteConfirmOpen(false);
-    };
-
-    const handleDeleteConfirm = async () => {
-        setDeleteConfirmOpen(false);
-        await handleDelete();
-    };
 
     const {auth, logout} = useAuthContext();
 
@@ -65,84 +34,76 @@ export default function SecurityModal({open, onClose}) {
 
     const [loading, setLoading] = useState(false);
 
-    const {showNotification} = useNotification();
+    const {showSuccess, showWarn} = useNotification();
     const handleSave = async () => {
         try {
             setLoading(true);
-
-            const editInformation = {
-                oldPassword: oldPassword,
-                newPassword: newPassword,
-            }
-
+            const editInformation = {oldPassword: oldPassword, newPassword: newPassword}
             await sendEdit(editInformation, "/password");
-            showNotification({message: "Password updated!", severity: "success"});
+            showSuccess("Password updated!");
 
         } catch (error) {
             switch (true) {
-                case error instanceof IncorrectPasswordException:
+                case error instanceof UnauthorizedException:
                     setOldPasswordError(error.message);
+                    showWarn(error.message);
                     break;
-
                 default:
                     console.log('Unknown error occurred! ');
-                    window.location.reload();
             }
         }
         setLoading(false);
         setNewPassword('')
         setConfirmPassword('')
-
     };
 
     const navigate = useNavigate();
-    const handleDelete = async () => {
-        try {
-            setLoading(true);
-            await sendDeleteUser();
-            logout();
-            setTimeout(() => {
-                navigate("/weather-app/login");
-                showNotification(
-                    {
-                        message: "Your account has been deleted!",
-                        severity: "info"
-                    })
-            }, 200)
 
 
-        } catch (error) {
-            console.log('Unknown error occurred! ');
-        }
-        setLoading(false);
-    }
+    const handlePasswordClick = () => {
+        setChangeConfirmModal(true);
+    };
 
+    const handlePasswordCancel = () => {
+        setChangeConfirmModal(false);
+    };
+
+    const handlePasswordConfirm = async () => {
+        setChangeConfirmModal(false);
+        await handleSave();
+    };
+
+    const [changeConfirmModal, setChangeConfirmModal] = useState(false);
+
+
+    const clearFields = () => {
+        setOldPassword('');
+        setNewPassword('');
+        setConfirmPassword('')
+    };
 
     if (auth.isAuthenticated) {
         return (
             <>
-                <Modal
-                    open={open}
-                    onClose={() => {
-                        onClose();
-                    }}
-                    aria-labelledby="profile-modal"
-                    aria-describedby="profile-modal-description"
-                >
-
-                    <Slide in={open} direction={'up'}
-                           style={{
-                               transform: "translate(-50%, 0%)",
-                               marginTop: "70px",
-                           }}
-                    >
+                <Modal open={open} onClose={() => {
+                    onClose();
+                    clearFields()
+                }}>
+                    <Slide in={open} direction={'down'} style={{transform: "translate(-50%, 0%)", marginTop: "70px",}}>
                         <Card variant="outlined"
                               sx={{
-                                  backgroundColor: "background.paper",
-                                  width: 400,
-                                  boxShadow: 24,
-                                  p: 2,
-                                  borderRadius: "8px",
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  width: {sm: '400px', xs: '100%'},
+                                  maxWidth: {sm: '400px', xs: '90%'},
+                                  padding: 2,
+                                  gap: 2,
+                                  margin: 'auto',
+                                  backgroundColor: "modal",
+                                  backdropFilter: 'blur(6px)',
+                                  WebkitBackdropFilter: 'blur(6px)',
+                                  boxShadow: 5,
+                                  borderRadius: 2,
                                   position: "relative",
                               }}
                         >
@@ -153,8 +114,8 @@ export default function SecurityModal({open, onClose}) {
                                 size="small"
                                 onClick={() => {
                                     onClose();
+                                    clearFields()
                                 }}
-
                                 sx={{
                                     position: 'absolute',
                                     top: 5,
@@ -166,44 +127,27 @@ export default function SecurityModal({open, onClose}) {
                                 <CloseIcon sx={{fontSize: '25px'}}/>
                             </IconButton>
 
-                            <Typography
-                                variant="h5"
-                                textAlign="center"
-                                sx={{width: '100%', mb: 2}}
-                            >
+                            <Typography variant="h5" textAlign="center" sx={{width: '100%', mb: 1}}>
                                 Security Settings
                             </Typography>
 
 
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    width: '100%',
-                                    gap: 2,
-                                }}
-                            >
+                            <Box sx={{display: 'flex', flexDirection: 'column', gap: 2,}}>
 
                                 <ValidatedPasswordField
                                     password={oldPassword}
                                     setPassword={setOldPassword}
-
                                     passwordError={oldPasswordError}
                                     setPasswordError={setOldPasswordError}
-
                                     label="Current Password"
                                 />
 
-
-                                <AnimatedElement
-                                    condition={!oldPasswordError && oldPassword.length > 0}>
+                                <AnimatedElement condition={!oldPasswordError && oldPassword.length > 0}>
                                     <ValidatedPasswordField
                                         password={newPassword}
                                         setPassword={setNewPassword}
-
                                         passwordError={newPasswordError}
                                         setPasswordError={setNewPasswordError}
-
                                         label="New Password"
                                     />
                                 </AnimatedElement>
@@ -213,44 +157,28 @@ export default function SecurityModal({open, onClose}) {
                                     <ValidatedPasswordConfirmField
                                         confirmPassword={confirmPassword}
                                         setConfirmPassword={setConfirmPassword}
-
                                         confirmPasswordError={confirmPasswordError}
                                         setConfirmPasswordError={setConfirmPasswordError}
-
                                         originalPassword={newPassword}
-
                                         label="Confirm New Password"
                                     />
                                 </AnimatedElement>
 
-
                                 <Box display="flex" justifyContent="flex-end" gap={2}>
-                                    <Button size="small" variant="outlined" onClick={onClose}>
+                                    <Button size="small" variant="outlined" onClick={() => {
+                                        onClose();
+                                        clearFields()
+                                    }}>
                                         Cancel
                                     </Button>
 
-
-                                    <LoadingButton
-                                        variant="contained"
-                                        size="small"
-                                        onClick={handleSave}
-                                        loading={loading}
-                                        disabled={oldPasswordError || oldPassword.length === 0 || newPasswordError || newPassword.length === 0 || confirmPasswordError || confirmPassword.length === 0}
+                                    <Button variant="contained" size="small" onClick={handlePasswordClick}
+                                            loading={loading}
+                                            disabled={oldPasswordError || oldPassword.length === 0 || newPasswordError || newPassword.length === 0 || confirmPasswordError || confirmPassword.length === 0}
                                     >
                                         Change Password
-                                    </LoadingButton>
-
+                                    </Button>
                                 </Box>
-
-                                <Divider/>
-
-
-                                <LoadingButton size="small" loading={loading} style={{width: "100%"}} variant="text"
-                                               onClick={handleDeleteClick} color="error">
-                                    Delete Account <DeleteIcon/>
-                                </LoadingButton>
-
-
                             </Box>
                         </Card>
                     </Slide>
@@ -259,39 +187,36 @@ export default function SecurityModal({open, onClose}) {
 
 
                 <Modal
-                    open={deleteConfirmOpen}
-                    onClose={handleDeleteCancel}
+                    open={changeConfirmModal}
+                    onClose={handlePasswordCancel}
                     aria-labelledby="confirm-delete-modal"
                     aria-describedby="confirm-delete-modal-description"
                 >
-                    <Slide in={deleteConfirmOpen} direction={'up'}
-                           style={{
-                               transform: "translate(-50%, 0%)",
-                               marginTop: "170px",
-                           }}
-                    >
+                    <Slide in={changeConfirmModal} direction={'down'} style={{margin: 'auto', marginTop: "170px",}}>
                         <Card variant="outlined"
                               sx={{
-                                  position: "relative",
                                   backgroundColor: "background.paper",
                                   width: 300,
                                   boxShadow: 24,
                                   p: 4,
-                                  borderRadius: "8px",
+                                  borderRadius: 2,
                               }}
                         >
                             <Typography
                                 component="h2"
                                 variant="h6"
-                                sx={{textAlign: "center", mb: 2}}
+                                sx={{textAlign: "center", mb: 1}}
                             >
-                                Are you sure you want to delete your account?
+                                Are you sure you want to change your password?
+                            </Typography >
+                            <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary'}}>
+                                After changing your password, only this active session will remain – all others will be invalidated.
                             </Typography>
                             <Box display="flex" justifyContent="space-between" mt={2}>
-                                <Button variant="outlined" onClick={handleDeleteCancel}>
+                                <Button variant="outlined" onClick={handlePasswordCancel}>
                                     No
                                 </Button>
-                                <Button variant="contained" color="error" onClick={handleDeleteConfirm}>
+                                <Button variant="contained" color="error" onClick={handlePasswordConfirm}>
                                     Yes
                                 </Button>
                             </Box>

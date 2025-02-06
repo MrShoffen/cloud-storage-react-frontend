@@ -2,17 +2,16 @@ import React, {useEffect, useState} from "react";
 import {Box, Button, Modal, Slide, Typography} from "@mui/material";
 import {useAuthContext} from "../../context/Auth/AuthContext.jsx";
 import ValidatedAvatarInput from "../../components/InputElements/AvatarInput/ValidatedAvatarInput.jsx";
-
-import {styled} from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import ValidatedUsernameTextField from "../../components/InputElements/TextField/ValidatedUsernameTextField.jsx";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import {useNotification} from "../../context/Notification/NotificationProvider.jsx";
+import {sendEdit} from "../../services/fetch/auth/SendEdit.js";
+import ConflictException from "../../exception/ConflictException.jsx";
 
 
 export default function ProfileModal({open, onClose}) {
-
     const {auth, login} = useAuthContext();
 
     const [avatarUrl, setAvatarUrl] = useState('');
@@ -21,60 +20,42 @@ export default function ProfileModal({open, onClose}) {
     const [username, setUsername] = useState('');
     const [usernameError, setUsernameError] = useState('');
 
-
     useEffect(() => {
-        // validateSession();
         setAvatarUrl(auth.isAuthenticated ? auth.user.avatarUrl : '');
         setUsername(auth.isAuthenticated ? auth.user.username : '')
-
-
-    }, [open, auth.isAuthenticated]);
-
+    }, [auth.user, open]);
 
     const [loading, setLoading] = useState(false);
-
-    const {showNotification} = useNotification();
+    const {showSuccess, showError, showWarn} = useNotification();
 
     const handleSave = async () => {
-        // try {
-        //     setLoading(true);
-        //     const editInformation = {
-        //         newUsername: username,
-        //         newAvatarUrl: avatarUrl,
-        //     }
-        //
-        //     const newData = await sendEdit(editInformation, "/profile");
-        //
-        //     login(newData);
-        //
-        //     showNotification({message: "Information updated successfully.", severity: "success"});
-        // } catch (error) {
-        //     switch (true) {
-        //         case error instanceof UserAlreadyExistException:
-        //             setUsernameError(error.message);
-        //             break;
-        //
-        //         default:
-        //             console.log('Unknown error occurred! ');
-        //             window.location.reload();
-        //     }
-        // }
-        // setLoading(false);
-    };
+        try {
+            setLoading(true);
+            const editInformation = {newUsername: username, newAvatarUrl: avatarUrl};
 
+            const newData = await sendEdit(editInformation, "/profile");
+            login(newData);
+            showSuccess("Information updated successfully.");
+        } catch (error) {
+            switch (true) {
+                case error instanceof ConflictException:
+                    setUsernameError(error.message);
+                    showWarn(error.message);
+                    break;
+
+                default:
+                    console.log('Unknown error occurred! ');
+                    onClose();
+                    showError('Unknown error occurred!');
+            }
+        }
+        setLoading(false);
+    };
 
 
     if (auth.isAuthenticated) {
         return (
-            <Modal
-                open={open}
-                onClose={() => {
-                    onClose();
-                }}
-                aria-labelledby="profile-modal"
-                aria-describedby="profile-modal-description"
-            >
-
+            <Modal open={open} onClose={onClose}>
                 <Slide in={open} direction={'down'} style={{transform: "translate(-50%, 0%)", marginTop: "70px"}}>
                     <Card variant="outlined"
                           sx={{

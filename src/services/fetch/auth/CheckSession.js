@@ -1,5 +1,6 @@
 import {API_USER_INFO} from "../../../UrlConstants.jsx";
 import UserUnauthorizedException from "../../../exception/UserUnauthorizedException.jsx";
+import ForbiddenException from "../../../exception/ForbiddenException.jsx";
 
 
 export const checkSession = async () => {
@@ -12,7 +13,7 @@ export const checkSession = async () => {
 
     if (!response.ok) {
         const error = await response.json();
-        throw new UserUnauthorizedException(error.detail);
+        throw new ForbiddenException(error.detail);
     }
 
     return await response.json();

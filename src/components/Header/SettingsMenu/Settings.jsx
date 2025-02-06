@@ -5,6 +5,7 @@ import {accountMenuItems} from "./AccountMenuItems.jsx";
 import {authenticationMenuItems} from "./AuthenticationMenuItems.jsx";
 import MenuIcon from "@mui/icons-material/Menu";
 import ProfileModal from "../../../modals/ProfileModal/ProfileModal.jsx";
+import SecurityModal from "../../../modals/SecurityModal/SecurityModal.jsx";
 
 
 export const Settings = () => {
@@ -25,6 +26,14 @@ export const Settings = () => {
     }
     const handleCloseProfileModal = () => {
         setProfileModalOpen(false);
+    };
+
+    const [isSecurityModalOpen, setSecurityModalOpen] = useState(false);
+    const handleOpenSecurityModal = async () => {
+        setSecurityModalOpen(true);
+    }
+    const handleCloseSecurityModal = () => {
+        setSecurityModalOpen(false);
     };
 
 
@@ -55,7 +64,9 @@ export const Settings = () => {
                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                 TransitionComponent={Slide}
             >
-                {auth.isAuthenticated ? accountMenuItems(handleOpenProfileModal) : authenticationMenuItems()}
+                {auth.isAuthenticated ?
+                    accountMenuItems(handleOpenProfileModal, handleOpenSecurityModal)
+                    : authenticationMenuItems()}
             </Menu>
         )
     }
@@ -89,7 +100,9 @@ export const Settings = () => {
                     }
                 }}
             >
-                {auth.isAuthenticated ? accountMenuItems(handleOpenProfileModal) : authenticationMenuItems()}
+                {auth.isAuthenticated ?
+                    accountMenuItems(handleOpenProfileModal, handleOpenSecurityModal)
+                    : authenticationMenuItems()}
             </Drawer>
         )
     }
@@ -117,6 +130,7 @@ export const Settings = () => {
             {getMenuVariant()}
             {getDrawerVariant()}
             <ProfileModal open={isProfileModalOpen} onClose={handleCloseProfileModal}/>
+            <SecurityModal open={isSecurityModalOpen} onClose={handleCloseSecurityModal}/>
 
         </>
     )
