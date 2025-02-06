@@ -1,6 +1,7 @@
 import {CustomThemeProvider} from "./GlobalThemeContext/CustomThemeProvider.jsx";
 import {NotificationProvider} from "./Notification/NotificationProvider.jsx";
 import {AuthProvider} from "./Auth/AuthContext.jsx";
+import {CloudStorageProvider} from "./Storage/StorageProvider.jsx";
 
 export const GlobalProvider = ({children}) => {
 
@@ -8,7 +9,9 @@ export const GlobalProvider = ({children}) => {
         <CustomThemeProvider>
             <NotificationProvider>
                 <AuthProvider>
-                    {children}
+                    <CloudStorageProvider>
+                        {children}
+                    </CloudStorageProvider>
                 </AuthProvider>
             </NotificationProvider>
         </CustomThemeProvider>

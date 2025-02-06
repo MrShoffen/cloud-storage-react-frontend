@@ -1,6 +1,6 @@
 import './App.css'
 
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import {BaseLayout} from "./pages/BaseLayout.jsx";
 import {GlobalProvider} from "./context/GlobalProvider.jsx";
 import {SignIn} from "./pages/SignIn.jsx";
@@ -11,6 +11,7 @@ import AvailableAfterLoginRoute from "./context/Auth/AvailableAfterLoginRoute.js
 import Files from "./pages/Files.jsx";
 
 function App() {
+
 
     return (
         <BrowserRouter>
@@ -37,7 +38,7 @@ function App() {
 
                         {/*available after login only*/}
 
-                        <Route path="home"
+                        <Route path="home/*"
                                element={
                                    <AvailableAfterLoginRoute>
                                        <Files/>
