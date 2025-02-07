@@ -8,7 +8,9 @@ import {ObjectIcon} from "../elements/ObjectIcon.jsx";
 import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
 
 
-export default function StorageObject({object}) {
+export default function StorageTileObject({object, style}) {
+
+    const isLarge = style === 'largeTiles'
 
     const {goToFolder} = useStorageContext();
 
@@ -23,8 +25,8 @@ export default function StorageObject({object}) {
             onClick={onClick}
             sx={{
                 position: 'relative',
-                minWidth: 100,
-                minHeight: 100,
+                minWidth: isLarge ? 160 : 100,
+                minHeight:  isLarge ? 160 : 100,
                 boxShadow: 5,
                 backgroundColor: "modal",
                 border: '1px solid',
@@ -33,8 +35,8 @@ export default function StorageObject({object}) {
             }}
             elevation={0}
         >
-            <Box sx={{width: '100%', position: 'absolute', top: 10}}>
-                <ObjectIcon object={object}/>
+            <Box sx={{width: '100%', position: 'absolute', top: 5}}>
+                <ObjectIcon object={object} style={style} />
             </Box>
                 <ObjectName object={object}/>
 

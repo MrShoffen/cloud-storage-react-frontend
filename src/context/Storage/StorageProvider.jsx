@@ -70,6 +70,7 @@ export const CloudStorageProvider = ({children}) => {
             folderContent,
             folderPath,
             isRootFolder,
+            currentFolder,
             goToPrevFolder,
             goToFolder,
             loadFolder
