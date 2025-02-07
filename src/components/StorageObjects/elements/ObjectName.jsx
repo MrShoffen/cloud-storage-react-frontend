@@ -38,6 +38,9 @@ export const ObjectName = ({object}) => {
                     whiteSpace: 'nowrap', // Запрещаем перенос строк
                     overflow: 'hidden', // Скрываем выходящий за пределы текст
                     textOverflow: 'ellipsis', // Добавляем многоточие
+                    '&:hover': {
+                        cursor: 'default',
+                    },
                 }}
             >
                 {object.folder ? object.name.slice(0, -1) : object.name}

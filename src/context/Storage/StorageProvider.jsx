@@ -12,26 +12,27 @@ export const CloudStorageProvider = ({children}) => {
     const [folderPath, setFolderPath] = React.useState([""]);
     const currentFolder = folderPath[folderPath.length - 1];
     const isRootFolder = currentFolder === "";
-    const goToPrevFolder = () => {
+    const currentPath = folderPath.join("");
+
+    const goToPrevFolder = async () => {
         setFolderContentLoading(true);
+
         if (folderPath.length === 1) {
             return;
         }
         const updatedPath = folderPath.slice(0, -1);
         setFolderPath(updatedPath);
-        updateCurrentFolderContent(updatedPath);
+        await updateCurrentFolderContent(updatedPath);
         setFolderContentLoading(false);
     }
-    const goToFolder = (folderName) => {
+    const goToFolder = async (folderName) => {
         setFolderContentLoading(true);
+
         const updatedPath = [...folderPath, folderName];
         setFolderPath(updatedPath);
-        updateCurrentFolderContent(updatedPath);
+        await updateCurrentFolderContent(updatedPath);
 
-        // setTimeout(() =>
-            setFolderContentLoading(false)
-            // , 200);
-
+        setFolderContentLoading(false)
     }
 
 
@@ -45,6 +46,7 @@ export const CloudStorageProvider = ({children}) => {
         window.history.pushState(null, "", '/cloud-storage/home/' + fullPath);
 
     }
+
 
     const loadFolder = async (url = "") => {
         setFolderContentLoading(true);
@@ -93,13 +95,14 @@ export const CloudStorageProvider = ({children}) => {
             folderPath,
             isRootFolder,
             currentFolder,
+            currentPath,
             goToPrevFolder,
             goToFolder,
             loadFolder,
             filesView,
             turnLargeTiles,
             turnRegularTiles,
-            turnList
+            turnList,
         }}>
         {children}
     </CloudStorageContext.Provider>);

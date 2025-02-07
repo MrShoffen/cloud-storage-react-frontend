@@ -16,7 +16,7 @@ export const ObjectIcon = ({object, style}) => {
 
     const listStyle={
         width: '100%',
-        fontSize: '20px',
+        fontSize: '25px',
     }
 
     let iconStyle = style === 'regularTiles' ? regularStyle : style === 'largeTiles' ? largeStyle : listStyle;

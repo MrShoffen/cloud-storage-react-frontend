@@ -1,16 +1,15 @@
 import {Box, Card, CardContent, CardHeader, Skeleton, Tooltip} from "@mui/material";
-import React, {useEffect} from "react";
+import React from "react";
 import Typography from "@mui/material/Typography";
 import {FolderIconGrad} from "../../../assets/icons/FolderIconGrad.jsx";
 
 import {ObjectName} from "../elements/ObjectName.jsx";
 import {ObjectIcon} from "../elements/ObjectIcon.jsx";
 import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
+import {ObjectListName} from "../elements/ObjectListName.jsx";
 
 
-export default function StorageTileObject({object, style}) {
-
-    const isLarge = style === 'largeTiles'
+export default function StorageListObject({object, style}) {
 
     const {goToFolder} = useStorageContext();
     const onClick = () => {
@@ -24,20 +23,25 @@ export default function StorageTileObject({object, style}) {
             onClick={onClick}
             sx={{
                 position: 'relative',
-                minWidth: isLarge ? 160 : 100,
-                minHeight: isLarge ? 160 : 100,
+                minWidth: 20,
+                minHeight: 40,
                 boxShadow: 5,
                 backgroundColor: "modal",
                 border: '1px solid',
                 borderColor: "divider",
                 borderRadius: 2,
+                display: 'flex',         // Добавляем flex-контейнер
+                alignItems: 'center',    // Выравниваем по вертикали
+                paddingLeft: 4,          // Немного отступа от края
             }}
             elevation={0}
         >
-            <Box sx={{width: '100%', position: 'absolute', top: 5}}>
+            <Box sx={{position: 'absolute', left: 5, top: 7}}>
                 <ObjectIcon object={object} style={style}/>
             </Box>
-            <ObjectName object={object}/>
+
+            <ObjectListName object={object}/>
+
 
         </Card>
     );

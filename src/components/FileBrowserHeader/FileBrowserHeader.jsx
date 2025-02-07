@@ -1,8 +1,25 @@
-import {Box, Button, Card, Container, Divider} from "@mui/material";
+import {
+    Box,
+    Button,
+    Card, CircularProgress,
+    Container,
+    Divider,
+    IconButton,
+    List, ListItem,
+    ListItemButton,
+    ListItemIcon, ListItemText,
+    SwipeableDrawer
+} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {CustomBread} from "./Breadcrumbs/CustomBread.jsx";
 import {useStorageContext} from "../../context/Storage/StorageProvider.jsx";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import {useEffect, useRef, useState} from "react";
+import LargeTile from '@mui/icons-material/ViewModule';
+import RegularTile from '@mui/icons-material/ViewCompact';
+import ListIcon from '@mui/icons-material/List';
+import {FileMenu} from "./FileMenu/FileMenu.jsx";
 
 export const FileBrowserHeader = () => {
 
@@ -12,6 +29,26 @@ export const FileBrowserHeader = () => {
         currentFolder,
         folderContentLoading,
     } = useStorageContext();
+
+    function handleBack() {
+        goToPrevFolder();
+    }
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    }
+    const handleOpenMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+
+    const scrollBoxRef = useRef(null);
+
+    useEffect(() => {
+        if (scrollBoxRef.current) {
+            scrollBoxRef.current.scrollLeft = scrollBoxRef.current.scrollWidth;
+        }
+    }, [currentFolder, folderContentLoading]); // Следим за изменением контента
 
     return (
         <Container disableGutters
@@ -33,13 +70,15 @@ export const FileBrowserHeader = () => {
                           border: '1px solid',
                           borderColor: 'divider',
                           borderRadius: 2,
-                          backdropFilter: 'blur(12px)',
-                          WebkitBackdropFilter: 'blur(12px)',
+                          backdropFilter: 'blur(10px)',
+                          WebkitBackdropFilter: 'blur(1px)',
                           height: '110px'
 
                       }}
                 >
-                    <Box sx={{
+                    <Box
+                        ref={scrollBoxRef}
+                        sx={{
                         pl: 1,
                         pr: 1,
                         maxHeight: '51px',
@@ -56,7 +95,7 @@ export const FileBrowserHeader = () => {
                     }}
                     >
                         {folderContentLoading ?
-                            <Typography> Loading</Typography> :
+                            <CircularProgress sx={{mt: 1, ml: 1}} size={30}/> :
                             <CustomBread/>}
                     </Box>
 
@@ -71,9 +110,17 @@ export const FileBrowserHeader = () => {
                         }}
                     >
                         {!isRootFolder &&
-                        <Button  onClick={goToPrevFolder} variant='contained' sx={{minHeight: '38px',minWidth: '38px', p: 0, width: '38px', height: '38px', borderRadius: '50%'}}>
-                            <ArrowBackIcon/>
-                        </Button>}
+                            <Button onClick={handleBack} variant='contained' sx={{
+                                minHeight: '38px',
+                                minWidth: '38px',
+                                p: 0,
+                                width: '38px',
+                                height: '38px',
+                                borderRadius: '50%'
+                            }}>
+                                <ArrowBackIcon/>
+                            </Button>
+                        }
                         <Box sx={{
                             position: 'absolute',
                             width: "70%",
@@ -89,13 +136,20 @@ export const FileBrowserHeader = () => {
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                             }}>
-                                {!folderContentLoading && ( currentFolder ? currentFolder.slice(0, -1) : 'Home')}
+                                {!folderContentLoading && (currentFolder ? currentFolder.slice(0, -1) : 'Home')}
                             </Typography>
                         </Box>
+
+
+                        <IconButton onClick={handleOpenMenu} variant='contained' sx={{ml: 'auto'}}>
+                            <MoreVertIcon/>
+                        </IconButton>
 
                     </Box>
                 </Card>
             </Box>
+            <FileMenu anchorEl={anchorEl} handleCloseMenu={handleCloseMenu}/>
+
         </Container>
     )
 }
