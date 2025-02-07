@@ -2,7 +2,7 @@ import {Box, Button, Card, Container, Divider} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {CustomBread} from "./Breadcrumbs/CustomBread.jsx";
 import {useStorageContext} from "../../context/Storage/StorageProvider.jsx";
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export const FileBrowserHeader = () => {
 
@@ -35,6 +35,7 @@ export const FileBrowserHeader = () => {
                           borderRadius: 2,
                           backdropFilter: 'blur(12px)',
                           WebkitBackdropFilter: 'blur(12px)',
+                          height: '110px'
 
                       }}
                 >
@@ -69,23 +70,26 @@ export const FileBrowserHeader = () => {
                             maxWidth: "100%",
                         }}
                     >
-                        <Button disabled={isRootFolder} onClick={goToPrevFolder} variant='contained'>back</Button>
-
+                        {!isRootFolder &&
+                        <Button  onClick={goToPrevFolder} variant='contained' sx={{minHeight: '38px',minWidth: '38px', p: 0, width: '38px', height: '38px', borderRadius: '50%'}}>
+                            <ArrowBackIcon/>
+                        </Button>}
                         <Box sx={{
                             position: 'absolute',
-                            width: "50%",
+                            width: "70%",
                             transform: 'translateX(-50%)',
                             left: '50%',
-                            bottom: 5,
+                            bottom: 10,
                         }}>
                             <Typography variant='h5' sx={{
                                 width: '100%',
+                                // backgroundColor: 'white',
                                 textAlign: 'center',
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                             }}>
-                                {currentFolder ? currentFolder.slice(0, -1) : 'Home'}
+                                {!folderContentLoading && ( currentFolder ? currentFolder.slice(0, -1) : 'Home')}
                             </Typography>
                         </Box>
 

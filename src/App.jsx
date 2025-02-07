@@ -8,7 +8,7 @@ import {SignUp} from "./pages/SignUp.jsx";
 import Index from "./pages/Index.jsx";
 import UnavailableAfterLoginRoute from "./context/Auth/UnavailableAfterLoginRoute.jsx";
 import AvailableAfterLoginRoute from "./context/Auth/AvailableAfterLoginRoute.jsx";
-import Files from "./pages/Files.jsx";
+import Files from "./pages/Files/Files.jsx";
 
 function App() {
 

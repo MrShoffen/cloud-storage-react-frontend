@@ -27,14 +27,17 @@ export const CloudStorageProvider = ({children}) => {
         const updatedPath = [...folderPath, folderName];
         setFolderPath(updatedPath);
         updateCurrentFolderContent(updatedPath);
-        setFolderContentLoading(false);
+
+        // setTimeout(() =>
+            setFolderContentLoading(false)
+            // , 200);
+
     }
 
 
     const [folderContent, setFolderContent] = useState(null);
-//todo after update - parse url in browser to save state
+
     const updateCurrentFolderContent = async (path = [""]) => {
-        // console.log(path);
         const fullPath = path.join("");
         let content = await sendGetFolderContent(fullPath);
         setFolderContent(content);
