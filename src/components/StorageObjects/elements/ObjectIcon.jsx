@@ -1,7 +1,7 @@
-import {FolderIconGrad} from "../../assets/icons/FolderIconGrad.jsx";
+import {FolderIconGrad} from "../../../assets/icons/FolderIconGrad.jsx";
 import React from "react";
-import {FileIconGrad} from "../../assets/icons/FileIconGrad.jsx";
-import {TextFileIconGrad} from "../../assets/icons/TextFileIconGrad.jsx";
+import {FileIconGrad} from "../../../assets/icons/FileIconGrad.jsx";
+import {TextFileIconGrad} from "../../../assets/icons/TextFileIconGrad.jsx";
 
 
 export const ObjectIcon = ({object}) => {

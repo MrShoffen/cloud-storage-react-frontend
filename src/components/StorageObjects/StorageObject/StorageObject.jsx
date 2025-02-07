@@ -3,15 +3,18 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import {FolderIconGrad} from "../../../assets/icons/FolderIconGrad.jsx";
 
-import {ObjectName} from "../ObjectName.jsx";
-import {ObjectIcon} from "../ObjectIcon.jsx";
+import {ObjectName} from "../elements/ObjectName.jsx";
+import {ObjectIcon} from "../elements/ObjectIcon.jsx";
+import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
 
 
-export default function StorageObject({object, navigateToFolder}) {
+export default function StorageObject({object}) {
+
+    const {goToFolder} = useStorageContext();
 
     const onClick = () => {
         if (object.folder) {
-            navigateToFolder(object.name);
+            goToFolder(object.name);
         }
     }
 

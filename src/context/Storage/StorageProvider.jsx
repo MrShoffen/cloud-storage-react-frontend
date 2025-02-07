@@ -8,26 +8,26 @@ export const useStorageContext = () => useContext(CloudStorageContext);
 
 
 export const CloudStorageProvider = ({children}) => {
-    const [folderLoading, setFolderLoading] = useState(false);
+    const [folderContentLoading, setFolderContentLoading] = useState(false);
     const [folderPath, setFolderPath] = React.useState([""]);
     const currentFolder = folderPath[folderPath.length - 1];
     const isRootFolder = currentFolder === "";
     const goToPrevFolder = () => {
-        setFolderLoading(true);
+        setFolderContentLoading(true);
         if (folderPath.length === 1) {
             return;
         }
         const updatedPath = folderPath.slice(0, -1);
         setFolderPath(updatedPath);
         updateCurrentFolderContent(updatedPath);
-        setFolderLoading(false);
+        setFolderContentLoading(false);
     }
     const goToFolder = (folderName) => {
-        setFolderLoading(true);
+        setFolderContentLoading(true);
         const updatedPath = [...folderPath, folderName];
         setFolderPath(updatedPath);
         updateCurrentFolderContent(updatedPath);
-        setFolderLoading(false);
+        setFolderContentLoading(false);
     }
 
 
@@ -43,35 +43,36 @@ export const CloudStorageProvider = ({children}) => {
 
     }
 
-    const initialFolderLoad = async (url = "") => {
-        setFolderLoading(true);
+    const loadFolder = async (url = "") => {
+        setFolderContentLoading(true);
         let content = await sendGetFolderContent(url);
         setFolderContent(content);
         console.log(content);
 
+        window.history.pushState(null, "", '/cloud-storage/home/' + url);
 
         if (url === "") {
-            setFolderLoading(false);
-
+            setFolderContentLoading(false);
+            setFolderPath([""])
             return;
         }
         const parts = url.split("/").filter(Boolean); // Убираем пустые элементы
         const result = parts.map(part => `${part}/`);
 
         setFolderPath(["", ...result]);
-        setFolderLoading(false);
+        setFolderContentLoading(false);
     }
 
 
     return (<CloudStorageContext.Provider
         value={{
-            folderLoading,
+            folderContentLoading,
             folderContent,
             folderPath,
             isRootFolder,
             goToPrevFolder,
             goToFolder,
-            initialFolderLoad
+            loadFolder
         }}>
         {children}
     </CloudStorageContext.Provider>);
