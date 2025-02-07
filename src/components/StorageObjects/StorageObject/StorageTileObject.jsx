@@ -8,7 +8,7 @@ import {ObjectIcon} from "../elements/ObjectIcon.jsx";
 import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
 
 
-export default function StorageTileObject({object, style}) {
+export default function StorageTileObject({object,  style, selectedIds}) {
 
     const isLarge = style === 'largeTiles'
 
@@ -21,13 +21,16 @@ export default function StorageTileObject({object, style}) {
 
     return (
         <Card
+            id={object.path}
+            data-id={object.path}
+            className={'selectable'}
             onClick={onClick}
             sx={{
                 position: 'relative',
                 minWidth: isLarge ? 160 : 100,
                 minHeight: isLarge ? 160 : 100,
                 boxShadow: 5,
-                backgroundColor: "modal",
+                backgroundColor: selectedIds.includes(object.path) ? "white" : "modal",
                 border: '1px solid',
                 borderColor: "divider",
                 borderRadius: 2,
