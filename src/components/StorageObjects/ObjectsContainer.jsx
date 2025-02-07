@@ -6,12 +6,11 @@ import {useCustomThemeContext} from "../../context/GlobalThemeContext/CustomThem
 
 export const ObjectsContainer = () => {
 
-    const {folderContent} = useStorageContext();
-    const {filesView, turnRegularTiles, turnLargeTiles} = useCustomThemeContext();
+    const {folderContent, filesView, turnRegularTiles, turnLargeTiles} = useStorageContext();
 
 
-    turnLargeTiles();
-    // turnRegularTiles();
+    // turnLargeTiles();
+    turnRegularTiles();
     if (filesView === 'regularTiles') {
 
         return (
@@ -22,7 +21,6 @@ export const ObjectsContainer = () => {
                     gridTemplateColumns: 'repeat(auto-fill, minmax(min(100px, 100%), 1fr))',
                     gap: 1,
                     pb: 5,
-                    // transform: isVisible ? "translateY(0)" : "translateY(-65px)",
                     transition: "transform 0.3s linear",
                 }}
             >

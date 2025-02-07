@@ -1,8 +1,8 @@
-import {Breadcrumbs, Chip} from "@mui/material";
+import {Box, Breadcrumbs, Chip} from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Typography from "@mui/material/Typography";
 import {useNavigate} from "react-router-dom";
-import {useStorageContext} from "../../context/Storage/StorageProvider.jsx";
+import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
 import HomeIcon from "@mui/icons-material/Home";
 
 
@@ -25,7 +25,7 @@ export const CustomBread = () => {
     }
 
     return (
-        <>
+        <Box sx={{display: 'flex',mt: '10px', maxHeight: '28px',  height: '28px', alignContent: 'center', alignItems: 'center'}}>
             <Chip
                 icon={<HomeIcon/>}
                 onClick={() => loadFolder("")}
@@ -39,7 +39,7 @@ export const CustomBread = () => {
             {folderPath.length > 1 &&
                 <NavigateNextIcon sx={{color: 'text.secondary', height: '32px'}} fontSize="small"/>}
 
-            <Breadcrumbs sx={{pt: '3px', ml: 1, minWidth: "max-content"}}
+            <Breadcrumbs sx={{ ml: 1, minWidth: "max-content"}}
                          separator={<NavigateNextIcon fontSize="small"/>}>
                 {folderPath.map((item, index) => {
                         let lastElement = index === folderPath.length - 1;
@@ -52,6 +52,7 @@ export const CustomBread = () => {
                             <Chip
                                 label={item.slice(0, -1)}
                                 sx={{
+                                    maxWidth: '120px',
                                     cursor: !lastElement ? 'pointer' : 'default',
                                     height: '25px',
                                     backgroundColor: lastElement ? 'info.main' : '',
@@ -68,7 +69,7 @@ export const CustomBread = () => {
                 )
                 }
             </Breadcrumbs>
-        </>
+        </Box>
     )
 
 }

@@ -69,26 +69,9 @@ export const CustomThemeProvider = ({children}) => {
         [isDarkMode]
     );
 
-    const [filesView, setFilesView] = useState(() => {
-        const view = localStorage.getItem('filesView');
-        return view ? view : 'regularTiles';
-    });
-
-    const toggleFilesView = (mode) => {
-        setFilesView(() => {
-            localStorage.setItem('filesView', mode);
-            return mode;
-        })
-    };
-
-    const turnRegularTiles = () => toggleFilesView('regularTiles');
-
-    const turnLargeTiles = () => toggleFilesView('largeTiles');
-
-    const turnList = () => toggleFilesView('list');
 
     return (
-        <ThemeContext.Provider value={{isDarkMode, toggleTheme, filesView, turnLargeTiles, turnRegularTiles, turnList}}>
+        <ThemeContext.Provider value={{isDarkMode, toggleTheme}}>
             <ThemeProvider theme={theme}>
                 <CssBaseline enableColorScheme/>
                 <BackgroundWrapper>

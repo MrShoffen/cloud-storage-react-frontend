@@ -64,6 +64,25 @@ export const CloudStorageProvider = ({children}) => {
     }
 
 
+    const [filesView, setFilesView] = useState(() => {
+        const view = localStorage.getItem('filesView');
+        return view ? view : 'regularTiles';
+    });
+
+    const toggleFilesView = (mode) => {
+        setFilesView(() => {
+            localStorage.setItem('filesView', mode);
+            return mode;
+        })
+    };
+
+    const turnRegularTiles = () => toggleFilesView('regularTiles');
+
+    const turnLargeTiles = () => toggleFilesView('largeTiles');
+
+    const turnList = () => toggleFilesView('list');
+
+
     return (<CloudStorageContext.Provider
         value={{
             folderContentLoading,
@@ -73,7 +92,11 @@ export const CloudStorageProvider = ({children}) => {
             currentFolder,
             goToPrevFolder,
             goToFolder,
-            loadFolder
+            loadFolder,
+            filesView,
+            turnLargeTiles,
+            turnRegularTiles,
+            turnList
         }}>
         {children}
     </CloudStorageContext.Provider>);
