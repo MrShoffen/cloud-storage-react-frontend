@@ -75,6 +75,7 @@ export const CloudStorageProvider = ({children}) => {
     });
 
     const toggleFilesView = (mode) => {
+        setSelectionMode(false);
         setFilesView(() => {
             localStorage.setItem('filesView', mode);
             return mode;
@@ -88,6 +89,8 @@ export const CloudStorageProvider = ({children}) => {
     const turnList = () => toggleFilesView('list');
 
 
+    const [isSelectionMode, setSelectionMode] = useState(false);
+
     return (<CloudStorageContext.Provider
         value={{
             folderContentLoading,
@@ -99,10 +102,14 @@ export const CloudStorageProvider = ({children}) => {
             goToPrevFolder,
             goToFolder,
             loadFolder,
+
+            //todo move to separate context
             filesView,
             turnLargeTiles,
             turnRegularTiles,
             turnList,
+            isSelectionMode,
+            setSelectionMode
         }}>
         {children}
     </CloudStorageContext.Provider>);

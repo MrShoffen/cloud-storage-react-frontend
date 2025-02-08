@@ -1,4 +1,4 @@
-import {Tooltip} from "@mui/material";
+import {Tooltip, Zoom} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React from "react";
 
@@ -11,17 +11,23 @@ export const ObjectName = ({object}) => {
             title={object.folder ? object.name.slice(0, -1) : object.name}
             placement="bottom"
             arrow
+            enterDelay={700}
             slotProps={{
                 popper: {
                     modifiers: [
                         {
                             name: 'offset',
                             options: {
-                                offset: [0, -14],
+                                offset: [0, -5],
+
                             },
                         },
                     ],
                 },
+
+            }}
+            slots={{
+                transition: Zoom,
             }}
 
         >
