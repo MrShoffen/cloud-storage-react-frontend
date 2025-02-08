@@ -73,9 +73,10 @@ export const NotificationProvider = ({children}) => {
 
             <Snackbar
                 open={notification.open}
-                onClose={closeNotification}
+
                 anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
                 TransitionComponent={SlideTransition}
+                resumeHideDuration={2000}
             >
                 <Alert
                     variant='filled'
@@ -84,7 +85,7 @@ export const NotificationProvider = ({children}) => {
                     sx={{
                         backdropFilter: 'blur(5px)',
                         WebkitBackdropFilter: 'blur(5px)',
-                        width: '100%',
+                        // width: '100%',
                         fontSize: '15px',
                         alignItems: 'center',
                         backgroundColor: backgroundColors[notification.severity],

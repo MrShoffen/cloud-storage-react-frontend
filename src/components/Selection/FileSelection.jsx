@@ -69,7 +69,7 @@ export const FileSelection = ({
             } else {
                 setSelectionMode(true);
             }
-        }, 50);
+        }, 100);
 
     }, [selectedIds])
 
