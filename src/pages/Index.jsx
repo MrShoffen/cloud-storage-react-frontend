@@ -1,9 +1,12 @@
-import {Card, Container} from "@mui/material";
+import {Card, Container, Fab} from "@mui/material";
 import {useState} from "react";
+import AddIcon from "@mui/icons-material/Add";
+import {FilePageButton} from "../components/FilePageButton/FilePageButton.jsx";
+import {useAuthContext} from "../context/Auth/AuthContext.jsx";
 
 export default function Index() {
 
-    const [count, setCount] = useState(0);
+    const {auth} = useAuthContext();
 
     return (
         <Container
@@ -17,6 +20,8 @@ export default function Index() {
                 // maxWidth: { md: 'md' } // Ограничение ширины на больших экранах
             }}
         >
+            {auth.isAuthenticated && <FilePageButton/>}
+
             <Card
                 elevation={0}
                 sx={{
@@ -59,6 +64,7 @@ export default function Index() {
                         sdfsd f
                         fsdfsdf
 
+
                         sdfsdfsdaf
 
 
@@ -98,9 +104,6 @@ export default function Index() {
                 <div className="card">
 
 
-                    <button onClick={() => setCount((count) => count + 1)}>
-                        count is {count}
-                    </button>
                     <p>
                         Edit <code>src/App.jsx</code> and save to test HMR
                     </p>

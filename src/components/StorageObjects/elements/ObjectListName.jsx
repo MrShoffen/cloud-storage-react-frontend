@@ -67,6 +67,7 @@ export const ObjectListName = ({object}) => {
                             fontSize: '12px',
                             color: 'text.secondary',
                             whiteSpace: 'nowrap',
+                            userSelect: 'none',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             '&:hover': {
@@ -89,6 +90,7 @@ export const ObjectListName = ({object}) => {
                             fontSize: '12px',
                             color: 'text.secondary',
                             whiteSpace: 'nowrap',
+                            userSelect: 'none',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             '&:hover': {

@@ -1,8 +1,7 @@
-import React, {createContext, useContext, useState} from 'react';
+import React, {createContext, useContext, useState, useEffect} from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import {AlertTitle, Slide} from "@mui/material";
-
+import {AlertTitle, Slide, Grow} from '@mui/material';
 
 const NotificationContext = createContext();
 export const useNotification = () => useContext(NotificationContext);
@@ -19,26 +18,38 @@ const colors = {
     error: "rgba(244,67,54,0.8)",
     success: "rgba(70,182,0,0.8)",
     warning: "rgba(255,136,0,0.8)",
-}
-
+};
 
 export const NotificationProvider = ({children}) => {
-    const SlideTransition = (props) => <Slide {...props}/>;
+    const SlideTransition = (props) => <Slide {...props} direction="up"/>;
 
     const [notification, setNotification] = useState({
-        open: false, message: '', severity: 'info',
+        open: false,
+        message: '',
+        severity: 'info',
+        duration: 9000,
     });
+
+    useEffect(() => {
+        if (!notification.open) {
+            // Сбрасываем состояние после закрытия
+            setNotification({
+                open: false,
+                message: '',
+                severity: 'info',
+                duration: 9000,
+            });
+        }
+    }, [notification.open]);
 
     const showNotification = ({message, severity = 'info', duration = 9000}) => {
         setNotification({
-            open: true, message, severity,
+            open: true,
+            message,
+            severity,
+            duration,
         });
-
-        setTimeout(() => {
-            setNotification((prev) => ({...prev, open: false}));
-        }, duration);
     };
-
 
     const closeNotification = () => {
         setNotification((prev) => ({...prev, open: false}));
@@ -46,37 +57,53 @@ export const NotificationProvider = ({children}) => {
 
     const showWarn = (warning, duration = 9000) => {
         showNotification({
-            message: warning, severity: 'warning', duration: duration
-        })
-    }
+            message: warning,
+            severity: 'warning',
+            duration: duration,
+        });
+    };
 
     const showInfo = (info, duration = 9000) => {
         showNotification({
-            message: info, severity: 'info', duration: duration
-        })
-    }
+            message: info,
+            severity: 'info',
+            duration: duration,
+        });
+    };
 
     const showSuccess = (success, duration = 9000) => {
         showNotification({
-            message: success, severity: 'success', duration: duration
-        })
-    }
+            message: success,
+            severity: 'success',
+            duration: duration,
+        });
+    };
 
     const showError = (error, duration = 9000) => {
         showNotification({
-            message: error, severity: 'error', duration: duration
-        })
-    }
+            message: error,
+            severity: 'error',
+            duration: duration,
+        });
+    };
 
-    return (<NotificationContext.Provider value={{showWarn, showInfo, showSuccess, showError}}>
+    return (
+        <NotificationContext.Provider value={{showWarn, showInfo, showSuccess, showError}}>
             {children}
 
+            <style>
+                {`
+                   .MuiSnackbar-root {
+                        pointer-events: none;
+                    }
+                `}
+            </style>
             <Snackbar
                 open={notification.open}
-
+                onClose={closeNotification}
+                autoHideDuration={notification.duration}
                 anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
                 TransitionComponent={SlideTransition}
-                resumeHideDuration={2000}
             >
                 <Alert
                     variant='filled'
@@ -85,20 +112,19 @@ export const NotificationProvider = ({children}) => {
                     sx={{
                         backdropFilter: 'blur(5px)',
                         WebkitBackdropFilter: 'blur(5px)',
-                        // width: '100%',
+                        width: '100%',
                         fontSize: '15px',
                         alignItems: 'center',
                         backgroundColor: backgroundColors[notification.severity],
                         border: '2px solid',
                         borderColor: colors[notification.severity],
                         color: 'text.secondary',
-                        m: '3px',
                     }}
                 >
                     <AlertTitle>{notification.severity.toUpperCase()}</AlertTitle>
                     {notification.message}
                 </Alert>
-
             </Snackbar>
-        </NotificationContext.Provider>);
+        </NotificationContext.Provider>
+    );
 };

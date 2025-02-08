@@ -5,6 +5,7 @@ import {HeaderSearchField} from "../InputElements/HeaderSearchField.jsx";
 import {useAuthContext} from "../../context/Auth/AuthContext.jsx";
 import {Settings} from "./SettingsMenu/Settings.jsx";
 import {SelectHeader} from "../Selection/SelectHeader/SelectHeader.jsx";
+import {FileButton} from "./FileButton.jsx";
 
 
 export default function Header() {
@@ -29,7 +30,7 @@ export default function Header() {
                     <MainLabel/>
 
                     <Box sx={{flexGrow: 1, height: 1}}/>
-
+                    {auth.isAuthenticated && <FileButton/>}
                     {auth.isAuthenticated && <HeaderSearchField/>}
 
                     <DarkModeSwitcher/>

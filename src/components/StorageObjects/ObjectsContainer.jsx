@@ -1,4 +1,4 @@
-import {Box} from "@mui/material";
+import {Box, Button} from "@mui/material";
 import StorageTileObject from "./StorageObject/StorageTileObject.jsx";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import {AnimatePresence, motion} from "framer-motion";
@@ -12,7 +12,7 @@ import {useStorageSelection} from "../../context/Storage/StorageSelectionProvide
 export const ObjectsContainer = () => {
 
     const {folderContent} = useStorageNavigation();
-    const {filesView} = useStorageView();
+    const {filesView, sortFolder} = useStorageView();
     const {selectedIds, setSelectedIds} = useStorageSelection();
 
     const animationVariants = {
@@ -35,6 +35,7 @@ export const ObjectsContainer = () => {
                 variants={animationVariants}
                 transition={{duration: 0.2}}
             >
+
                 {
                     (filesView === 'regularTiles' || filesView === 'largeTiles')
                         ?
@@ -56,9 +57,10 @@ export const ObjectsContainer = () => {
 
                         >
                             {folderContent
-                                && folderContent
-                                    .map((item) => <StorageTileObject selectedIds={selectedIds} object={item}
-                                                                      style={filesView}/>)}
+                                &&
+                                sortFolder(folderContent).map((item) => <StorageTileObject selectedIds={selectedIds}
+                                                                                           object={item}
+                                                                                           style={filesView}/>)}
                         </Box>
                         :
                         <Box
@@ -73,9 +75,10 @@ export const ObjectsContainer = () => {
                             }}
                         >
                             {folderContent
-                                && folderContent
-                                    .map((item) => <StorageListObject object={item} style={filesView}
-                                                                      selectedIds={selectedIds}/>)}
+                                &&
+                                sortFolder(folderContent).map((item) => <StorageListObject object={item}
+                                                                                           style={filesView}
+                                                                                           selectedIds={selectedIds}/>)}
                         </Box>
                 }
 
