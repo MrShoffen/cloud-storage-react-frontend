@@ -13,7 +13,7 @@ import {SelectHeader} from "../Selection/SelectHeader/SelectHeader.jsx";
 
 export const ObjectsContainer = () => {
 
-    const {folderContent, filesView} = useStorageContext();
+    const {folderContent, filesView, selectedIds, setSelectedIds} = useStorageContext();
 
     const animationVariants = {
         hidden: {opacity: 0},
@@ -21,7 +21,6 @@ export const ObjectsContainer = () => {
         exit: {opacity: 0}
     };
 
-    const [selectedIds, setSelectedIds] = useState([]);
     const containerRef = useRef(null);
     const moveableRef = useRef(null);
     const selectoRef = useRef(null);

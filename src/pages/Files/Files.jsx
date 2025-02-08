@@ -56,7 +56,7 @@ export default function Files() {
             <FileBrowserHeader/>
 
             <Container disableGutters sx={{mt: 23, width: '100%'}}>
-                <Box sx={{p: 2, pt: 1}}>
+                <Box sx={{p: 1, pt: 1}}>
                     {folderContentLoading ? <LoadingBox/> : <ObjectsContainer/>}
                 </Box>
             </Container>

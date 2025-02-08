@@ -39,16 +39,17 @@ export const CloudStorageProvider = ({children}) => {
     const [folderContent, setFolderContent] = useState(null);
 
     const updateCurrentFolderContent = async (path = [""]) => {
+        setSelectedIds([]);
         const fullPath = path.join("");
         let content = await sendGetFolderContent(fullPath);
         setFolderContent(content);
         console.log(content);
         window.history.pushState(null, "", '/cloud-storage/home/' + fullPath);
-
     }
 
 
     const loadFolder = async (url = "") => {
+        setSelectedIds([]);
         setFolderContentLoading(true);
         let content = await sendGetFolderContent(url);
         setFolderContent(content);
@@ -90,6 +91,7 @@ export const CloudStorageProvider = ({children}) => {
 
 
     const [isSelectionMode, setSelectionMode] = useState(false);
+    const [selectedIds, setSelectedIds] = useState([]);
 
     return (<CloudStorageContext.Provider
         value={{
@@ -108,8 +110,11 @@ export const CloudStorageProvider = ({children}) => {
             turnLargeTiles,
             turnRegularTiles,
             turnList,
+
             isSelectionMode,
-            setSelectionMode
+            setSelectionMode,
+            selectedIds,
+            setSelectedIds
         }}>
         {children}
     </CloudStorageContext.Provider>);

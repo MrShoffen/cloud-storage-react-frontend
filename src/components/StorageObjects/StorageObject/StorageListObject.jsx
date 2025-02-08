@@ -56,11 +56,7 @@ export default function StorageListObject({object, style, selectedIds}) {
                 position: 'relative',
                 minWidth: 20,
                 minHeight: 40,
-                boxShadow: 0,
-                backgroundColor: selected ? "objectSelected" : "modal",
-
-                border: '1px solid',
-                borderColor: "divider",
+                backgroundColor: selected ? "objectSelected" : "transparent",
                 borderRadius: 2,
                 display: 'flex',         // Добавляем flex-контейнер
                 alignItems: 'center',    // Выравниваем по вертикали

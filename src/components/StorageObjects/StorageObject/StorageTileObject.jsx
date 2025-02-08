@@ -58,11 +58,7 @@ export default function StorageTileObject({object, style, selectedIds}) {
                 minWidth: isLarge ? 160 : 100,
                 minHeight: isLarge ? 160 : 100,
                 maxHeight: isLarge ? 160 : 100,
-                boxShadow: 5,
-                backgroundColor: selected ? "objectSelected" : "modal",
-                // backgroundColor: 'action.hover',
-                border: '1px solid',
-                borderColor: "divider",
+                backgroundColor: selected ? "objectSelected" : "transparent",
                 borderRadius: 2,
                 '&:hover': {
                     backgroundColor: selected ? "objectSelected" : "objectHover",
