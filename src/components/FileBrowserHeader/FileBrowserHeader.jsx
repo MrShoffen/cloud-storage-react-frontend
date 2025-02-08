@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {CustomBread} from "./Breadcrumbs/CustomBread.jsx";
-import {useStorageContext} from "../../context/Storage/StorageProvider.jsx";
+import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {useEffect, useRef, useState} from "react";
@@ -28,7 +28,7 @@ export const FileBrowserHeader = () => {
         goToPrevFolder,
         currentFolder,
         folderContentLoading,
-    } = useStorageContext();
+    } = useStorageNavigation();
 
     function handleBack() {
         goToPrevFolder();

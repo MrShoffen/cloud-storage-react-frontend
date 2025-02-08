@@ -1,13 +1,16 @@
 import React, {createContext, useContext, useState} from "react";
 import {sendGetFolderContent} from "../../services/fetch/auth/SendGetFolderContent.js";
+import {useStorageSelection} from "./StorageSelectionProvider.jsx";
 
 
 const CloudStorageContext = createContext();
 
-export const useStorageContext = () => useContext(CloudStorageContext);
+export const useStorageNavigation = () => useContext(CloudStorageContext);
 
 
-export const CloudStorageProvider = ({children}) => {
+export const StorageNavigationProvider = ({children}) => {
+   const {setSelectedIds} =useStorageSelection();
+
     const [folderContentLoading, setFolderContentLoading] = useState(false);
     const [folderPath, setFolderPath] = React.useState([""]);
     const currentFolder = folderPath[folderPath.length - 1];
@@ -69,30 +72,6 @@ export const CloudStorageProvider = ({children}) => {
         setFolderContentLoading(false);
     }
 
-
-    const [filesView, setFilesView] = useState(() => {
-        const view = localStorage.getItem('filesView');
-        return view ? view : 'regularTiles';
-    });
-
-    const toggleFilesView = (mode) => {
-        setSelectionMode(false);
-        setFilesView(() => {
-            localStorage.setItem('filesView', mode);
-            return mode;
-        })
-    };
-
-    const turnRegularTiles = () => toggleFilesView('regularTiles');
-
-    const turnLargeTiles = () => toggleFilesView('largeTiles');
-
-    const turnList = () => toggleFilesView('list');
-
-
-    const [isSelectionMode, setSelectionMode] = useState(false);
-    const [selectedIds, setSelectedIds] = useState([]);
-
     return (<CloudStorageContext.Provider
         value={{
             folderContentLoading,
@@ -103,18 +82,7 @@ export const CloudStorageProvider = ({children}) => {
             currentPath,
             goToPrevFolder,
             goToFolder,
-            loadFolder,
-
-            //todo move to separate context
-            filesView,
-            turnLargeTiles,
-            turnRegularTiles,
-            turnList,
-
-            isSelectionMode,
-            setSelectionMode,
-            selectedIds,
-            setSelectedIds
+            loadFolder
         }}>
         {children}
     </CloudStorageContext.Provider>);

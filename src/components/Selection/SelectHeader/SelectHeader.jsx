@@ -1,6 +1,6 @@
 import {AppBar, Box, Button, Container, Drawer, Toolbar} from "@mui/material";
 import React, {useState} from "react";
-import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
+import {useStorageNavigation} from "../../../context/Storage/StorageNavigationProvider.jsx";
 import MainLabel from "../../Header/MainLabel.jsx";
 import {HeaderSearchField} from "../../InputElements/HeaderSearchField.jsx";
 import DarkModeSwitcher from "../../Header/DarkModeSwitcher.jsx";
@@ -13,6 +13,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Typography from "@mui/material/Typography";
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
+import {useStorageSelection} from "../../../context/Storage/StorageSelectionProvider.jsx";
 
 
 const pathToName = (path) => {
@@ -24,7 +25,10 @@ const pathToName = (path) => {
 export const SelectHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const {isSelectionMode, setSelectionMode} = useStorageContext();
+    const {isSelectionMode,
+        setSelectionMode,
+        selectedIds,
+        setSelectedIds} = useStorageSelection();
 
     // Условие для открытия/закрытия Drawer
     const toggleDrawer = (open) => (event) => {
@@ -34,7 +38,7 @@ export const SelectHeader = () => {
         setIsOpen(open);
     };
 
-    const {folderContent, filesView, selectedIds, setSelectedIds} = useStorageContext();
+
 
     const clearSelectionMode = () => {
         setSelectionMode(false);

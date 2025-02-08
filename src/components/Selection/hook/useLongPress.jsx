@@ -1,5 +1,5 @@
 import {useCallback, useRef, useState} from "react";
-import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
+import {useStorageNavigation} from "../../../context/Storage/StorageNavigationProvider.jsx";
 
 export const useLongPress = (
     onLongPress,
@@ -10,7 +10,6 @@ export const useLongPress = (
     const timeout = useRef();
     const target = useRef();
     const startPos = useRef({x: 0, y: 0});
-    const { isSelectionMode} = useStorageContext();
 
     const start = useCallback(
         event => {

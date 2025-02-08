@@ -2,9 +2,10 @@ import Selecto from "react-selecto";
 import Moveable from "react-moveable";
 import {useEffect, useRef, useState} from "react";
 import {Box, Button} from "@mui/material";
-import {useStorageContext} from "../../context/Storage/StorageProvider.jsx";
+import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import {isMobile} from "react-device-detect";
 import {ObjectIcon} from "../StorageObjects/elements/ObjectIcon.jsx";
+import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 
 export const FileSelection = ({
                                   containerRef,
@@ -14,7 +15,7 @@ export const FileSelection = ({
     const isMob = isMobile;
 
 
-    const {isSelectionMode, setSelectionMode} = useStorageContext();
+    const {isSelectionMode, setSelectionMode} = useStorageSelection();
 
     const [mobileSelecting, setMobileSelecting] = useState(false);
 
@@ -46,17 +47,13 @@ export const FileSelection = ({
 
     useEffect(() => {
             if (isMob && mobileSelecting) {
-
                 const elements = document.elementsFromPoint(coordinates.x, coordinates.y);
                 const el = elements.find(elem => elem.classList.contains('selectable'));
-                const clickEvent = new MouseEvent("mousedown", {
-                    bubbles: true, // Событие всплывает
-                    cancelable: true,
-                    clientX: coordinates.x, // Координата X относительно окна браузера
-                    clientY: coordinates.y, // Координата Y относительно окна браузера
-                });
                 if (el) {
-                    el.dispatchEvent(clickEvent)
+                    selectoRef.current.setSelectedTargets([el]);
+                    let id = el.dataset.id;
+                    setSelectedIds([id]);
+                    // el.dispatchEvent(clickEvent)
                 }
             }
         }
@@ -69,10 +66,10 @@ export const FileSelection = ({
             if (selectedIds.length === 0) {
                 isMob && setMobileSelecting(false);
                 setSelectionMode(false);
-            } else{
+            } else {
                 setSelectionMode(true);
             }
-        }, 100);
+        }, 50);
 
     }, [selectedIds])
 
@@ -98,8 +95,34 @@ export const FileSelection = ({
 
     return (
         <>
+            <Button
+                onClick={() => {
+                    const allElements = document.querySelectorAll(".selectable");
+                    const elementsArray = Array.from(allElements); // Преобразование в массив
 
+// Получаем координаты всех элементов
+                    let allPoints = elementsArray.map(el => selectoRef.current.getElementPoints(el)[0]);
 
+                    console.log(allPoints);
+                    // let validPoints = allPoints.filter(point => Array.isArray(point) && point.length === 2);
+                    //
+                    //
+                    //     const startPoint = validPoints[0];  // Первой точкой может быть первая найденная
+                    //     const endPoint = validPoints[validPoints.length - 1];  // Последней — последняя
+                    //
+                    //     selectoRef.current.setSelectedTargetsByPoints(allPoints[0], allPoints[allPoints.length-1]);
+
+                    selectoRef.current.setSelectedTargets(elementsArray);
+
+                    let selectedTargets = selectoRef.current.getSelectedTargets();
+
+                    let idS = selectedTargets.map(el => el.dataset.id);
+                    setSelectedIds(idS);
+
+                    console.log(selectedTargets);
+
+                }}
+            >but</Button>
             <Selecto
                 ref={selectoRef}
                 selectableTargets={[" .selectable"]}
@@ -117,8 +140,21 @@ export const FileSelection = ({
                         setSelectedIds(e.selected.map(el => el.dataset.id));
                     }
                 }
-                selectionClassName="selecto-selection"
+
+                className={isMob && "custom-selection"}
+                selectionStyle={{
+                    background: "rgba(255, 0, 0, 0.2)",   // Красный фон (20% прозрачности)
+                    border: "2px solid red",              // Красная граница
+                }}
             />
+            <style>
+                {`
+                   .custom-selection {
+                        background-color: transparent; 
+                        border-color:transparent; 
+                    }
+                `}
+            </style>
 
             {
                 !isMob &&
@@ -145,21 +181,12 @@ export const FileSelection = ({
                         }}
                         onRenderGroup={e => {
                             setShowIcon(true);
-
                             const x = e.events[0].clientX;
                             const y = e.events[0].clientY;
                             const objs = e.events.map(e => e.target.dataset.id);
-
                             setIconCoord({x: x, y: y});
 
                             console.log('X: ' + x + ', Y: ' + y + ' -- ' + objs);
-
-                            e.events.forEach((ev) => {
-                                // console.log(ev.clientX, ev.clientY);
-                                // console.log(ev.target.dataset.id);
-                                // ev.target.style.cssText += ev.cssText;
-                            });
-
                         }}
 
 

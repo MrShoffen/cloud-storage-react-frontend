@@ -1,19 +1,19 @@
 import {Box} from "@mui/material";
 import StorageTileObject from "./StorageObject/StorageTileObject.jsx";
-import {useStorageContext} from "../../context/Storage/StorageProvider.jsx";
-import {motion, AnimatePresence} from "framer-motion";
-import {useEffect, useRef, useState} from "react";
+import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
+import {AnimatePresence, motion} from "framer-motion";
+import {useRef} from "react";
 import StorageListObject from "./StorageObject/StorageListObject.jsx";
-import {SelectableGroup} from "react-selectable-fast";
-import Selecto from "react-selecto";
-import Moveable from "react-moveable";
 import './selected.css';
 import {FileSelection} from "../Selection/FileSelection.jsx";
-import {SelectHeader} from "../Selection/SelectHeader/SelectHeader.jsx";
+import {useStorageView} from "../../context/Storage/StorageViewProvider.jsx";
+import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 
 export const ObjectsContainer = () => {
 
-    const {folderContent, filesView, selectedIds, setSelectedIds} = useStorageContext();
+    const {folderContent} = useStorageNavigation();
+    const {filesView} = useStorageView();
+    const {selectedIds, setSelectedIds} = useStorageSelection();
 
     const animationVariants = {
         hidden: {opacity: 0},
@@ -24,7 +24,6 @@ export const ObjectsContainer = () => {
     const containerRef = useRef(null);
     const moveableRef = useRef(null);
     const selectoRef = useRef(null);
-
 
 
     return (

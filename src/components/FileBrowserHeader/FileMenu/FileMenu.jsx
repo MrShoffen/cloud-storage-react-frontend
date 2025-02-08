@@ -12,8 +12,8 @@ import {
 import ListIcon from "@mui/icons-material/List";
 import RegularTile from "@mui/icons-material/ViewCompact";
 import LargeTile from "@mui/icons-material/ViewModule";
-import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
 import CheckIcon from '@mui/icons-material/Check';
+import {useStorageView} from "../../../context/Storage/StorageViewProvider.jsx";
 
 export const FileMenu = ({anchorEl, handleCloseMenu}) => {
     const {
@@ -21,7 +21,7 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
         turnLargeTiles,
         turnRegularTiles,
         turnList,
-    } = useStorageContext();
+    } = useStorageView();
 
     const open = Boolean(anchorEl);
 

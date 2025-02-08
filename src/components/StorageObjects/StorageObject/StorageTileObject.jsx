@@ -5,9 +5,10 @@ import {FolderIconGrad} from "../../../assets/icons/FolderIconGrad.jsx";
 
 import {ObjectName} from "../elements/ObjectName.jsx";
 import {ObjectIcon} from "../elements/ObjectIcon.jsx";
-import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
+import {useStorageNavigation} from "../../../context/Storage/StorageNavigationProvider.jsx";
 import {useLongPress} from "../../Selection/hook/useLongPress.jsx";
 import {isMobile} from "react-device-detect";
+import {useStorageSelection} from "../../../context/Storage/StorageSelectionProvider.jsx";
 
 
 export default function StorageTileObject({object, style, selectedIds}) {
@@ -15,7 +16,9 @@ export default function StorageTileObject({object, style, selectedIds}) {
 
     const isLarge = style === 'largeTiles'
 
-    const {goToFolder, isSelectionMode, setSelectionMode} = useStorageContext();
+    const {goToFolder} = useStorageNavigation();
+    const {setSelectionMode, isSelectionMode} = useStorageSelection();
+
 
     const onClick = isMob ? () => {
         if (object.folder && !isSelectionMode) {

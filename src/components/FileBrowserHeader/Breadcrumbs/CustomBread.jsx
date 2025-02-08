@@ -2,7 +2,7 @@ import {Box, Breadcrumbs, Chip} from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Typography from "@mui/material/Typography";
 import {useNavigate} from "react-router-dom";
-import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
+import {useStorageNavigation} from "../../../context/Storage/StorageNavigationProvider.jsx";
 import HomeIcon from "@mui/icons-material/Home";
 
 
@@ -11,7 +11,7 @@ export const CustomBread = () => {
     const {
         folderPath,
         loadFolder
-    } = useStorageContext();
+    } = useStorageNavigation();
 
     const buildUrl = (endpoint, folderPath) => {
         let url = "";

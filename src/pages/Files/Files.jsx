@@ -1,6 +1,6 @@
 import {Box, CircularProgress, Container} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import {useStorageContext} from "../../context/Storage/StorageProvider.jsx";
+import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {ObjectsContainer} from "../../components/StorageObjects/ObjectsContainer.jsx";
@@ -26,7 +26,7 @@ const LoadingBox = () => {
 
 export default function Files() {
 
-    const {folderContentLoading, loadFolder} = useStorageContext();
+    const {folderContentLoading, loadFolder} = useStorageNavigation();
     const location = useLocation();
 
 

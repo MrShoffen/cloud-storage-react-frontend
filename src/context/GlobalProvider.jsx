@@ -1,7 +1,9 @@
 import {CustomThemeProvider} from "./GlobalThemeContext/CustomThemeProvider.jsx";
 import {NotificationProvider} from "./Notification/NotificationProvider.jsx";
 import {AuthProvider} from "./Auth/AuthContext.jsx";
-import {CloudStorageProvider} from "./Storage/StorageProvider.jsx";
+import {StorageNavigationProvider} from "./Storage/StorageNavigationProvider.jsx";
+import {StorageViewProvider} from "./Storage/StorageViewProvider.jsx";
+import {StorageSelectionProvider} from "./Storage/StorageSelectionProvider.jsx";
 
 export const GlobalProvider = ({children}) => {
 
@@ -9,9 +11,15 @@ export const GlobalProvider = ({children}) => {
         <CustomThemeProvider>
             <NotificationProvider>
                 <AuthProvider>
-                    <CloudStorageProvider>
-                        {children}
-                    </CloudStorageProvider>
+
+                    <StorageSelectionProvider>
+                        <StorageViewProvider>
+                            <StorageNavigationProvider>
+                                {children}
+                            </StorageNavigationProvider>
+                        </StorageViewProvider>
+                    </StorageSelectionProvider>
+
                 </AuthProvider>
             </NotificationProvider>
         </CustomThemeProvider>

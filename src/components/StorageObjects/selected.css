@@ -26,6 +26,17 @@
     opacity: 0;
 }
 
+.my-custom-selection {
+    background: rgba(255, 0, 0, 0.2);   /* Красный фон (20% прозрачности) */
+    border: 2px dashed red;             /* Красная пунктирная рамка */
+}
+
+
+.selecto-selection {
+    background: rgba(124, 113, 165, 0.3);  /* Полупрозрачный синий фон */
+    border: 2px solid rgba(255, 0, 128, 0.8); /* Синяя рамка */
+    border-radius: 4px; /* Закругление углов */
+}
 /*.scroll {*/
 /*    overflow: auto;*/
 /*    -webkit-user-select: none;*/
