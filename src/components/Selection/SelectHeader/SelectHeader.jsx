@@ -14,6 +14,13 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Typography from "@mui/material/Typography";
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 
+
+const pathToName = (path) => {
+    let sep = path.lastIndexOf("/", path.length - 2);
+    return path.substring(sep+1);
+
+}
+
 export const SelectHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -41,8 +48,8 @@ export const SelectHeader = () => {
                 position: 'absolute',
                 left: '50%',
                 transform: 'translateX(-50%)',
-                // top: isSelectionMode ? '-6px' : '-70px',
-                top: '-6px',
+                top: isSelectionMode ? '-6px' : '-70px',
+                // top: '-6px',
                 transition: 'top 0.2s ease-in-out',
             }}
             disableGutters>
@@ -70,7 +77,7 @@ export const SelectHeader = () => {
                     }}
                 >
                     {selectedIds.length === 1 && <InfoOutlinedIcon sx={{fontSize: '25px'}}/>
-                    ||
+                        ||
                         selectedIds.length > 1 && <CheckBoxOutlinedIcon sx={{fontSize: '25px'}}/>
                     }
                 </IconButton>
@@ -95,12 +102,11 @@ export const SelectHeader = () => {
                         },
                     }}
                 >
-                    {selectedIds.length === 1 && selectedIds[0]
-                    ||
+                    {selectedIds.length === 1 && pathToName(selectedIds[0])
+                        ||
                         selectedIds.length > 1 && (selectedIds.length + ' files')
                     }
                 </Typography>
-
 
 
                 <IconButton

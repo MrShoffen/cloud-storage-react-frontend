@@ -11,7 +11,8 @@ export const ObjectIcon = ({name, style='regularTiles'}) => {
     };
     const largeStyle = {
         width: '100%',
-        fontSize: '130px',
+        fontSize: '145px',
+
     };
 
     const listStyle={

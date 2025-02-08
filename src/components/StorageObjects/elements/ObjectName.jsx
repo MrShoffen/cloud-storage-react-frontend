@@ -24,7 +24,6 @@ export const ObjectName = ({object}) => {
                         },
                     ],
                 },
-
             }}
             slots={{
                 transition: Zoom,
