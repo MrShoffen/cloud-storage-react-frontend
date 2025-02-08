@@ -6,7 +6,7 @@ import {FolderIconGrad} from "../../../assets/icons/FolderIconGrad.jsx";
 import {ObjectName} from "../elements/ObjectName.jsx";
 import {ObjectIcon} from "../elements/ObjectIcon.jsx";
 import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
-import {useLongPress} from "../../Selection/useLongPress.jsx";
+import {useLongPress} from "../../Selection/hook/useLongPress.jsx";
 import {isMobile} from "react-device-detect";
 
 

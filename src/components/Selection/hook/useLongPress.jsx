@@ -1,5 +1,5 @@
 import {useCallback, useRef, useState} from "react";
-import {useStorageContext} from "../../context/Storage/StorageProvider.jsx";
+import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
 
 export const useLongPress = (
     onLongPress,

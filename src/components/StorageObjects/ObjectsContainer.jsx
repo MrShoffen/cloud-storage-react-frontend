@@ -9,6 +9,7 @@ import Selecto from "react-selecto";
 import Moveable from "react-moveable";
 import './selected.css';
 import {FileSelection} from "../Selection/FileSelection.jsx";
+import {SelectHeader} from "../Selection/SelectHeader/SelectHeader.jsx";
 
 export const ObjectsContainer = () => {
 

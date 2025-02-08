@@ -4,6 +4,7 @@ import MainLabel from "./MainLabel.jsx";
 import {HeaderSearchField} from "../InputElements/HeaderSearchField.jsx";
 import {useAuthContext} from "../../context/Auth/AuthContext.jsx";
 import {Settings} from "./SettingsMenu/Settings.jsx";
+import {SelectHeader} from "../Selection/SelectHeader/SelectHeader.jsx";
 
 
 export default function Header() {
@@ -20,9 +21,11 @@ export default function Header() {
                     height: "64px",
                 }}
         >
+
+            <SelectHeader/>
+
             <Container disableGutters>
                 <Toolbar sx={{height: "65px",}} disableGutters>
-
                     <MainLabel/>
 
                     <Box sx={{flexGrow: 1, height: 1}}/>

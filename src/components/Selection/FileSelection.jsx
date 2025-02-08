@@ -69,6 +69,8 @@ export const FileSelection = ({
             if (selectedIds.length === 0) {
                 isMob && setMobileSelecting(false);
                 setSelectionMode(false);
+            } else{
+                setSelectionMode(true);
             }
         }, 100);
 

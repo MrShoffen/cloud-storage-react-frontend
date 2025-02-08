@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {ObjectsContainer} from "../../components/StorageObjects/ObjectsContainer.jsx";
 import {FileBrowserHeader} from "../../components/FileBrowserHeader/FileBrowserHeader.jsx";
+import {SelectHeader} from "../../components/Selection/SelectHeader/SelectHeader.jsx";
 
 
 const LoadingBox = () => {
