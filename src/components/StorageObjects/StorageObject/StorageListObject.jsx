@@ -7,8 +7,9 @@ import {ObjectName} from "../elements/ObjectName.jsx";
 import {ObjectIcon} from "../elements/ObjectIcon.jsx";
 import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
 import {ObjectListName} from "../elements/ObjectListName.jsx";
-import {useLongPress} from "../Selection/useLongPress.jsx";
+import {useLongPress} from "../../Selection/useLongPress.jsx";
 import {isMobile} from "react-device-detect";
+import CheckIcon from "@mui/icons-material/Check";
 
 const isMob = isMobile;
 
@@ -40,7 +41,7 @@ export default function StorageListObject({object, style, selectedIds}) {
     const longPressEvent = useLongPress(onLongPress, onClick);
 
 
-
+    const selected = selectedIds.includes(object.path);
 
     return (
         <Card
@@ -56,21 +57,35 @@ export default function StorageListObject({object, style, selectedIds}) {
                 minWidth: 20,
                 minHeight: 40,
                 boxShadow: 0,
-                backgroundColor: selectedIds.includes(object.path) ? "divider" : "modal",
+                backgroundColor: selected ? "objectSelected" : "modal",
+
                 border: '1px solid',
                 borderColor: "divider",
                 borderRadius: 2,
                 display: 'flex',         // Добавляем flex-контейнер
                 alignItems: 'center',    // Выравниваем по вертикали
                 paddingLeft: 4,          // Немного отступа от края
+                '&:hover': {
+                    backgroundColor: selected ? "objectSelected" : "objectHover",
+                }
             }}
             elevation={0}
         >
             <Box sx={{position: 'absolute', left: 5, top: 7}}>
-                <ObjectIcon object={object} style={style}/>
+                <ObjectIcon name={object.name} style={style}/>
             </Box>
 
             <ObjectListName object={object}/>
+
+            {selected &&
+                <CheckIcon
+                    sx={{
+                        position: 'absolute',
+                        right: '8px', // Отступ от правого края
+                        color: 'primary.dark', // Цвет галочки
+                    }}
+                />
+            }
 
 
         </Card>

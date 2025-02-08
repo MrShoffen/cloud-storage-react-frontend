@@ -61,6 +61,8 @@ export const CustomThemeProvider = ({children}) => {
                     searchInput: isDarkMode ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.3)",
                     menu: isDarkMode ? 'rgba(0,0,0,0.8)' : "white",
                     modal: isDarkMode ? "rgba(0,0,0,0.4)" : "white",
+                    objectHover: isDarkMode ? "rgba(45,58,112,0.09)" : "rgba(202,202,202,0.7)",
+                    objectSelected: isDarkMode ? "rgba(45,86,197,0.35)" : "rgba(126,126,126,0.7)",
                     background: {
                         default: isDarkMode ? 'black' : 'white',
                     },

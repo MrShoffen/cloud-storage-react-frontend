@@ -8,7 +8,7 @@ import {SelectableGroup} from "react-selectable-fast";
 import Selecto from "react-selecto";
 import Moveable from "react-moveable";
 import './selected.css';
-import {FileSelection} from "./Selection/FileSelection.jsx";
+import {FileSelection} from "../Selection/FileSelection.jsx";
 
 export const ObjectsContainer = () => {
 
@@ -25,6 +25,8 @@ export const ObjectsContainer = () => {
     const moveableRef = useRef(null);
     const selectoRef = useRef(null);
 
+
+
     return (
         <AnimatePresence mode="wait">
             <motion.div
@@ -40,6 +42,7 @@ export const ObjectsContainer = () => {
                         <Box
                             ref={containerRef}
                             className={"elements"}
+
                             sx={{
                                 width: '100%',
                                 display: 'grid',

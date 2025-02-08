@@ -43,6 +43,7 @@ export const ObjectListName = ({object}) => {
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
+                        userSelect: 'none',
                         '&:hover': {
                             cursor: 'default',
                         },

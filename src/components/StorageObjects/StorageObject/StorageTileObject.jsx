@@ -6,7 +6,7 @@ import {FolderIconGrad} from "../../../assets/icons/FolderIconGrad.jsx";
 import {ObjectName} from "../elements/ObjectName.jsx";
 import {ObjectIcon} from "../elements/ObjectIcon.jsx";
 import {useStorageContext} from "../../../context/Storage/StorageProvider.jsx";
-import {useLongPress} from "../Selection/useLongPress.jsx";
+import {useLongPress} from "../../Selection/useLongPress.jsx";
 import {isMobile} from "react-device-detect";
 
 
@@ -38,11 +38,18 @@ export default function StorageTileObject({object, style, selectedIds}) {
 
     const longPressEvent = useLongPress(onLongPress, onClick);
 
+    const onDrag = (e) => {
+        console.log('dragging');
+    }
+
+    const selected = selectedIds.includes(object.path);
+
     return (
         <Card
             data-id={object.path}
             className={'selectable'}
             onClick={onClick}
+            onDrag={onDrag}
 
             {...longPressEvent}
             onDoubleClick={onDoubleClick}
@@ -52,15 +59,19 @@ export default function StorageTileObject({object, style, selectedIds}) {
                 minHeight: isLarge ? 160 : 100,
                 maxHeight: isLarge ? 160 : 100,
                 boxShadow: 5,
-                backgroundColor: selectedIds.includes(object.path) ? "divider" : "modal",
+                backgroundColor: selected ? "objectSelected" : "modal",
+                // backgroundColor: 'action.hover',
                 border: '1px solid',
                 borderColor: "divider",
                 borderRadius: 2,
+                '&:hover': {
+                    backgroundColor: selected ? "objectSelected" : "objectHover",
+                }
             }}
             elevation={0}
         >
             <Box sx={{width: '100%', position: 'absolute', top: 5}}>
-                <ObjectIcon object={object} style={style}/>
+                <ObjectIcon name={object.name} style={style}/>
             </Box>
             <ObjectName object={object}/>
 

@@ -39,6 +39,7 @@ export const ObjectName = ({object}) => {
                     bottom: 0,
                     pl: '3px',
                     pr: '3px',
+                    userSelect: 'none',
                     color: 'text.secondary',
                     fontSize: '15px',
                     whiteSpace: 'nowrap', // Запрещаем перенос строк

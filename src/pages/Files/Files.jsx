@@ -2,7 +2,7 @@ import {Box, CircularProgress, Container} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {useStorageContext} from "../../context/Storage/StorageProvider.jsx";
 import {useEffect, useState} from "react";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {ObjectsContainer} from "../../components/StorageObjects/ObjectsContainer.jsx";
 import {FileBrowserHeader} from "../../components/FileBrowserHeader/FileBrowserHeader.jsx";
 
@@ -29,12 +29,25 @@ export default function Files() {
     const location = useLocation();
 
 
-    useEffect(() => {
-        let extracted = location.pathname.replace(/^\/cloud-storage\/home/, "");
-        extracted = extracted.replace("/", "");
+
+    const loadFolderFromPath = () => {
+        let extracted = location.pathname.replace(/^\/cloud-storage\/home/, '');
+        extracted = extracted.replace('/', '');
         let decodedUrl = decodeURIComponent(extracted);
         loadFolder(decodedUrl);
-    }, [])
+    };
+
+    // Загружаем папку при монтировании компонента
+    useEffect(() => {
+        loadFolderFromPath();
+    }, []);
+
+    // Отслеживаем изменения в пути (включая нажатие кнопки "Назад")
+    useEffect(() => {
+        loadFolderFromPath();
+    }, [location.pathname]); // Зависимость от location.pathname
+
+    const navigate = useNavigate();
 
 
     return (

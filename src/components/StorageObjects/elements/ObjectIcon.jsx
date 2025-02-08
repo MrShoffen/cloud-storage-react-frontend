@@ -4,7 +4,7 @@ import {FileIconGrad} from "../../../assets/icons/FileIconGrad.jsx";
 import {TextFileIconGrad} from "../../../assets/icons/TextFileIconGrad.jsx";
 
 
-export const ObjectIcon = ({object, style}) => {
+export const ObjectIcon = ({name, style='regularTiles'}) => {
     const regularStyle = {
         width: '100%',
         fontSize: '80px',
@@ -22,12 +22,12 @@ export const ObjectIcon = ({object, style}) => {
     let iconStyle = style === 'regularTiles' ? regularStyle : style === 'largeTiles' ? largeStyle : listStyle;
 
 
-    if (object.folder) {
+    if (name.endsWith('/')) {
         return <FolderIconGrad sx={iconStyle}/>
     }
 
-    let dotIndex = object.name.lastIndexOf(".");
-    let format = object.name.substring(dotIndex+1);
+    let dotIndex = name.lastIndexOf(".");
+    let format = name.substring(dotIndex+1);
 
 
     if (format === 'txt') {

@@ -1,4 +1,5 @@
 .moveable-line {
+
     opacity: 0;
 }
 
@@ -7,14 +8,17 @@
 }
 
 .moveable-direction {
+
     opacity: 0;
 }
 
 .moveable-area-pieces {
+
     opacity: 0;
 }
 
 .moveable-control {
+
     opacity: 0;
 }
 
