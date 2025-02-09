@@ -27,7 +27,6 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
             anchorEl={anchorEl}
             open={open}
             onClose={handleCloseMenu}
-            onClick={handleCloseMenu}
             sx={{display: {xs: 'none', md: 'block',}, zIndex: 2}}
             slotProps={{
                 paper: {
@@ -56,7 +55,6 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
             anchor='bottom'
             open={open}
             onClose={handleCloseMenu}
-            onClick={handleCloseMenu}
             sx={{
                 display: {
                     xs: 'block', md: 'none',

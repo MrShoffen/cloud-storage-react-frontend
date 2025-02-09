@@ -4,7 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import {Box, Button} from "@mui/material";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import {isMobile} from "react-device-detect";
-import {ObjectIcon} from "../StorageObjects/elements/ObjectIcon.jsx";
+import {ObjectIcon} from "../FileBrowser/elements/ObjectIcon.jsx";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 
 export const FileSelection = ({
@@ -152,6 +152,10 @@ export const FileSelection = ({
                    .custom-selection {
                         background-color: transparent; 
                         border-color:transparent; 
+                    }
+                    
+                    .grad-selection {
+                    
                     }
                 `}
             </style>

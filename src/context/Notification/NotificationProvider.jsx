@@ -21,7 +21,6 @@ const colors = {
 };
 
 export const NotificationProvider = ({children}) => {
-    const SlideTransition = (props) => <Slide {...props} direction="up"/>;
 
     const [notification, setNotification] = useState({
         open: false,
@@ -30,17 +29,6 @@ export const NotificationProvider = ({children}) => {
         duration: 9000,
     });
 
-    useEffect(() => {
-        if (!notification.open) {
-            // Сбрасываем состояние после закрытия
-            setNotification({
-                open: false,
-                message: '',
-                severity: 'info',
-                duration: 9000,
-            });
-        }
-    }, [notification.open]);
 
     const showNotification = ({message, severity = 'info', duration = 9000}) => {
         setNotification({
@@ -51,7 +39,10 @@ export const NotificationProvider = ({children}) => {
         });
     };
 
-    const closeNotification = () => {
+    const closeNotification = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
         setNotification((prev) => ({...prev, open: false}));
     };
 
@@ -91,19 +82,12 @@ export const NotificationProvider = ({children}) => {
         <NotificationContext.Provider value={{showWarn, showInfo, showSuccess, showError}}>
             {children}
 
-            <style>
-                {`
-                   .MuiSnackbar-root {
-                        pointer-events: none;
-                    }
-                `}
-            </style>
+
             <Snackbar
                 open={notification.open}
                 onClose={closeNotification}
                 autoHideDuration={notification.duration}
                 anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-                TransitionComponent={SlideTransition}
             >
                 <Alert
                     variant='filled'
