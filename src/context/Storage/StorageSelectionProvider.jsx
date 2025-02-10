@@ -11,12 +11,35 @@ export const StorageSelectionProvider = ({children}) => {
     const [isSelectionMode, setSelectionMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
 
+    const [isCopyMode, setCopyMode] = useState(false);
+
+    const [copyingIds, setCopyingIds] = useState([]);
+
+
+    const startCopying = () => {
+        setCopyingIds(selectedIds);
+        setCopyMode(true);
+
+        setSelectedIds([]);
+        setSelectionMode(false);
+    }
+
+    const endCopying = () => {
+        setCopyingIds([]);
+        setCopyMode(true);
+    }
+
     return (<CloudStorageContext.Provider
         value={{
             isSelectionMode,
             setSelectionMode,
             selectedIds,
-            setSelectedIds
+            setSelectedIds,
+
+            isCopyMode,
+            copyingIds,
+            startCopying,
+            endCopying
         }}>
         {children}
     </CloudStorageContext.Provider>);

@@ -4,8 +4,11 @@ import {CustomBread} from "./Breadcrumbs/CustomBread.jsx";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {FileMenu} from "./FileMenu/FileMenu.jsx";
+import CloseIcon from "@mui/icons-material/Close";
+import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 export const FileBrowserHeader = () => {
 
@@ -47,6 +50,8 @@ export const FileBrowserHeader = () => {
                        zIndex: 2,
                    }}
         >
+
+
             <Box sx={{p: 1}}>
                 <Card elevation={0}
                       sx={{
@@ -63,22 +68,22 @@ export const FileBrowserHeader = () => {
                       }}
                 >
                     <Box
-                        ref={scrollBoxRef}
+                        reaf={scrollBoxRef}
                         sx={{
-                        pl: 1,
-                        pr: 1,
-                        maxHeight: '51px',
-                        height: '51px',
-                        display: "flex",
-                        overflowX: "auto",
-                        maxWidth: "100%",
-                        "&::-webkit-scrollbar": {height: "3px"},
-                        "&::-webkit-scrollbar-thumb": {backgroundColor: "#888", borderRadius: "3px"},
-                        scrollbarWidth: "thin",
-                        '&::-webkit-scrollbar-track': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                        },
-                    }}
+                            pl: 1,
+                            pr: 1,
+                            maxHeight: '51px',
+                            height: '51px',
+                            display: "flex",
+                            overflowX: "auto",
+                            maxWidth: "100%",
+                            "&::-webkit-scrollbar": {height: "3px"},
+                            "&::-webkit-scrollbar-thumb": {backgroundColor: "#888", borderRadius: "3px"},
+                            scrollbarWidth: "thin",
+                            '&::-webkit-scrollbar-track': {
+                                backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                            },
+                        }}
                     >
                         {folderContentLoading ?
                             <CircularProgress sx={{mt: 1, ml: 1}} size={30}/> :
@@ -107,27 +112,86 @@ export const FileBrowserHeader = () => {
                                 <ArrowBackIcon/>
                             </Button>
                         }
+                        {/*<Box sx={{*/}
+                        {/*    position: 'absolute',*/}
+                        {/*    width: "70%",*/}
+
+                        {/*    transform: 'translateX(-50%)',*/}
+                        {/*    left: '50%',*/}
+                        {/*    bottom: 10,*/}
+                        {/*}}>*/}
+                        {/*    <Typography variant='h5' sx={{*/}
+                        {/*        width: '100%',*/}
+                        {/*        userSelect: 'none',*/}
+                        {/*        backgroundColor: 'white',*/}
+                        {/*        textAlign: 'center',*/}
+                        {/*        whiteSpace: 'nowrap',*/}
+                        {/*        overflow: 'hidden',*/}
+                        {/*        textOverflow: 'ellipsis',*/}
+                        {/*    }}>*/}
+                        {/*        {!folderContentLoading && (currentFolder ? currentFolder.slice(0, -1) : 'Home')}*/}
+
+                        {/*    </Typography>*/}
+                        {/*</Box>*/}
+
                         <Box sx={{
                             position: 'absolute',
                             width: "70%",
+                            maxWidth: '500px',
+                            height: '48px',
+                            border: '2px solid',
+                            borderRadius: '24px',
+                            borderColor: 'info.dark',
+                            background: 'linear-gradient(90deg, rgba(16,113,175,1)   0%,  rgba(28,73,163,1) 100%)',
                             transform: 'translateX(-50%)',
                             left: '50%',
-                            bottom: 10,
+                            bottom: 4,
                         }}>
-                            <Typography variant='h5' sx={{
-                                width: '100%',
-                                userSelect: 'none',
-                                // backgroundColor: 'white',
-                                textAlign: 'center',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                            }}>
-                                {!folderContentLoading && (currentFolder ? currentFolder.slice(0, -1) : 'Home')}
+                            <IconButton
+                                sx={{
+                                    position: 'absolute',
+                                    bottom: 4.5,
+                                    left: 7,
+                                    width: '35px',
+                                    height: '35px',
+                                    backgroundColor: 'error.main',
+                                    '&:hover': {
+                                        backgroundColor: 'error.dark',
 
-                            </Typography>
+                                    }
+                                }}
+                            >
+                                <CloseIcon sx={{fontSize: '28px'}}/>
+                            </IconButton>
+
+
+                                <Typography variant='h6' sx={{
+                                    width: '100%',
+                                    userSelect: 'none',
+                                    textAlign: 'center',
+                                    color: 'white',
+                                    pt: 0.8
+                                }}>
+                                   Buffer: 45 <InsertDriveFileIcon sx={{fontSize: '20px', pt: '1px', ml: -0.3, mb: -0.3}}/>
+                                </Typography>
+
+                            <IconButton
+                                sx={{
+                                    position: 'absolute',
+                                    bottom: 4.5,
+                                    right: 7,
+                                    width: '35px',
+                                    height: '35px',
+                                    backgroundColor: 'success.main',
+                                    '&:hover': {
+                                        backgroundColor: 'success.dark',
+
+                                    }
+                                }}
+                            >
+                                <ContentPasteGoIcon sx={{fontSize: '28px'}}/>
+                            </IconButton>
                         </Box>
-
 
                         <IconButton onClick={handleOpenMenu} variant='contained' sx={{ml: 'auto'}}>
                             <MoreVertIcon/>

@@ -12,11 +12,12 @@ import {isMobile} from "react-device-detect";
 import CheckIcon from "@mui/icons-material/Check";
 import {useStorageSelection} from "../../../context/Storage/StorageSelectionProvider.jsx";
 import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const isMob = isMobile;
 
 
-export default function StorageListObject({object, style, selectedIds}) {
+export default function StorageListObject({object, style, selectedIds, copyingIds}) {
 
     const {goToFolder} = useStorageNavigation();
     const {setSelectionMode, isSelectionMode} = useStorageSelection();
@@ -29,7 +30,7 @@ export default function StorageListObject({object, style, selectedIds}) {
     }
 
     const onDoubleClick = !isMob ? () => {
-        if (object.folder) {
+        if (object.folder && !copied) {
             goToFolder(object.name);
         }
     } : null;
@@ -42,8 +43,8 @@ export default function StorageListObject({object, style, selectedIds}) {
 
     const longPressEvent = useLongPress(onLongPress, onClick);
 
-
     const selected = selectedIds.includes(object.path);
+    const copied = copyingIds.includes(object.path);
 
     return (
         <Card
@@ -57,6 +58,7 @@ export default function StorageListObject({object, style, selectedIds}) {
             sx={{
                 position: 'relative',
                 minWidth: 20,
+                opacity: copied ? 0.5 : 1,
                 minHeight: 50,
                 backgroundColor: selected ? "objectSelected" : "transparent",
                 borderRadius: 2,
@@ -70,7 +72,9 @@ export default function StorageListObject({object, style, selectedIds}) {
             elevation={0}
         >
             <Box sx={{position: 'absolute', width: '20px', left: 8, bottom: 5, }}>
-                <FileFormatIcon name={object.name} style={style}/>
+                {!copied && <FileFormatIcon name={object.name} style={style}/>}
+                {copied && <ContentCopyIcon/>}
+
             </Box>
 
             <ObjectListName object={object}/>

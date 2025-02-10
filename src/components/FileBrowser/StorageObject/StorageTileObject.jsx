@@ -10,9 +10,10 @@ import {useLongPress} from "../../Selection/hook/useLongPress.jsx";
 import {isMobile} from "react-device-detect";
 import {useStorageSelection} from "../../../context/Storage/StorageSelectionProvider.jsx";
 import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
+import ContentCutIcon from '@mui/icons-material/ContentCut';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-
-export default function StorageTileObject({object, style, selectedIds}) {
+export default function StorageTileObject({object, style, selectedIds, copyingIds}) {
     const isMob = isMobile;
 
     const isLarge = style === 'largeTiles'
@@ -25,13 +26,15 @@ export default function StorageTileObject({object, style, selectedIds}) {
         if (object.folder && !isSelectionMode) {
             goToFolder(object.name);
         }
-    } : () => {}
+    } : () => {
+    }
 
-    const onDoubleClick =  !isMob ? () => {
-        if (object.folder) {
+    const onDoubleClick = !isMob ? () => {
+        if (object.folder && !copied) {
             goToFolder(object.name);
         }
-    } : () =>{};
+    } : () => {
+    };
 
     const onLongPress = isMob ? () => {
         if (navigator.vibrate)
@@ -48,6 +51,8 @@ export default function StorageTileObject({object, style, selectedIds}) {
 
     const selected = selectedIds.includes(object.path);
 
+    const copied = copyingIds.includes(object.path);
+
     return (
         <Card
             data-id={object.path}
@@ -59,6 +64,7 @@ export default function StorageTileObject({object, style, selectedIds}) {
             onDoubleClick={onDoubleClick}
             sx={{
                 position: 'relative',
+                opacity: copied ? 0.5 : 1,
                 minWidth: isLarge ? 160 : 100,
                 minHeight: isLarge ? 160 : 100,
                 maxHeight: isLarge ? 160 : 100,
@@ -72,7 +78,7 @@ export default function StorageTileObject({object, style, selectedIds}) {
         >
             <Box sx={{width: '100%', position: 'absolute', top: 8, left: '50%', transform: 'translate(-50%)'}}>
                 <FileFormatIcon name={object.name} style={style}/>
-
+                {copied && <ContentCopyIcon/>}
             </Box>
             <ObjectName object={object}/>
 

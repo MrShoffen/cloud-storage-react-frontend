@@ -15,7 +15,12 @@ export const ObjectsContainer = () => {
 
     const {folderContent} = useStorageNavigation();
     const {filesView, sortFolder} = useStorageView();
-    const {selectedIds, setSelectedIds, setSelectionMode} = useStorageSelection();
+    const {
+        selectedIds, setSelectedIds, setSelectionMode, isCopyMode,
+        copyingIds,
+        startCopying,
+        endCopying
+    } = useStorageSelection();
     const {deleteObject} = useStorageOperations();
 
     const animationVariants = {
@@ -38,19 +43,19 @@ export const ObjectsContainer = () => {
                 setSelectedIds([]);
             }
         }
+        if ((event.ctrlKey || event.metaKey) && event.key === "c") {
+            event.preventDefault(); // Предотвращаем стандартное поведение (копирование)
+            console.log("Ctrl + C pressed");
+            if(selectedIds.length > 0) {
+                startCopying();
+            }
+        }
     };
 
-    // useEffect(() => {
-    //
-    //
-    //     // Добавляем обработчик события keydown
-    //     document.addEventListener("keydown", handleKeyDown);
-    //
-    //     // Убираем обработчик при размонтировании компонента
-    //     return () => {
-    //         document.removeEventListener("keydown", handleKeyDown);
-    //     };
-    // }, [selectedIds]);
+    useEffect(() => {
+
+    console.log(copyingIds);
+    }, [selectedIds]);
 
     return (
         <AnimatePresence mode="wait">
@@ -90,6 +95,7 @@ export const ObjectsContainer = () => {
                             {folderContent
                                 &&
                                 sortFolder(folderContent).map((item) => <StorageTileObject selectedIds={selectedIds}
+                                                                                           copyingIds={copyingIds}
                                                                                            object={item}
                                                                                            style={filesView}/>)}
                         </Box>
@@ -97,18 +103,25 @@ export const ObjectsContainer = () => {
                         <Box
                             ref={containerRef}
                             className={"elements"}
+                            onKeyDown={handleKeyDown}
+                            tabIndex={0}
 
                             sx={{
                                 width: '100%',
                                 display: 'grid',
                                 gap: 0.8,
                                 pb: 30,
+                                '&:focus': {
+                                    outline: 'none', // Убираем стандартный outline
+                                    // boxShadow: '0 0 0 2px #3f51b5', // Добавляем тень
+                                },
                             }}
                         >
                             {folderContent
                                 &&
                                 sortFolder(folderContent).map((item) => <StorageListObject object={item}
                                                                                            style={filesView}
+                                                                                           copyingIds={copyingIds}
                                                                                            selectedIds={selectedIds}/>)}
                         </Box>
                 }

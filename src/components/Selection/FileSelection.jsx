@@ -20,7 +20,7 @@ export const FileSelection = ({
     const {deleteObject, moveObjects} = useStorageOperations();
 
 
-    const {isSelectionMode, setSelectionMode} = useStorageSelection();
+    const {isSelectionMode, setSelectionMode, isCopyMode} = useStorageSelection();
 
     const [mobileSelecting, setMobileSelecting] = useState(false);
 
@@ -129,14 +129,6 @@ export const FileSelection = ({
                     let allPoints = elementsArray.map(el => selectoRef.current.getElementPoints(el)[0]);
 
                     console.log(allPoints);
-                    // let validPoints = allPoints.filter(point => Array.isArray(point) && point.length === 2);
-                    //
-                    //
-                    //     const startPoint = validPoints[0];  // Первой точкой может быть первая найденная
-                    //     const endPoint = validPoints[validPoints.length - 1];  // Последней — последняя
-                    //
-                    //     selectoRef.current.setSelectedTargetsByPoints(allPoints[0], allPoints[allPoints.length-1]);
-
                     selectoRef.current.setSelectedTargets(elementsArray);
 
                     let selectedTargets = selectoRef.current.getSelectedTargets();
@@ -154,7 +146,7 @@ export const FileSelection = ({
                 onClick={() => deleteObject(selectedIds)}
             >delete</Button>
 
-            {true &&
+            {!isCopyMode &&
                 <Selecto
                     ref={selectoRef}
                     selectableTargets={[" .selectable"]}
