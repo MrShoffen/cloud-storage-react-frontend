@@ -2,6 +2,7 @@ import {FolderIconGrad} from "../../../assets/icons/FolderIconGrad.jsx";
 import React from "react";
 import {FileIconGrad} from "../../../assets/icons/FileIconGrad.jsx";
 import {TextFileIconGrad} from "../../../assets/icons/TextFileIconGrad.jsx";
+import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
 
 
 export const ObjectIcon = ({name, style='regularTiles'}) => {
@@ -31,9 +32,5 @@ export const ObjectIcon = ({name, style='regularTiles'}) => {
     let format = name.substring(dotIndex+1);
 
 
-    if (format === 'txt') {
-        return <TextFileIconGrad sx={iconStyle}/>
-    } else {
-        return <FileIconGrad sx={iconStyle}/>
-    }
+    return <FileFormatIcon name={name} style={style}/>
 }

@@ -22,6 +22,7 @@ export default function Index() {
         >
             {auth.isAuthenticated && <FilePageButton/>}
 
+
             <Card
                 elevation={0}
                 sx={{

@@ -20,6 +20,7 @@ import LargeTile from '@mui/icons-material/ViewModule';
 import RegularTile from '@mui/icons-material/ViewCompact';
 import ListIcon from '@mui/icons-material/List';
 import {FileMenu} from "./FileMenu/FileMenu.jsx";
+import {FileFormatIcon} from "../../assets/FileFormatIcon.jsx";
 
 export const FileBrowserHeader = () => {
 
@@ -71,7 +72,7 @@ export const FileBrowserHeader = () => {
                           borderColor: 'divider',
                           borderRadius: 2,
                           backdropFilter: 'blur(10px)',
-                          WebkitBackdropFilter: 'blur(1px)',
+                          WebkitBackdropFilter: 'blur(10px)',
                           height: '110px'
 
                       }}
@@ -130,6 +131,7 @@ export const FileBrowserHeader = () => {
                         }}>
                             <Typography variant='h5' sx={{
                                 width: '100%',
+                                userSelect: 'none',
                                 // backgroundColor: 'white',
                                 textAlign: 'center',
                                 whiteSpace: 'nowrap',
@@ -137,6 +139,7 @@ export const FileBrowserHeader = () => {
                                 textOverflow: 'ellipsis',
                             }}>
                                 {!folderContentLoading && (currentFolder ? currentFolder.slice(0, -1) : 'Home')}
+
                             </Typography>
                         </Box>
 

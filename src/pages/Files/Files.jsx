@@ -6,6 +6,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {ObjectsContainer} from "../../components/FileBrowser/ObjectsContainer.jsx";
 import {FileBrowserHeader} from "../../components/FileBrowserHeader/FileBrowserHeader.jsx";
 import {SelectHeader} from "../../components/Selection/SelectHeader/SelectHeader.jsx";
+import {FileTasksModal} from "../../modals/FileTasksModal/FileTasksModal.jsx";
 
 
 const LoadingBox = () => {
@@ -60,6 +61,8 @@ export default function Files() {
                     {folderContentLoading ? <LoadingBox/> : <ObjectsContainer/>}
                 </Box>
             </Container>
+
+            <FileTasksModal/>
         </Box>
     )
 }

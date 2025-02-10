@@ -9,6 +9,7 @@ import {useStorageNavigation} from "../../../context/Storage/StorageNavigationPr
 import {useLongPress} from "../../Selection/hook/useLongPress.jsx";
 import {isMobile} from "react-device-detect";
 import {useStorageSelection} from "../../../context/Storage/StorageSelectionProvider.jsx";
+import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
 
 
 export default function StorageTileObject({object, style, selectedIds}) {
@@ -69,8 +70,9 @@ export default function StorageTileObject({object, style, selectedIds}) {
             }}
             elevation={0}
         >
-            <Box sx={{width: '100%', position: 'absolute', top: 5}}>
-                <ObjectIcon name={object.name} style={style}/>
+            <Box sx={{width: '100%', position: 'absolute', top: 8, left: '50%', transform: 'translate(-50%)'}}>
+                <FileFormatIcon name={object.name} style={style}/>
+
             </Box>
             <ObjectName object={object}/>
 

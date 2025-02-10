@@ -11,6 +11,7 @@ import {useLongPress} from "../../Selection/hook/useLongPress.jsx";
 import {isMobile} from "react-device-detect";
 import CheckIcon from "@mui/icons-material/Check";
 import {useStorageSelection} from "../../../context/Storage/StorageSelectionProvider.jsx";
+import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
 
 const isMob = isMobile;
 
@@ -56,20 +57,20 @@ export default function StorageListObject({object, style, selectedIds}) {
             sx={{
                 position: 'relative',
                 minWidth: 20,
-                minHeight: 40,
+                minHeight: 50,
                 backgroundColor: selected ? "objectSelected" : "transparent",
                 borderRadius: 2,
                 display: 'flex',         // Добавляем flex-контейнер
                 alignItems: 'center',    // Выравниваем по вертикали
-                paddingLeft: 4,          // Немного отступа от края
+                paddingLeft: 5,          // Немного отступа от края
                 '&:hover': {
                     backgroundColor: selected ? "objectSelected" : "objectHover",
                 }
             }}
             elevation={0}
         >
-            <Box sx={{position: 'absolute', left: 5, top: 7}}>
-                <ObjectIcon name={object.name} style={style}/>
+            <Box sx={{position: 'absolute', width: '20px', left: 8, bottom: 5, }}>
+                <FileFormatIcon name={object.name} style={style}/>
             </Box>
 
             <ObjectListName object={object}/>

@@ -6,6 +6,7 @@ import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvi
 import {isMobile} from "react-device-detect";
 import {ObjectIcon} from "../FileBrowser/elements/ObjectIcon.jsx";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
+import {FileFormatIcon} from "../../assets/FileFormatIcon.jsx";
 
 export const FileSelection = ({
                                   containerRef,
@@ -222,11 +223,12 @@ export const FileSelection = ({
                                 return <Box
                                     sx={{
                                         position: "absolute",
-                                        left: index * 6 - 1 + 'px',
-                                        top: index * 6 - 4 + 'px',
+                                        width: "100%",
+                                        left: index * 6 - 8 + 'px',
+                                        top: index * 6 +  2+ 'px',
                                     }}
                                 >
-                                    <ObjectIcon name={id}/>
+                                    <FileFormatIcon name={id} />
                                 </Box>
                             }
                         )}

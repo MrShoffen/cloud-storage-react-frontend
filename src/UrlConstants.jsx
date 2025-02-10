@@ -13,7 +13,7 @@ export const API_REGISTRATION = API_BASE_URL + API_CONTEXT + '/users';
 export const API_LOGIN = API_BASE_URL + API_CONTEXT + '/auth/login';
 export const API_LOGOUT = API_BASE_URL + API_CONTEXT + '/auth/logout';
 
-export const API_FOLDER_CONTENT = API_BASE_URL + API_CONTEXT + '/folders';
+export const API_FOLDER_CONTENT = API_BASE_URL + API_CONTEXT + '/files/';
 
 export const API_FIND_LOCATIONS_UNAUTH = API_BASE_URL + API_CONTEXT + '/locations';
 export const API_GET_WEATHER_INFO_UNAUTH = API_BASE_URL + API_CONTEXT + '/weather';

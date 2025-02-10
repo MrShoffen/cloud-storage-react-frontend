@@ -8,6 +8,7 @@ import './selected.css';
 import {FileSelection} from "../Selection/FileSelection.jsx";
 import {useStorageView} from "../../context/Storage/StorageViewProvider.jsx";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
+import {FileTasksModal} from "../../modals/FileTasksModal/FileTasksModal.jsx";
 
 export const ObjectsContainer = () => {
 
@@ -86,6 +87,7 @@ export const ObjectsContainer = () => {
                                selectoRef={selectoRef}
                                setSelectedIds={setSelectedIds}/>
             </motion.div>
+
         </AnimatePresence>
     )
 

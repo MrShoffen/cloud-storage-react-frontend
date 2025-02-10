@@ -5,13 +5,7 @@ import {throwSpecifyException} from "../../../exception/ThrowSpecifyException.js
 export const sendGetFolderContent = async (folderName = "") => {
     const params = new URLSearchParams({"folder-name": folderName});
 
-    let url;
-    if (folderName === "") {
-        url = API_FOLDER_CONTENT
-    } else {
-        url = `${API_FOLDER_CONTENT}?${params.toString()}`;
-    }
-
+    const url = API_FOLDER_CONTENT + folderName;
     const response = await fetch(url, {
         method: 'GET',
         headers: {

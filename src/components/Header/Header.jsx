@@ -6,6 +6,7 @@ import {useAuthContext} from "../../context/Auth/AuthContext.jsx";
 import {Settings} from "./SettingsMenu/Settings.jsx";
 import {SelectHeader} from "../Selection/SelectHeader/SelectHeader.jsx";
 import {FileButton} from "./FileButton.jsx";
+import {FileTasksModal} from "../../modals/FileTasksModal/FileTasksModal.jsx";
 
 
 export default function Header() {
@@ -38,6 +39,7 @@ export default function Header() {
                     <Settings/>
 
                 </Toolbar>
+
             </Container>
         </AppBar>
     )
