@@ -20,7 +20,7 @@ export const FileSelection = ({
     const {deleteObject, moveObjects} = useStorageOperations();
 
 
-    const {isSelectionMode, setSelectionMode, isCopyMode} = useStorageSelection();
+    const {isSelectionMode, setSelectionMode, isCopyMode, isCutMode} = useStorageSelection();
 
     const [mobileSelecting, setMobileSelecting] = useState(false);
 
@@ -146,7 +146,7 @@ export const FileSelection = ({
                 onClick={() => deleteObject(selectedIds)}
             >delete</Button>
 
-            {!isCopyMode &&
+            {!isCopyMode && !isCutMode &&
                 <Selecto
                     ref={selectoRef}
                     selectableTargets={[" .selectable"]}

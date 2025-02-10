@@ -13,13 +13,13 @@ import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
 import ContentCutIcon from '@mui/icons-material/ContentCut';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-export default function StorageTileObject({object, style, selectedIds, copyingIds}) {
+export default function StorageTileObject({object, style, selectedIds, bufferIds}) {
     const isMob = isMobile;
 
     const isLarge = style === 'largeTiles'
 
     const {goToFolder} = useStorageNavigation();
-    const {setSelectionMode, isSelectionMode} = useStorageSelection();
+    const {setSelectionMode, isSelectionMode, isCutMode, isCopyMode} = useStorageSelection();
 
 
     const onClick = isMob ? () => {
@@ -51,7 +51,8 @@ export default function StorageTileObject({object, style, selectedIds, copyingId
 
     const selected = selectedIds.includes(object.path);
 
-    const copied = copyingIds.includes(object.path);
+    const copied = bufferIds.includes(object.path) && isCopyMode;
+    const cutted = bufferIds.includes(object.path) && isCutMode;
 
     return (
         <Card
@@ -64,7 +65,7 @@ export default function StorageTileObject({object, style, selectedIds, copyingId
             onDoubleClick={onDoubleClick}
             sx={{
                 position: 'relative',
-                opacity: copied ? 0.5 : 1,
+                opacity: copied || cutted ? 0.5 : 1,
                 minWidth: isLarge ? 160 : 100,
                 minHeight: isLarge ? 160 : 100,
                 maxHeight: isLarge ? 160 : 100,
@@ -79,6 +80,8 @@ export default function StorageTileObject({object, style, selectedIds, copyingId
             <Box sx={{width: '100%', position: 'absolute', top: 8, left: '50%', transform: 'translate(-50%)'}}>
                 <FileFormatIcon name={object.name} style={style}/>
                 {copied && <ContentCopyIcon/>}
+                {cutted && <ContentCutIcon/>}
+
             </Box>
             <ObjectName object={object}/>
 

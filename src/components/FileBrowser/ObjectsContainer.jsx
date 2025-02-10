@@ -17,9 +17,9 @@ export const ObjectsContainer = () => {
     const {filesView, sortFolder} = useStorageView();
     const {
         selectedIds, setSelectedIds, setSelectionMode, isCopyMode,
-        copyingIds,
+        bufferIds,
         startCopying,
-        endCopying
+        startCutting
     } = useStorageSelection();
     const {deleteObject} = useStorageOperations();
 
@@ -46,16 +46,19 @@ export const ObjectsContainer = () => {
         if ((event.ctrlKey || event.metaKey) && event.key === "c") {
             event.preventDefault(); // Предотвращаем стандартное поведение (копирование)
             console.log("Ctrl + C pressed");
-            if(selectedIds.length > 0) {
+            if (selectedIds.length > 0) {
                 startCopying();
             }
         }
+
+        if ((event.ctrlKey || event.metaKey) && event.key === "x") {
+            event.preventDefault();
+
+            if (selectedIds.length > 0) {
+                startCutting();
+            }
+        }
     };
-
-    useEffect(() => {
-
-    console.log(copyingIds);
-    }, [selectedIds]);
 
     return (
         <AnimatePresence mode="wait">
@@ -95,7 +98,7 @@ export const ObjectsContainer = () => {
                             {folderContent
                                 &&
                                 sortFolder(folderContent).map((item) => <StorageTileObject selectedIds={selectedIds}
-                                                                                           copyingIds={copyingIds}
+                                                                                           bufferIds={bufferIds}
                                                                                            object={item}
                                                                                            style={filesView}/>)}
                         </Box>
@@ -121,7 +124,7 @@ export const ObjectsContainer = () => {
                                 &&
                                 sortFolder(folderContent).map((item) => <StorageListObject object={item}
                                                                                            style={filesView}
-                                                                                           copyingIds={copyingIds}
+                                                                                           bufferIds={bufferIds}
                                                                                            selectedIds={selectedIds}/>)}
                         </Box>
                 }

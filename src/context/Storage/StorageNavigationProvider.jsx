@@ -9,7 +9,7 @@ export const useStorageNavigation = () => useContext(CloudStorageContext);
 
 
 export const StorageNavigationProvider = ({children}) => {
-    const {setSelectedIds} = useStorageSelection();
+    const {setSelectedIds, bufferIds} = useStorageSelection();
 
     const [folderContentLoading, setFolderContentLoading] = useState(false);
     const [folderPath, setFolderPath] = React.useState([""]);
@@ -81,6 +81,15 @@ export const StorageNavigationProvider = ({children}) => {
         setFolderContentLoading(false);
     }
 
+    const isPasteAllowed = () => {
+        const folderPathes = folderContent.map(obj => obj.path);
+        let filtered = bufferIds.filter(path => folderPathes.includes(path));
+        console.log("filt")
+
+        console.log(filtered);
+        return filtered.length === 0;
+    }
+
     return (<CloudStorageContext.Provider
         value={{
             folderContentLoading,
@@ -93,7 +102,8 @@ export const StorageNavigationProvider = ({children}) => {
             goToFolder,
             loadFolder,
 
-            removeObjectFromFolderContent
+            removeObjectFromFolderContent,
+            isPasteAllowed
         }}>
         {children}
     </CloudStorageContext.Provider>);

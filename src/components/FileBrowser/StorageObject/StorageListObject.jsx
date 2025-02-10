@@ -13,14 +13,15 @@ import CheckIcon from "@mui/icons-material/Check";
 import {useStorageSelection} from "../../../context/Storage/StorageSelectionProvider.jsx";
 import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ContentCutIcon from "@mui/icons-material/ContentCut";
 
 const isMob = isMobile;
 
 
-export default function StorageListObject({object, style, selectedIds, copyingIds}) {
+export default function StorageListObject({object, style, selectedIds, bufferIds}) {
 
     const {goToFolder} = useStorageNavigation();
-    const {setSelectionMode, isSelectionMode} = useStorageSelection();
+    const {setSelectionMode, isSelectionMode, isCutMode, isCopyMode} = useStorageSelection();
 
     const onClick = isMob ? () => {
         if (object.folder && !isSelectionMode) {
@@ -44,7 +45,9 @@ export default function StorageListObject({object, style, selectedIds, copyingId
     const longPressEvent = useLongPress(onLongPress, onClick);
 
     const selected = selectedIds.includes(object.path);
-    const copied = copyingIds.includes(object.path);
+
+    const copied = bufferIds.includes(object.path) && isCopyMode;
+    const cutted = bufferIds.includes(object.path) && isCutMode;
 
     return (
         <Card
@@ -58,7 +61,7 @@ export default function StorageListObject({object, style, selectedIds, copyingId
             sx={{
                 position: 'relative',
                 minWidth: 20,
-                opacity: copied ? 0.5 : 1,
+                opacity: copied || cutted ? 0.5 : 1,
                 minHeight: 50,
                 backgroundColor: selected ? "objectSelected" : "transparent",
                 borderRadius: 2,
@@ -72,8 +75,9 @@ export default function StorageListObject({object, style, selectedIds, copyingId
             elevation={0}
         >
             <Box sx={{position: 'absolute', width: '20px', left: 8, bottom: 5, }}>
-                {!copied && <FileFormatIcon name={object.name} style={style}/>}
-                {copied && <ContentCopyIcon/>}
+   <FileFormatIcon name={object.name} style={style}/>
+                {copied && <ContentCopyIcon sx={{color: 'black', position: 'absolute', fontSize: '15px', bottom:11, left: 3}}/>}
+                {cutted && <ContentCutIcon sx={{color: 'black', position: 'absolute', fontSize: '15px', bottom:11, left: 3}}/>}
 
             </Box>
 
