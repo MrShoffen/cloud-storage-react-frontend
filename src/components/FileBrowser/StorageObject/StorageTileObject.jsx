@@ -36,7 +36,7 @@ export default function StorageTileObject({object, style, selectedIds}) {
     const onLongPress = isMob ? () => {
         if (navigator.vibrate)
             navigator.vibrate(100);
-        setSelectionMode(true);
+        setSelectionMode(true); //here need to disable while copying
     } : () => {
     }
 

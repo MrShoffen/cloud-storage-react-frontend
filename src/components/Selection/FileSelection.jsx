@@ -8,6 +8,7 @@ import {ObjectIcon} from "../FileBrowser/elements/ObjectIcon.jsx";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 import {FileFormatIcon} from "../../assets/FileFormatIcon.jsx";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
+import {extractSimpleName} from "../../services/util/Utils.js";
 
 export const FileSelection = ({
                                   containerRef,
@@ -16,7 +17,7 @@ export const FileSelection = ({
                               }) => {
     const isMob = isMobile;
 
-    const {deleteObject} = useStorageOperations();
+    const {deleteObject, moveObjects} = useStorageOperations();
 
 
     const {isSelectionMode, setSelectionMode} = useStorageSelection();
@@ -43,7 +44,9 @@ export const FileSelection = ({
                 if (isSelectionMode) {
                     setMobileSelecting(isSelectionMode);
                 } else {
-                    selectoRef.current.setSelectedTargets([]);
+                    if (selectoRef.current) {
+                        selectoRef.current.setSelectedTargets([]);
+                    }
                 }
             }
         },
@@ -54,10 +57,11 @@ export const FileSelection = ({
                 const elements = document.elementsFromPoint(coordinates.x, coordinates.y);
                 const el = elements.find(elem => elem.classList.contains('selectable'));
                 if (el) {
-                    selectoRef.current.setSelectedTargets([el]);
-                    let id = el.dataset.id;
-                    setSelectedIds([id]);
-                    // el.dispatchEvent(clickEvent)
+                    if (selectoRef.current) {
+                        selectoRef.current.setSelectedTargets([el]);
+                        let id = el.dataset.id;
+                        setSelectedIds([id]);
+                    }
                 }
             }
         }
@@ -107,14 +111,13 @@ export const FileSelection = ({
         if (el) {
             let targetPath = el.dataset.id;
 
-            if(selectedIds.includes(targetPath) || !targetPath.endsWith("/")) {
+            if (selectedIds.includes(targetPath) || !targetPath.endsWith("/")) {
                 return;
             }
-            console.log(targetPath);
 
+
+            moveObjects(selectedIds, targetPath);
         }
-
-
     }
 
     return (
@@ -153,30 +156,32 @@ export const FileSelection = ({
                 onClick={() => deleteObject(selectedIds)}
             >delete</Button>
 
-            <Selecto
-                ref={selectoRef}
-                selectableTargets={[" .selectable"]}
-                selectByClick={!isMob ? true : (mobileSelecting)}
-                selectFromInside={!isMob ? shouldSelectFromInside() : (mobileSelecting)}
-                continueSelect={!isMob ? false : (mobileSelecting)}
-                toggleContinueSelect={['shift']}
-                hitRate={isMob ? 1000 : 0}
-                dragContainer={".elements"}
+            {true &&
+                <Selecto
+                    ref={selectoRef}
+                    selectableTargets={[" .selectable"]}
+                    selectByClick={!isMob ? true : (mobileSelecting)}
+                    selectFromInside={!isMob ? shouldSelectFromInside() : (mobileSelecting)}
+                    continueSelect={!isMob ? false : (mobileSelecting)}
+                    toggleContinueSelect={['shift']}
+                    hitRate={isMob ? 1000 : 0}
+                    dragContainer={".elements"}
 
-                onSelect={
-                    (e) => {
-                        setSelectedIds([]);
-                        console.log(e.selected.map(el => el.dataset.id))
-                        setSelectedIds(e.selected.map(el => el.dataset.id));
+                    onSelect={
+                        (e) => {
+                            setSelectedIds([]);
+                            console.log(e.selected.map(el => el.dataset.id))
+                            setSelectedIds(e.selected.map(el => el.dataset.id));
+                        }
                     }
-                }
 
-                className={isMob && "custom-selection"}
-                selectionStyle={{
-                    background: "rgba(255, 0, 0, 0.2)",   // Красный фон (20% прозрачности)
-                    border: "2px solid red",              // Красная граница
-                }}
-            />
+                    className={isMob && "custom-selection"}
+                    selectionStyle={{
+                        background: "rgba(255, 0, 0, 0.2)",   // Красный фон (20% прозрачности)
+                        border: "2px solid red",              // Красная граница
+                    }}
+                />
+            }
             <style>
                 {`
                    .custom-selection {

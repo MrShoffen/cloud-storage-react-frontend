@@ -2,6 +2,9 @@ import React, {createContext, useContext, useEffect, useState} from "react";
 import {sendGetFolderContent} from "../../services/fetch/auth/storage/SendGetFolderContent.js";
 import {sendDeleteObject} from "../../services/fetch/auth/storage/SendDeleteObject.js";
 import {useStorageNavigation} from "../Storage/StorageNavigationProvider.jsx";
+import {sendMoveObject} from "../../services/fetch/auth/storage/SendMoveObject.js";
+import {extractSimpleName} from "../../services/util/Utils.js";
+import ConflictException from "../../exception/ConflictException.jsx";
 
 const FileOperationsContext = createContext();
 
@@ -22,10 +25,11 @@ export const FileOperationsProvider = ({children}) => {
     const [newTasksAdded, setNewTasksAdded] = useState(false);
 
 
-    const createTask = (objectPath, type) => {
-        const operation = {type: type, source: objectPath, target: null};
-        return {id: tasks.length + 1, operation: operation, status: "pending"};
+    const createTask = (objectPath, target, type, message) => {
+        const operation = {type: type, source: objectPath, target: target};
+        return {id: tasks.length + 1, operation: operation, status: "pending", message: message};
     }
+
 
     const identicalTasks = (task1) => {
         const pendingTasks = tasks.filter((task) => task.status === "pending");
@@ -49,12 +53,22 @@ export const FileOperationsProvider = ({children}) => {
     }
 
 
-
+    const updateTask = (task, newStatus = null, newMessage = null) => {
+        setTasks(prevTasks =>
+            prevTasks.map(inTask =>
+                inTask.operation.source === task.operation.source
+                    ? {
+                        ...inTask, status: newStatus ? newStatus : inTask.status,
+                        message: newMessage ? newMessage : inTask.message
+                    }
+                    : inTask
+            )
+        )
+    }
 
 
     const deleteObject = (objects) => {
-        let deleteTasks = objects.map(path => createTask(path, "delete"));
-
+        let deleteTasks = objects.map(path => createTask(path, null, "delete", "Waiting for deletion"));
         let uniqueTasks = deleteTasks.filter((task) => !identicalTasks(task));
 
         setTasks([...tasks, ...uniqueTasks]);
@@ -62,54 +76,78 @@ export const FileOperationsProvider = ({children}) => {
         executeTasks(uniqueTasks);
     }
 
-    const executeTasks = async (pendingTasks) => {
-        for (const task of pendingTasks) {
-            if (task.operation.type === "delete") {
+    const moveObjects = (sourceObjects, target) => {
+        const moveTasks = sourceObjects.map(source => createTask(source, target + extractSimpleName(source), "move", "Waiting for moving"));
+        let uniqueTasks = moveTasks.filter((task) => !identicalTasks(task));
 
-                setTasks(prevTasks =>
-                    prevTasks.map(inTask =>
-                        inTask.operation.source === task.operation.source
-                            ? {...inTask, status: "progress"}
-                            : inTask
-                    )
-                )
+        setTasks([...tasks, ...uniqueTasks]);
+        setNewTasksAdded(true);
+        executeTasks(uniqueTasks);
+    }
+
+    const [taskRunning, setTaskRunning] = useState(false);
+
+    const executeTasks = async (pendingTasks) => {
+        setTaskRunning(true);
+
+        for (const task of pendingTasks) {
+
+
+            if (task.operation.type === "delete") {
                 await executeDeleteTask(task);
+            }
+            if (task.operation.type === "move") {
+                await executeMoveTask(task);
             }
         }
 
-        for (const task of pendingTasks) {
-            if(task.operation.type === "delete"  || task.operation.type === "move") {}
-            removeObjectFromFolderContent(task.operation.source);
+        setTaskRunning(false);
+    }
+
+    useEffect(() => {
+        if (!taskRunning) {
+            for (const task of tasks) {
+                if ((task.operation.type === "delete" || task.operation.type === "move")
+                    && task.status === "completed") {
+                    removeObjectFromFolderContent(task.operation.source);
+                }
+            }
+        }
+    }, [taskRunning])
+
+
+    async function executeMoveTask(task) {
+        try {
+            updateTask(task, "progress", "Moving in progress...")
+            await sendMoveObject(task.operation.source, task.operation.target);
+            updateTask(task, "completed", "Moving successfully completed")
+
+        } catch (e) {
+            updateTask(task, "error", e.message);
         }
 
-        // loadFolderFromPath();
     }
+
 
     const executeDeleteTask = async (task) => {
         try {
+            updateTask(task, "progress", "Deletion in progress...");
             await sendDeleteObject(task.operation.source);
-
-            setTasks(prevTasks =>
-                prevTasks.map(inTask =>
-                    inTask.operation.source === task.operation.source
-                        ? {...inTask, status: "completed"}
-                        : inTask
-                )
-            )
+            updateTask(task, "completed", "Deletion successfully completed")
 
         } catch (e) {
-
+            updateTask(task, "error", e.message);
         }
     }
 
 
-    // useEffect(() => {
-    //     const pendingTasks = tasks.filter((task) => task.status === "pending");
-    //     console.log(pendingTasks);
-    //
-    //
-    //
-    // }, [tasks]);
+// useEffect(() => {
+//     const pendingTasks = tasks.filter((task) => task.status === "pending");
+//     console.log(pendingTasks);
+//
+//
+//
+// }, [tasks]);
 
 
     return (<FileOperationsContext.Provider
@@ -121,7 +159,8 @@ export const FileOperationsProvider = ({children}) => {
             clearTasks,
             allTasksCompleted,
 
-            deleteObject
+            deleteObject,
+            moveObjects
         }}>
         {children}
     </FileOperationsContext.Provider>);

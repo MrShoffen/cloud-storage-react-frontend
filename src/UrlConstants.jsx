@@ -14,6 +14,7 @@ export const API_LOGIN = API_BASE_URL + API_CONTEXT + '/auth/login';
 export const API_LOGOUT = API_BASE_URL + API_CONTEXT + '/auth/logout';
 
 export const API_FILES = API_BASE_URL + API_CONTEXT + '/files';
+export const API_MOVE_FILES = API_BASE_URL + API_CONTEXT + '/files/move';
 
 export const API_FIND_LOCATIONS_UNAUTH = API_BASE_URL + API_CONTEXT + '/locations';
 export const API_GET_WEATHER_INFO_UNAUTH = API_BASE_URL + API_CONTEXT + '/weather';
