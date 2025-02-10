@@ -7,7 +7,7 @@ import ValidatedUsernameTextField from "../../components/InputElements/TextField
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import {useNotification} from "../../context/Notification/NotificationProvider.jsx";
-import {sendEdit} from "../../services/fetch/auth/SendEdit.js";
+import {sendEditUser} from "../../services/fetch/auth/user/SendEditUser.js";
 import ConflictException from "../../exception/ConflictException.jsx";
 
 
@@ -33,7 +33,7 @@ export default function ProfileModal({open, onClose}) {
             setLoading(true);
             const editInformation = {newUsername: username, newAvatarUrl: avatarUrl};
 
-            const newData = await sendEdit(editInformation, "/profile");
+            const newData = await sendEditUser(editInformation, "/profile");
             login(newData);
             showSuccess("Information updated successfully.");
         } catch (error) {

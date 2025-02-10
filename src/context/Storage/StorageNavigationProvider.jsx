@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useState} from "react";
-import {sendGetFolderContent} from "../../services/fetch/auth/SendGetFolderContent.js";
+import {sendGetFolderContent} from "../../services/fetch/auth/storage/SendGetFolderContent.js";
 import {useStorageSelection} from "./StorageSelectionProvider.jsx";
 
 
@@ -41,7 +41,13 @@ export const StorageNavigationProvider = ({children}) => {
 
     const [folderContent, setFolderContent] = useState(null);
 
-
+    const removeObjectFromFolderContent = (deletingPath) => {
+        setFolderContent(content =>
+            content.filter(object =>
+                object.path !== deletingPath
+            )
+        )
+    }
 
 
     const updateCurrentFolderContent = async (path = [""]) => {
@@ -85,7 +91,9 @@ export const StorageNavigationProvider = ({children}) => {
             currentPath,
             goToPrevFolder,
             goToFolder,
-            loadFolder
+            loadFolder,
+
+            removeObjectFromFolderContent
         }}>
         {children}
     </CloudStorageContext.Provider>);

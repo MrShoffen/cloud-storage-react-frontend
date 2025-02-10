@@ -1,8 +1,8 @@
-import {API_USER_INFO} from "../../../UrlConstants.jsx";
-import {throwSpecifyException} from "../../../exception/ThrowSpecifyException.jsx";
+import {API_USER_INFO} from "../../../../UrlConstants.jsx";
+import {throwSpecifyException} from "../../../../exception/ThrowSpecifyException.jsx";
 
 
-export const sendEdit = async (editData, type) =>{
+export const sendEditUser = async (editData, type) =>{
     const response = await fetch(API_USER_INFO + type, {
         method: 'PATCH',
         headers: {

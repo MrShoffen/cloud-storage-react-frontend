@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
-import {checkSession} from "../../services/fetch/auth/CheckSession.js";
+import {checkSession} from "../../services/fetch/auth/user/CheckSession.js";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useNotification} from "../Notification/NotificationProvider.jsx";
 

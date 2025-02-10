@@ -12,3 +12,9 @@ export const formatDate = (dateString) => {
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
     }).format(date).replace(",", ""); // Удаляем лишнюю запятую
 };
+
+export const extractSimpleName = (path) => {
+    let sep = path.lastIndexOf("/", path.length - 2);
+    return path.substring(sep + 1);
+
+}

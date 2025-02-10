@@ -2,7 +2,7 @@ import {Tooltip, Zoom} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import bytes from "bytes";
-import {formatDate} from "../../../services/util/DateFormatter.js";
+import {formatDate} from "../../../services/util/Utils.js";
 
 
 export const ObjectListName = ({object}) => {

@@ -14,6 +14,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Typography from "@mui/material/Typography";
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import {useStorageSelection} from "../../../context/Storage/StorageSelectionProvider.jsx";
+import {useStorageOperations} from "../../../context/Files/FileOperationsProvider.jsx";
 
 
 const pathToName = (path) => {
@@ -23,19 +24,21 @@ const pathToName = (path) => {
 }
 
 export const SelectHeader = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const {deleteObject} = useStorageOperations();
 
     const {isSelectionMode,
         setSelectionMode,
         selectedIds,
         setSelectedIds} = useStorageSelection();
 
-
-
-
     const clearSelectionMode = () => {
         setSelectionMode(false);
         setSelectedIds([]);
+    }
+
+    function handleDelete() {
+        deleteObject(selectedIds);
+        clearSelectionMode();
     }
 
     return (
@@ -120,6 +123,7 @@ export const SelectHeader = () => {
                 </IconButton>
 
                 <IconButton
+                    onClick={handleDelete}
                     sx={{
                         position: 'absolute',
                         bottom: 14,

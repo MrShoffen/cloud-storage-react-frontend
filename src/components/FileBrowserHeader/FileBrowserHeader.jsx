@@ -1,26 +1,11 @@
-import {
-    Box,
-    Button,
-    Card, CircularProgress,
-    Container,
-    Divider,
-    IconButton,
-    List, ListItem,
-    ListItemButton,
-    ListItemIcon, ListItemText,
-    SwipeableDrawer
-} from "@mui/material";
+import {Box, Button, Card, CircularProgress, Container, Divider, IconButton} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {CustomBread} from "./Breadcrumbs/CustomBread.jsx";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {useEffect, useRef, useState} from "react";
-import LargeTile from '@mui/icons-material/ViewModule';
-import RegularTile from '@mui/icons-material/ViewCompact';
-import ListIcon from '@mui/icons-material/List';
 import {FileMenu} from "./FileMenu/FileMenu.jsx";
-import {FileFormatIcon} from "../../assets/FileFormatIcon.jsx";
 
 export const FileBrowserHeader = () => {
 

@@ -11,7 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import {useNotification} from "../../context/Notification/NotificationProvider.jsx";
-import {sendEdit} from "../../services/fetch/auth/SendEdit.js";
+import {sendEditUser} from "../../services/fetch/auth/user/SendEditUser.js";
 import ForbiddenException from "../../exception/ForbiddenException.jsx";
 import UnauthorizedException from "../../exception/UnauthorizedException.jsx";
 
@@ -39,7 +39,7 @@ export default function SecurityModal({open, onClose}) {
         try {
             setLoading(true);
             const editInformation = {oldPassword: oldPassword, newPassword: newPassword}
-            await sendEdit(editInformation, "/password");
+            await sendEditUser(editInformation, "/password");
             showSuccess("Password updated!");
 
         } catch (error) {

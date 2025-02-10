@@ -7,6 +7,7 @@ import {isMobile} from "react-device-detect";
 import {ObjectIcon} from "../FileBrowser/elements/ObjectIcon.jsx";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 import {FileFormatIcon} from "../../assets/FileFormatIcon.jsx";
+import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
 
 export const FileSelection = ({
                                   containerRef,
@@ -14,6 +15,8 @@ export const FileSelection = ({
                                   selectedIds, setSelectedIds
                               }) => {
     const isMob = isMobile;
+
+    const {deleteObject} = useStorageOperations();
 
 
     const {isSelectionMode, setSelectionMode} = useStorageSelection();
@@ -124,6 +127,12 @@ export const FileSelection = ({
 
                 }}
             >but</Button>
+
+
+            <Button
+            onClick={() => deleteObject(selectedIds)}
+            >delete</Button>
+
             <Selecto
                 ref={selectoRef}
                 selectableTargets={[" .selectable"]}

@@ -442,12 +442,15 @@ export const FileFormatIcon = ({name, style = 'regularTiles'}) => {
                     transform: 'translateX(-50% )',
                     position: 'absolute',
                     left: '50%',
+                    userSelect: 'none',
 
                 }}
             >
                 <img src={folderIc} style={{
                     width: '100%',
-                    userSelect: 'none'
+                    userSelect: 'none',
+                    pointerEvents: 'none',
+
                 }} alt={name}/>
             </Box>
         )
@@ -1729,7 +1732,9 @@ export const FileFormatIcon = ({name, style = 'regularTiles'}) => {
         >
             <img src={icon} style={{
                 width: '100%',
-                userSelect: 'none'
+                userSelect: 'none',
+                pointerEvents: 'none',
+
             }} alt={name}/>
         </Box>
     )

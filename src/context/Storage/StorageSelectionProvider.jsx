@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useState} from "react";
-import {sendGetFolderContent} from "../../services/fetch/auth/SendGetFolderContent.js";
+import {sendGetFolderContent} from "../../services/fetch/auth/storage/SendGetFolderContent.js";
 
 
 const CloudStorageContext = createContext();

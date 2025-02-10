@@ -1,6 +1,6 @@
 import {Divider, ListItemIcon, MenuItem} from "@mui/material";
 import {AccountCircle, GitHub, Help, Logout, Settings} from "@mui/icons-material";
-import {sendLogout} from "../../../services/fetch/auth/SendLogout.js";
+import {sendLogout} from "../../../services/fetch/auth/user/SendLogout.js";
 import {useAuthContext} from "../../../context/Auth/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 import {useNotification} from "../../../context/Notification/NotificationProvider.jsx";
