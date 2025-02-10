@@ -97,6 +97,26 @@ export const FileSelection = ({
 
     }
 
+
+    const handleDragEnd = (event) => {
+        setShowIcon(false);
+
+        const elements = document.elementsFromPoint(event.clientX, event.clientY);
+
+        const el = elements.find(elem => elem.classList.contains('selectable'));
+        if (el) {
+            let targetPath = el.dataset.id;
+
+            if(selectedIds.includes(targetPath) || !targetPath.endsWith("/")) {
+                return;
+            }
+            console.log(targetPath);
+
+        }
+
+
+    }
+
     return (
         <>
             <Button
@@ -130,7 +150,7 @@ export const FileSelection = ({
 
 
             <Button
-            onClick={() => deleteObject(selectedIds)}
+                onClick={() => deleteObject(selectedIds)}
             >delete</Button>
 
             <Selecto
@@ -191,7 +211,7 @@ export const FileSelection = ({
                             setIconCoord({x: x, y: y});
 
                             const objs = e.target.dataset.id;
-                            console.log('X: ' + x + ', Y: ' + y + ' -- ' + objs);
+                            // console.log('X: ' + x + ', Y: ' + y + ' -- ' + objs);
                         }}
                         onRenderGroup={e => {
                             setShowIcon(true);
@@ -200,12 +220,12 @@ export const FileSelection = ({
                             const objs = e.events.map(e => e.target.dataset.id);
                             setIconCoord({x: x, y: y});
 
-                            console.log('X: ' + x + ', Y: ' + y + ' -- ' + objs);
+                            // console.log('X: ' + x + ', Y: ' + y + ' -- ' + objs);
                         }}
 
 
-                        onDragGroupEnd={() => setShowIcon(false)}
-                        onDragEnd={() => setShowIcon(false)}
+                        onDragGroupEnd={handleDragEnd}
+                        onDragEnd={handleDragEnd}
                     />
                     <Box
                         ref={iconRef}
@@ -234,10 +254,10 @@ export const FileSelection = ({
                                         position: "absolute",
                                         width: "100%",
                                         left: index * 6 - 8 + 'px',
-                                        top: index * 6 +  2+ 'px',
+                                        top: index * 6 + 2 + 'px',
                                     }}
                                 >
-                                    <FileFormatIcon name={id} />
+                                    <FileFormatIcon name={id}/>
                                 </Box>
                             }
                         )}

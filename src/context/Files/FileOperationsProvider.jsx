@@ -78,8 +78,8 @@ export const FileOperationsProvider = ({children}) => {
         }
 
         for (const task of pendingTasks) {
+            if(task.operation.type === "delete"  || task.operation.type === "move") {}
             removeObjectFromFolderContent(task.operation.source);
-
         }
 
         // loadFolderFromPath();

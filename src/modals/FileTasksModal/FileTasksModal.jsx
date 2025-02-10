@@ -1,13 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
-import {Box, Container, Divider, Toolbar} from "@mui/material";
+import {Box, Container, Divider} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
 import Typography from "@mui/material/Typography";
-import DownloadIcon from "@mui/icons-material/Download";
-import DeleteIcon from "@mui/icons-material/Delete";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {Task} from "./Task.jsx";

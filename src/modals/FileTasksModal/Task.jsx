@@ -52,7 +52,7 @@ export const Task = ({task}) => {
                 }}
             >
 
-                <Box sx={{position: 'absolute', width: '15px', left: -1, top: 40,}}>
+                <Box sx={{position: 'absolute', width: '15px', left:  -1, top: simpleName.endsWith('/') ? 53 : 20,}}>
                     <FileFormatIcon name={simpleName} style="list"/>
                 </Box>
                 <Typography sx={{
@@ -84,9 +84,11 @@ export const Task = ({task}) => {
                         width: '100%',
                         display: 'flex',
                         position: 'absolute',
+                        color: 'warning.main',
                         left: 18,
                         top: 36,
-                    }}>Waiting for {operation}</Typography>
+                    }}>In queue
+                        for {operation === 'delete' ? "deletion" : (operation === 'move' ? 'moving' : 'copying')}</Typography>
 
                     :
 
@@ -99,7 +101,12 @@ export const Task = ({task}) => {
                                 position: 'absolute',
                                 left: 18,
                                 top: 36,
-                            }}>{operation.charAt(0).toUpperCase() + operation.slice(1)} completed</Typography> :
+                                color: 'success.main'
+                            }}>{operation === 'delete' ? "Deletion" :
+                                (operation === 'move' ? 'Moving' : 'Copying')} successfully completed</Typography>
+
+                            :
+
                             <Typography sx={{
                                 fontSize: '15px',
                                 width: '100%',
@@ -107,7 +114,8 @@ export const Task = ({task}) => {
                                 position: 'absolute',
                                 left: 18,
                                 top: 36,
-                            }}>{operation.charAt(0).toUpperCase() + operation.slice(1)} in progress</Typography>
+                            }}>{operation === 'delete' ? "Deletion" : (operation === 'move' ? 'Moving' : 'Copying')} in
+                                progress...</Typography>
                     )
 
 
@@ -124,24 +132,26 @@ export const Task = ({task}) => {
             }
 
 
-            <IconButton
-                onClick={() => deleteTask(task)}
-                sx={{
-                    position: 'absolute',
-                    bottom: 16,
-                    right: 7,
-                    backgroundColor: 'success.main',
-                    width: '35px',
-                    height: '35px',
-                    color: 'text.secondary',
-                    "&:hover": {
-                        backgroundColor: 'success.dark',
-                    }
-                }}
-            >
-                <CloseIcon sx={{fontSize: '30px'}}/>
-            </IconButton>
-
+            {/*//todo add removing pending tasks*/}
+            {status === 'completed' &&
+                <IconButton
+                    onClick={() => deleteTask(task)}
+                    sx={{
+                        position: 'absolute',
+                        bottom: 18,
+                        right: 8,
+                        backgroundColor: 'success.main',
+                        width: '30px',
+                        height: '30px',
+                        color: 'text.primary',
+                        "&:hover": {
+                            backgroundColor: 'success.dark',
+                        }
+                    }}
+                >
+                    <CloseIcon sx={{fontSize: '30px'}}/>
+                </IconButton>
+            }
 
         </Card>
     )
