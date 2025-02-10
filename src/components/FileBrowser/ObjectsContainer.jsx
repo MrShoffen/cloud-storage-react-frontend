@@ -2,19 +2,21 @@ import {Box, Button} from "@mui/material";
 import StorageTileObject from "./StorageObject/StorageTileObject.jsx";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import {AnimatePresence, motion} from "framer-motion";
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
 import StorageListObject from "./StorageObject/StorageListObject.jsx";
 import './selected.css';
 import {FileSelection} from "../Selection/FileSelection.jsx";
 import {useStorageView} from "../../context/Storage/StorageViewProvider.jsx";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 import {FileTasksModal} from "../../modals/FileTasksModal/FileTasksModal.jsx";
+import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
 
 export const ObjectsContainer = () => {
 
     const {folderContent} = useStorageNavigation();
     const {filesView, sortFolder} = useStorageView();
-    const {selectedIds, setSelectedIds} = useStorageSelection();
+    const {selectedIds, setSelectedIds, setSelectionMode} = useStorageSelection();
+    const {deleteObject} = useStorageOperations();
 
     const animationVariants = {
         hidden: {opacity: 0},
@@ -26,6 +28,29 @@ export const ObjectsContainer = () => {
     const moveableRef = useRef(null);
     const selectoRef = useRef(null);
 
+
+    const handleKeyDown = (event) => {
+        event.stopPropagation();
+        if (event.key === "Delete" || event.key === "Del") { // Проверяем, что нажата клавиша Del
+            if (selectedIds.length > 0) {
+                deleteObject(selectedIds);
+                setSelectionMode(false);
+                setSelectedIds([]);
+            }
+        }
+    };
+
+    // useEffect(() => {
+    //
+    //
+    //     // Добавляем обработчик события keydown
+    //     document.addEventListener("keydown", handleKeyDown);
+    //
+    //     // Убираем обработчик при размонтировании компонента
+    //     return () => {
+    //         document.removeEventListener("keydown", handleKeyDown);
+    //     };
+    // }, [selectedIds]);
 
     return (
         <AnimatePresence mode="wait">
@@ -43,13 +68,18 @@ export const ObjectsContainer = () => {
                         <Box
                             ref={containerRef}
                             className={"elements"}
-
+                            onKeyDown={handleKeyDown}
+                            tabIndex={0}
                             sx={{
                                 width: '100%',
                                 display: 'grid',
                                 gridTemplateColumns: 'repeat(auto-fill, minmax(min(' + (filesView === 'largeTiles' ? '160px' : '100px') + ',100%), 1fr))',
                                 gap: 1,
                                 pb: 30,
+                                '&:focus': {
+                                    outline: 'none', // Убираем стандартный outline
+                                    // boxShadow: '0 0 0 2px #3f51b5', // Добавляем тень
+                                },
                             }}
 
                             onScroll={() => {

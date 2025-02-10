@@ -98,7 +98,6 @@ export const FileSelection = ({
         if (el) {
             return !selectedIds.includes(el.dataset.id);
         }
-
     }
 
 
@@ -114,11 +113,10 @@ export const FileSelection = ({
             if (selectedIds.includes(targetPath) || !targetPath.endsWith("/")) {
                 return;
             }
-
-
             moveObjects(selectedIds, targetPath);
         }
     }
+
 
     return (
         <>
@@ -166,6 +164,7 @@ export const FileSelection = ({
                     toggleContinueSelect={['shift']}
                     hitRate={isMob ? 1000 : 0}
                     dragContainer={".elements"}
+                    keyContainer={containerRef.current}
 
                     onSelect={
                         (e) => {
@@ -176,10 +175,6 @@ export const FileSelection = ({
                     }
 
                     className={isMob && "custom-selection"}
-                    selectionStyle={{
-                        background: "rgba(255, 0, 0, 0.2)",   // Красный фон (20% прозрачности)
-                        border: "2px solid red",              // Красная граница
-                    }}
                 />
             }
             <style>
