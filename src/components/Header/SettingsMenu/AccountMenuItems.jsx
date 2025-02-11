@@ -4,8 +4,6 @@ import {sendLogout} from "../../../services/fetch/auth/user/SendLogout.js";
 import {useAuthContext} from "../../../context/Auth/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 import {useNotification} from "../../../context/Notification/NotificationProvider.jsx";
-import {useState} from "react";
-import ProfileModal from "../../../modals/ProfileModal/ProfileModal.jsx";
 
 
 export const accountMenuItems = (openProfileModal, openSecurityModal) => {
@@ -19,7 +17,7 @@ export const accountMenuItems = (openProfileModal, openSecurityModal) => {
             logout();
             setTimeout(() => {
                 navigate("/cloud-storage/login");
-                showInfo("You've successfully logged out.", 4000);
+                showInfo("Выход успешно выполнен", 4000);
             }, 400);
         } catch (error) {
             console.log('Unknown error occurred! ');
@@ -32,20 +30,20 @@ export const accountMenuItems = (openProfileModal, openSecurityModal) => {
             <MenuItem onClick={openProfileModal}>
                 <ListItemIcon>
                     <AccountCircle fontSize="small"/>
-                </ListItemIcon> Profile
+                </ListItemIcon> Настройки профиля
             </MenuItem>
             <MenuItem onClick={openSecurityModal}>
                 <ListItemIcon>
                     <Settings fontSize="small"/>
                 </ListItemIcon>
-                Security settings
+                Настройки безопасности
             </MenuItem>
             <Divider/>
             <MenuItem>
                 <ListItemIcon>
                     <Help fontSize="small"/>
                 </ListItemIcon>
-                Help
+                Помощь
             </MenuItem>
             <MenuItem
                 component="a"
@@ -57,14 +55,14 @@ export const accountMenuItems = (openProfileModal, openSecurityModal) => {
                 <ListItemIcon>
                     <GitHub fontSize="small"/>
                 </ListItemIcon>
-                Source code
+                Исходный код проекта
             </MenuItem>
             <Divider/>
             <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
                     <Logout fontSize="small"/>
                 </ListItemIcon>
-                Logout
+                Выход
             </MenuItem>
         </>
     )

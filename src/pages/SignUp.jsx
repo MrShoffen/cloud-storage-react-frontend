@@ -42,7 +42,7 @@ export const SignUp = () => {
             setRegistrationLoading(true);
             await sendRegistrationForm(requestData);
             navigate("/cloud-storage/login");
-            showSuccess("You've successfully signed up. Now you can log in to your account.", 5000);
+            showSuccess("Регистрация успешно выполнена", 5000);
         } catch (error) {
             switch (true) {
                 case error instanceof ConflictException:
@@ -50,7 +50,7 @@ export const SignUp = () => {
                     setUsernameError(error.message);
                     break;
                 default:
-                    showError("Failed to sign up! Try again please.");
+                    showError("Не удалось зарегистрироваться. Попробуйте позже");
                     console.log('Unknown error occurred! ');
             }
         }
@@ -72,12 +72,12 @@ export const SignUp = () => {
                   alignSelf: 'center',
                   borderRadius: 2,
                   width: {xs: '85%', sm: '400px'},
-                  height: shouldShowButton ? '500px' : shouldShowValidatePasswordField ? '480px' : shouldShowPasswordField ? '425px' : '340px',
+                  height: shouldShowButton ? '500px' : shouldShowValidatePasswordField ? '480px' : shouldShowPasswordField ? '425px' : '370px',
                   transition: 'height 0.5s ease',
               }}>
 
             <Typography component="h1" variant="h4" sx={{textAlign: 'center'}}>
-                Sign up
+                Регистрация
             </Typography>
 
             <form onSubmit={handleSubmit}>
@@ -126,7 +126,7 @@ export const SignUp = () => {
                             loading={registrationLoading || avatarLoading}
                             loadingPosition="center"
                         >
-                            Sign up
+                            Зарегистрироваться
                         </Button>
                     </AnimatedElement>
 
@@ -140,10 +140,10 @@ export const SignUp = () => {
                                         bottom: 10,
                                         textAlign: 'center'
                                     }}>
-                            Already have an account?{' '}
+                            Уже зарегистрированы?{' '}
                             <Link sx={{color: '#1976d2', cursor: 'pointer'}}
                                   onClick={() => navigate("/cloud-storage/login")}>
-                                Sign in
+                                Войти
                             </Link>
                         </Typography>
                     </Zoom>

@@ -2,13 +2,10 @@ import Selecto from "react-selecto";
 import Moveable from "react-moveable";
 import {useEffect, useRef, useState} from "react";
 import {Box, Button} from "@mui/material";
-import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import {isMobile} from "react-device-detect";
-import {ObjectIcon} from "../FileBrowser/elements/ObjectIcon.jsx";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 import {FileFormatIcon} from "../../assets/FileFormatIcon.jsx";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
-import {extractSimpleName} from "../../services/util/Utils.js";
 
 export const FileSelection = ({
                                   containerRef,

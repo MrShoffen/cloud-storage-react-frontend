@@ -1,14 +1,13 @@
-import {Box, Button} from "@mui/material";
+import {Box} from "@mui/material";
 import StorageTileObject from "./StorageObject/StorageTileObject.jsx";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import {AnimatePresence, motion} from "framer-motion";
-import {useEffect, useRef} from "react";
+import {useRef} from "react";
 import StorageListObject from "./StorageObject/StorageListObject.jsx";
 import './selected.css';
 import {FileSelection} from "../Selection/FileSelection.jsx";
 import {useStorageView} from "../../context/Storage/StorageViewProvider.jsx";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
-import {FileTasksModal} from "../../modals/FileTasksModal/FileTasksModal.jsx";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
 
 export const ObjectsContainer = () => {
@@ -37,7 +36,7 @@ export const ObjectsContainer = () => {
     const handleKeyDown = (event) => {
         event.stopPropagation();
 
-        if (event.key === "Delete" || event.key === "Del") { // Проверяем, что нажата клавиша Del
+        if (event.key === "Delete" || event.key === "Del") {
             if (selectedIds.length > 0) {
                 deleteObject(selectedIds);
                 setSelectionMode(false);
@@ -46,7 +45,7 @@ export const ObjectsContainer = () => {
         }
 
         if ((event.ctrlKey || event.metaKey) && event.key === "c") {
-            event.preventDefault(); // Предотвращаем стандартное поведение (копирование)
+            event.preventDefault();
             console.log("Ctrl + C pressed");
             if (selectedIds.length > 0) {
                 startCopying();
@@ -95,8 +94,7 @@ export const ObjectsContainer = () => {
                                 gap: 1,
                                 pb: 30,
                                 '&:focus': {
-                                    outline: 'none', // Убираем стандартный outline
-                                    // boxShadow: '0 0 0 2px #3f51b5', // Добавляем тень
+                                    outline: 'none',
                                 },
                             }}
 
@@ -107,10 +105,11 @@ export const ObjectsContainer = () => {
                         >
                             {folderContent
                                 &&
-                                sortFolder(folderContent).map((item) => <StorageTileObject selectedIds={selectedIds}
-                                                                                           bufferIds={bufferIds}
-                                                                                           object={item}
-                                                                                           style={filesView}/>)}
+                                sortFolder(folderContent).map(
+                                    (item) => <StorageTileObject selectedIds={selectedIds}
+                                                                 bufferIds={bufferIds}
+                                                                 object={item}
+                                                                 style={filesView}/>)}
                         </Box>
                         :
                         <Box
@@ -125,17 +124,18 @@ export const ObjectsContainer = () => {
                                 gap: 0.8,
                                 pb: 30,
                                 '&:focus': {
-                                    outline: 'none', // Убираем стандартный outline
-                                    // boxShadow: '0 0 0 2px #3f51b5', // Добавляем тень
+                                    outline: 'none',
+
                                 },
                             }}
                         >
                             {folderContent
                                 &&
-                                sortFolder(folderContent).map((item) => <StorageListObject object={item}
-                                                                                           style={filesView}
-                                                                                           bufferIds={bufferIds}
-                                                                                           selectedIds={selectedIds}/>)}
+                                sortFolder(folderContent).map(
+                                    (item) => <StorageListObject object={item}
+                                                                 style={filesView}
+                                                                 bufferIds={bufferIds}
+                                                                 selectedIds={selectedIds}/>)}
                         </Box>
                 }
 

@@ -1,5 +1,13 @@
 import {
-    Divider, Grow, List, ListItemButton, ListItemIcon, ListItemText, ListSubheader, Menu, SwipeableDrawer
+    Divider,
+    Grow,
+    List,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    ListSubheader,
+    Menu,
+    SwipeableDrawer
 } from "@mui/material";
 import ListIcon from "@mui/icons-material/List";
 import RegularTile from "@mui/icons-material/ViewCompact";
@@ -63,8 +71,8 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
             }}
             PaperProps={{
                 elevation: 0, sx: {
-                    // Для Safari
-                    backdropFilter: 'blur(9px)', WebkitBackdropFilter: 'blur(9px)', // Для Safari
+
+                    backdropFilter: 'blur(9px)', WebkitBackdropFilter: 'blur(9px)',
                     border: '1px solid', borderColor: 'divider', backgroundColor: 'menu', borderRadius: 2
                 }
             }}
@@ -82,13 +90,13 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
                                sx={{
                                    backgroundColor: 'transparent',
                                    backdropFilter: 'blur(9px)',
-                                   WebkitBackdropFilter: 'blur(9px)', // Для Safari
-                                   maxHeight: '25px', // Уменьшаем высоту
+                                   WebkitBackdropFilter: 'blur(9px)',
+                                   maxHeight: '25px',
                                    marginBottom: '20px',
                                    marginTop: '-10px'
                                }}
                 >
-                    View
+                    Вид
                 </ListSubheader>
                 <ListItemButton
                     selected={filesView === 'list'}
@@ -98,12 +106,12 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
                     <ListItemIcon>
                         <ListIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="List"/>
-                    {filesView === 'list' && ( // Условно отображаем галочку
+                    <ListItemText primary="Список"/>
+                    {filesView === 'list' && (
                         <CheckIcon
                             sx={{
-                                position: 'absolute', right: '16px', // Отступ от правого края
-                                color: 'primary.dark', // Цвет галочки
+                                position: 'absolute', right: '16px',
+                                color: 'primary.dark',
                             }}
                         />)}
                 </ListItemButton>
@@ -116,12 +124,12 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
                     <ListItemIcon>
                         <RegularTile/>
                     </ListItemIcon>
-                    <ListItemText primary="Tile"/>
-                    {filesView === 'regularTiles' && ( // Условно отображаем галочку
+                    <ListItemText primary="Плитка"/>
+                    {filesView === 'regularTiles' && (
                         <CheckIcon
                             sx={{
-                                position: 'absolute', right: '16px', // Отступ от правого края
-                                color: 'primary.dark', // Цвет галочки
+                                position: 'absolute', right: '16px',
+                                color: 'primary.dark',
                             }}
                         />)}
 
@@ -135,12 +143,12 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
                     <ListItemIcon>
                         <LargeTile/>
                     </ListItemIcon>
-                    <ListItemText primary="Large Tile"/>
-                    {filesView === 'largeTiles' && ( // Условно отображаем галочку
+                    <ListItemText primary="Крупная плитка"/>
+                    {filesView === 'largeTiles' && (
                         <CheckIcon
                             sx={{
-                                position: 'absolute', right: '16px', // Отступ от правого края
-                                color: 'primary.dark', // Цвет галочки
+                                position: 'absolute', right: '16px',
+                                color: 'primary.dark',
                             }}
                         />)}
                 </ListItemButton>
@@ -153,13 +161,13 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
                                sx={{
                                    backgroundColor: 'transparent',
                                    backdropFilter: 'blur(9px)',
-                                   WebkitBackdropFilter: 'blur(9px)', // Для Safari
-                                   maxHeight: '25px', // Уменьшаем высоту
+                                   WebkitBackdropFilter: 'blur(9px)',
+                                   maxHeight: '25px',
                                    marginBottom: '20px',
                                    marginTop: '-14px'
                                }}
                 >
-                    File Sort
+                    Сортировать по
                 </ListSubheader>
                 <ListItemButton
                     selected={sortParameter === 'name'}
@@ -169,12 +177,12 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
                     <ListItemIcon>
                         <SortByAlphaIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Name"/>
-                    {sortParameter === 'name' && ( // Условно отображаем галочку
+                    <ListItemText primary="Названию"/>
+                    {sortParameter === 'name' && (
                         <CheckIcon
                             sx={{
-                                position: 'absolute', right: '16px', // Отступ от правого края
-                                color: 'primary.dark', // Цвет галочки
+                                position: 'absolute', right: '16px',
+                                color: 'primary.dark',
                             }}
                         />)}
                 </ListItemButton>
@@ -187,12 +195,12 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
                     <ListItemIcon>
                         <StraightenIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Size"/>
-                    {sortParameter === 'size' && ( // Условно отображаем галочку
+                    <ListItemText primary="Размеру"/>
+                    {sortParameter === 'size' && (
                         <CheckIcon
                             sx={{
-                                position: 'absolute', right: '16px', // Отступ от правого края
-                                color: 'primary.dark', // Цвет галочки
+                                position: 'absolute', right: '16px',
+                                color: 'primary.dark',
                             }}
                         />)}
 
@@ -206,12 +214,12 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
                     <ListItemIcon>
                         <EditCalendarIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Last Modified"/>
-                    {sortParameter === 'date' && ( // Условно отображаем галочку
+                    <ListItemText primary="Дате изменения"/>
+                    {sortParameter === 'date' && (
                         <CheckIcon
                             sx={{
-                                position: 'absolute', right: '16px', // Отступ от правого края
-                                color: 'primary.dark', // Цвет галочки
+                                position: 'absolute', right: '16px',
+                                color: 'primary.dark',
                             }}
                         />)}
                 </ListItemButton>
@@ -227,12 +235,12 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
                             <SortIcon sx={{transform: 'scaleY(-1)'}}/>
 
                         </ListItemIcon>
-                        <ListItemText primary="Ascending"/>
-                        {sortDirection === 'asc' && ( // Условно отображаем галочку
+                        <ListItemText primary="Возрастанию"/>
+                        {sortDirection === 'asc' && (
                             <CheckIcon
                                 sx={{
-                                    position: 'absolute', right: '16px', // Отступ от правого края
-                                    color: 'primary.dark', // Цвет галочки
+                                    position: 'absolute', right: '16px',
+                                    color: 'primary.dark',
                                 }}
                             />)}
                     </ListItemButton>
@@ -246,12 +254,12 @@ export const FileMenu = ({anchorEl, handleCloseMenu}) => {
                             <SortIcon/>
 
                         </ListItemIcon>
-                        <ListItemText primary="Descending"/>
-                        {sortDirection === 'desc' && ( // Условно отображаем галочку
+                        <ListItemText primary="Убыванию"/>
+                        {sortDirection === 'desc' && (
                             <CheckIcon
                                 sx={{
-                                    position: 'absolute', right: '16px', // Отступ от правого края
-                                    color: 'primary.dark', // Цвет галочки
+                                    position: 'absolute', right: '16px',
+                                    color: 'primary.dark',
                                 }}
                             />)}
 

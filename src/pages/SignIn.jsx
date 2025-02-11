@@ -9,6 +9,7 @@ import {sendLoginForm} from "../services/fetch/unauth/SendLoginForm.js";
 import {useAuthContext} from "../context/Auth/AuthContext.jsx";
 import {useNotification} from "../context/Notification/NotificationProvider.jsx";
 import UnauthorizedException from "../exception/UnauthorizedException.jsx";
+import NotFoundException from "../exception/NotFoundException.jsx";
 
 
 export const SignIn = () => {
@@ -36,15 +37,20 @@ export const SignIn = () => {
             setLoading(true);
             const profile = await sendLoginForm(requestData);
             login(profile);
-            showInfo("You've successfully logged in", 4000);
+            showInfo("Вход успшено выполнен", 4000);
         } catch (error) {
             switch (true) {
                 case error instanceof UnauthorizedException:
                     showWarn(error.message);
                     setUsernameError(error.message);
                     break;
+
+                case error instanceof NotFoundException:
+                    showWarn(error.message);
+                    setUsernameError(error.message);
+                    break;
                 default:
-                    showError("Failed to sign up! Try again please.");
+                    showError("Ошибка при попытке входа. Попробуйте позже");
                     console.log('Unknown error occurred! ');
             }
         }
@@ -64,12 +70,12 @@ export const SignIn = () => {
                   alignSelf: 'center',
                   borderRadius: 2,
                   width: {xs: '85%', sm: '400px'},
-                  height: shouldShowPasswordField ? '315px' : '232px',
+                  height: shouldShowPasswordField ? '315px' : '252px',
                   transition: 'height 0.5s ease',
               }}>
 
             <Typography component="h1" variant="h4" sx={{textAlign: 'center', mb: 2}}>
-                Sign in
+                Вход
             </Typography>
 
             <form onSubmit={handleSubmit}>
@@ -100,7 +106,7 @@ export const SignIn = () => {
                             onClick={handleSubmit}
                             loading={loading}
                         >
-                            Sign in
+                            Войти
                         </Button>
                     </AnimatedElement>
 
@@ -113,10 +119,10 @@ export const SignIn = () => {
                                         bottom: 10,
                                         textAlign: 'center'
                                     }}>
-                            Don't have an account?{' '}
+                            Еще нет аккаунта?{' '}
                             <Link sx={{color: '#1976d2', cursor: 'pointer'}}
                                   onClick={() => navigate("/cloud-storage/registration")}>
-                                Sign up
+                                Регистрация
                             </Link>
                         </Typography>
                     </Zoom>

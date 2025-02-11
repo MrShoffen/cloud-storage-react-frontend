@@ -41,9 +41,9 @@ export const ObjectName = ({object}) => {
                     userSelect: 'none',
                     color: 'text.secondary',
                     fontSize: '15px',
-                    whiteSpace: 'nowrap', // Запрещаем перенос строк
-                    overflow: 'hidden', // Скрываем выходящий за пределы текст
-                    textOverflow: 'ellipsis', // Добавляем многоточие
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
                     '&:hover': {
                         cursor: 'default',
                     },

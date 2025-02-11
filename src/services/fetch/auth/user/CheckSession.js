@@ -1,5 +1,4 @@
 import {API_USER_INFO} from "../../../../UrlConstants.jsx";
-import UserUnauthorizedException from "../../../../exception/UserUnauthorizedException.jsx";
 import ForbiddenException from "../../../../exception/ForbiddenException.jsx";
 
 

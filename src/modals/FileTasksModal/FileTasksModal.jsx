@@ -126,7 +126,7 @@ export const FileTasksModal = () => {
                         },
                     }}
                 >
-                    Tasks
+                    Операции
                 </Typography>
             </Box>
             <Divider/>

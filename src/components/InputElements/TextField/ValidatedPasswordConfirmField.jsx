@@ -7,7 +7,7 @@ export default function ValidatedPasswordConfirmField({
                                                           confirmPassword, setConfirmPassword,
                                                           confirmPasswordError, setConfirmPasswordError,
                                                           originalPassword,
-                                                          label="Confirm Password"
+                                                          label="Подтверждение пароля"
                                                       }) {
 
     const validatePasswordConfirm = (value) => {
@@ -15,7 +15,7 @@ export default function ValidatedPasswordConfirmField({
         let errMessage = '';
 
         if (value !== originalPassword) {
-            errMessage = 'Passwords do not match!';
+            errMessage = 'Пароли не совпадают!';
             isValid = false;
         }
 
@@ -36,7 +36,6 @@ export default function ValidatedPasswordConfirmField({
         <ValidatedTextField
             id="password_confirm"
             label={label}
-            placeholder="Latin latters and numbers"
             type="password_confirm"
             value={confirmPassword}
             onChange={(e) => validatePasswordConfirm(e.target.value)}

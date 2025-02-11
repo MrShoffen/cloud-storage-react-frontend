@@ -6,6 +6,7 @@ import {sendMoveObject} from "../../services/fetch/auth/storage/SendMoveObject.j
 import {extractSimpleName} from "../../services/util/Utils.js";
 import ConflictException from "../../exception/ConflictException.jsx";
 import {useStorageSelection} from "../Storage/StorageSelectionProvider.jsx";
+import {sendCopyObject} from "../../services/fetch/auth/storage/SendCopyObjects.js";
 
 const FileOperationsContext = createContext();
 
@@ -64,7 +65,7 @@ export const FileOperationsProvider = ({children}) => {
 
 
     const deleteObject = (objects) => {
-        let deleteTasks = objects.map(path => createTask(path, null, "delete", "Waiting for deletion"));
+        let deleteTasks = objects.map(path => createTask(path, null, "delete", "В очереди на удаление"));
         let uniqueTasks = deleteTasks.filter((task) => !identicalTasks(task));
 
         setTasks([...tasks, ...uniqueTasks]);
@@ -73,8 +74,17 @@ export const FileOperationsProvider = ({children}) => {
     }
 
     const moveObjects = (sourceObjects, target) => {
-        const moveTasks = sourceObjects.map(source => createTask(source, target + extractSimpleName(source), "move", "Waiting for moving"));
+        const moveTasks = sourceObjects.map(source => createTask(source, target + extractSimpleName(source), "move", "В очереди для перемещения"));
         let uniqueTasks = moveTasks.filter((task) => !identicalTasks(task));
+
+        setTasks([...tasks, ...uniqueTasks]);
+        setNewTasksAdded(true);
+        executeTasks(uniqueTasks);
+    }
+
+    const copyObjects = (sourceObjects, target) => {
+        const copyTasks = sourceObjects.map(source => createTask(source, target + extractSimpleName(source), "copy", "В очереди для копирования"));
+        let uniqueTasks = copyTasks.filter((task) => !identicalTasks(task));
 
         setTasks([...tasks, ...uniqueTasks]);
         setNewTasksAdded(true);
@@ -95,6 +105,9 @@ export const FileOperationsProvider = ({children}) => {
             if (task.operation.type === "move") {
                 await executeMoveTask(task);
             }
+            if (task.operation.type === "copy") {
+                await executeCopyTask(task);
+            }
         }
 
         setTaskRunning(false);
@@ -109,9 +122,21 @@ export const FileOperationsProvider = ({children}) => {
 
     async function executeMoveTask(task) {
         try {
-            updateTask(task, "progress", "Moving in progress...")
+            updateTask(task, "progress", "Перемещаем...")
             await sendMoveObject(task.operation.source, task.operation.target);
-            updateTask(task, "completed", "Moving successfully completed")
+            updateTask(task, "completed", "Перемещение успешно выполнено")
+
+        } catch (e) {
+            updateTask(task, "error", e.message);
+        }
+
+    }
+
+    async function executeCopyTask(task) {
+        try {
+            updateTask(task, "progress", "Копируем...")
+            await sendCopyObject(task.operation.source, task.operation.target);
+            updateTask(task, "completed", "Копирование успешно выполнено")
 
         } catch (e) {
             updateTask(task, "error", e.message);
@@ -122,9 +147,9 @@ export const FileOperationsProvider = ({children}) => {
 
     const executeDeleteTask = async (task) => {
         try {
-            updateTask(task, "progress", "Deletion in progress...");
+            updateTask(task, "progress", "Удаляем...");
             await sendDeleteObject(task.operation.source);
-            updateTask(task, "completed", "Deletion successfully completed")
+            updateTask(task, "completed", "Удаление успешно выполнено")
 
         } catch (e) {
             updateTask(task, "error", e.message);
@@ -149,8 +174,12 @@ export const FileOperationsProvider = ({children}) => {
         if (isCutMode) {
             console.log(bufferIds);
             moveObjects(bufferIds, currentPath);
-
             endCutting();
+        }
+        if (isCopyMode) {
+            console.log(bufferIds);
+            copyObjects(bufferIds, currentPath);
+            endCopying();
         }
     }
 
@@ -166,6 +195,7 @@ export const FileOperationsProvider = ({children}) => {
 
             deleteObject,
             moveObjects,
+            copyObjects,
             pasteObjects,
         }}>
         {children}

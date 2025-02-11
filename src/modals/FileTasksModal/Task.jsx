@@ -22,10 +22,6 @@ export const Task = ({task}) => {
 
     return (
         <Card
-            // data-id={object.path}
-            // className={'selectable'}/**/
-            // onDoubleClick={onDoubleClick}
-
 
             sx={{
                 mb: 1,

@@ -55,8 +55,6 @@ export const ObjectListName = ({object}) => {
 
             {!object.folder &&
                 <>
-                    {/*<Divider orientation="vertical"*/}
-                    {/*         sx={{position: 'absolute', bottom: '4px', height: '30px', left: '44.5%'}}/>*/}
                     <Typography
                         sx={{
                             width: '20%',
@@ -77,8 +75,6 @@ export const ObjectListName = ({object}) => {
                     >
                         {bytes(object.size, {decimalPlaces: 0})}
                     </Typography>
-                    {/*<Divider orientation="vertical"*/}
-                    {/*         sx={{position: 'absolute', bottom: '4px', height: '30px', left: '61%'}}/>*/}
 
                     <Typography
                         sx={{

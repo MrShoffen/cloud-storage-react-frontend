@@ -16,7 +16,7 @@ export const authenticationMenuItems = () => {
             }}>
                 <ListItemIcon>
                     <LoginIcon fontSize="small"/>
-                </ListItemIcon> Login
+                </ListItemIcon> Вход
             </MenuItem>
             <MenuItem onClick={() => {
                 navigate("/cloud-storage/registration");
@@ -25,14 +25,14 @@ export const authenticationMenuItems = () => {
                 <ListItemIcon>
                     <PersonAddIcon fontSize="small"/>
                 </ListItemIcon>
-                Registration
+                Регистрация
             </MenuItem>
             <Divider/>
             <MenuItem>
                 <ListItemIcon>
                     <Help fontSize="small"/>
                 </ListItemIcon>
-                Help
+                Помощь
             </MenuItem>
             <MenuItem component="a" href="https://github.com/MrShoffen/cloud-storage-rest-api"
                       target="_blank" rel="noopener noreferrer"
@@ -41,7 +41,7 @@ export const authenticationMenuItems = () => {
                 <ListItemIcon>
                     <GitHub fontSize="small"/>
                 </ListItemIcon>
-                Source code
+                Исходный код проекта
             </MenuItem>
         </>
     )

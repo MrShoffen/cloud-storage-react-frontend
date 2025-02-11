@@ -18,7 +18,7 @@ export const HeaderSearchField = () => {
                 width: {xs: '100%', sm: '300px',}
             }}
         >
-            <Input variant="outlined" placeholder="Search…" disableUnderline
+            <Input variant="outlined" placeholder="Поиск…" disableUnderline
                    endAdornment={
                        <IconButton sx={{mr: -1}}>
                            <SearchIcon sx={{color: 'primary.main',}}/>

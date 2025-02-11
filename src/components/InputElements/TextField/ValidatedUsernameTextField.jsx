@@ -3,22 +3,22 @@ import * as React from "react";
 import {useEffect} from "react";
 
 
-export default function ValidatedUsernameTextField({username, setUsername, usernameError, setUsernameError, label='Username'}) {
+export default function ValidatedUsernameTextField({username, setUsername, usernameError, setUsernameError, label='Имя пользователя'}) {
 
     const validateUsername = (value) => {
         let isValid = true;
         let errMessage = '';
 
         if (value && value.length < 5) {
-            errMessage = 'Username length must be greater than 5 characters.';
+            errMessage = 'Имя пользователя должно быть длинее 4 символов. ';
             isValid = false;
         }
         if (value && !/^[a-zA-Z0-9]+[a-zA-Z_0-9]*[a-zA-Z0-9]+$/.test(value)) {
-            errMessage += 'Только латинские буквы и нижнее подчеркивание.';
+            errMessage += 'Только латинские буквы, цифры и нижнее подчеркивание. ';
             isValid = false;
         }
         if (value && value.length > 20) {
-            errMessage += 'Username length must be less than 20 characters.';
+            errMessage += 'Имя пользователя должно быть короче 20 символов. ';
             isValid = false;
         }
 
@@ -39,7 +39,7 @@ export default function ValidatedUsernameTextField({username, setUsername, usern
         <ValidatedTextField
             id="username"
             label={label}
-            placeholder="Latin letters and underline"
+            placeholder="Латинские буквы и цифры "
             type="text"
 
             value={username}

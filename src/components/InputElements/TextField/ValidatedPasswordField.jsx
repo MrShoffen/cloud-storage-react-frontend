@@ -5,21 +5,21 @@ import {useEffect} from "react";
 
 export default function ValidatedPasswordField({password, setPassword,
                                                passwordError, setPasswordError,
-                                               label='Password'}) {
+                                               label='Пароль'}) {
     const validatePassword = (value) => {
         let isValid = true;
         let errMessage = '';
 
         if (value && value.length < 5) {
-            errMessage = 'Password length must be greater than 5 characters.';
+            errMessage = 'Пароль должен быть длинее 4 символов. ';
             isValid = false;
         }
         if (value && !/^[a-zA-Z0-9!@#$%^&*(),.?":{}|<>[\]/`~+=-_';]*$/.test(value)) {
-            errMessage += 'Only latin letters, numbers and special symbols are allowed.';
+            errMessage += 'Недопустимые символы в пароле ';
             isValid = false;
         }
         if (value && value.length > 20) {
-            errMessage += 'Password length must be less than 20 characters.';
+            errMessage += 'Пароль должен быть короче 20 символов. ';
             isValid = false;
         }
 
@@ -41,7 +41,6 @@ export default function ValidatedPasswordField({password, setPassword,
         <ValidatedTextField
             id="password"
             label={label}
-            placeholder="Latin latters and numbers"
             type="password"
             value={password}
             onChange={(e) => validatePassword(e.target.value)}

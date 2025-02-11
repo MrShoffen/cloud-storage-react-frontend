@@ -1,10 +1,5 @@
-import {Box, Card, CardContent, CardHeader, Skeleton, Tooltip} from "@mui/material";
+import {Box, Card} from "@mui/material";
 import React from "react";
-import Typography from "@mui/material/Typography";
-import {FolderIconGrad} from "../../../assets/icons/FolderIconGrad.jsx";
-
-import {ObjectName} from "../elements/ObjectName.jsx";
-import {ObjectIcon} from "../elements/ObjectIcon.jsx";
 import {useStorageNavigation} from "../../../context/Storage/StorageNavigationProvider.jsx";
 import {ObjectListName} from "../elements/ObjectListName.jsx";
 import {useLongPress} from "../../Selection/hook/useLongPress.jsx";

@@ -8,7 +8,6 @@ import {FormHelperText} from "@mui/material";
 import {uploadAvatar} from "../../../services/fetch/unauth/UploadAvatar.js";
 import {CircularLoading} from "../../Loading/CircularLoading/CircularLoading.jsx";
 import {useNotification} from "../../../context/Notification/NotificationProvider.jsx";
-import {useAuthContext} from "../../../context/Auth/AuthContext.jsx";
 
 
 export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '', avatarLoading, setAvatarLoading}) {
@@ -19,16 +18,16 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
     const {showError, showSuccess} = useNotification();
 
     const validateAvatar = (file) => {
-        const acceptedFileTypes = ["image/jpeg", "image/png", "image/jpg"];
+        const acceptedFileTypes = ["image/jpeg", "image/png", "image/jpg", "image/gif"];
         if (!acceptedFileTypes.includes(file.type)) {
-            setAvatarErrorMessage("Invalid file type. Only .jpg and .png allowed");
+            setAvatarErrorMessage("Некорректный формат файла. Только .jpg .gi .png");
             setAvatarError(true)
             return false;
         }
 
         const maxSize = 5 * 1024 * 1024;
         if (file.size > maxSize) {
-            setAvatarErrorMessage("Maximum file size is 5MB");
+            setAvatarErrorMessage("Максимальный размер изображения - 5MB");
             setAvatarError(true)
             return false;
         }
@@ -58,16 +57,16 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                 console.log(avatar);
                 setTimeout(() => {
                     setAvatarLoading(false);
-                    showSuccess("Avatar uploaded successfully.", 5000);
+                    showSuccess("Аватар успешно загружен", 5000);
                 }, 3500);
             } catch (error) {
                 console.log(error.message);
                 setAvatarError(true);
-                setAvatarErrorMessage('Failed to upload avatar');
+                setAvatarErrorMessage('Ошибка при загрузке аватара');
                 handleDeleteAvatar();
                 setTimeout(() => {
                     setAvatarLoading(false);
-                    showError('Failed to upload avatar', 5000);
+                    showError('Ошибка при загрузке аватара', 5000);
                 }, 3500);
             }
         }

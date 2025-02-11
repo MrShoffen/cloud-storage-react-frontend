@@ -1,6 +1,7 @@
 import UnauthorizedException from "./UnauthorizedException.jsx";
 import ConflictException from "./ConflictException.jsx";
 import ForbiddenException from "./ForbiddenException.jsx";
+import NotFoundException from "./NotFoundException.jsx";
 
 
 export const throwSpecifyException = (error) => {
@@ -12,6 +13,9 @@ export const throwSpecifyException = (error) => {
             throw new ConflictException(error.detail);
         case 403:
             throw new ForbiddenException(error.detail);
+
+        case 404:
+            throw new NotFoundException(error.detail);
         default:
             throw new Error('Unknown error');
     }
