@@ -5,6 +5,7 @@ import {useStorageNavigation} from "../Storage/StorageNavigationProvider.jsx";
 import {sendMoveObject} from "../../services/fetch/auth/storage/SendMoveObject.js";
 import {extractSimpleName} from "../../services/util/Utils.js";
 import ConflictException from "../../exception/ConflictException.jsx";
+import {useStorageSelection} from "../Storage/StorageSelectionProvider.jsx";
 
 const FileOperationsContext = createContext();
 
@@ -13,13 +14,8 @@ export const useStorageOperations = () => useContext(FileOperationsContext);
 
 export const FileOperationsProvider = ({children}) => {
 
-    const {loadFolder, removeObjectFromFolderContent} = useStorageNavigation();
-    const loadFolderFromPath = () => {
-        let extracted = location.pathname.replace(/^\/cloud-storage\/home/, '');
-        extracted = extracted.replace('/', '');
-        let decodedUrl = decodeURIComponent(extracted);
-        loadFolder(decodedUrl);
-    };
+    const {loadFolder, currentPath} = useStorageNavigation();
+    const {isCopyMode, isCutMode, bufferIds, endCopying, endCutting} = useStorageSelection();
 
     const [tasks, setTasks] = useState([]);
     const [newTasksAdded, setNewTasksAdded] = useState(false);
@@ -105,13 +101,8 @@ export const FileOperationsProvider = ({children}) => {
     }
 
     useEffect(() => {
-        if (!taskRunning) {
-            for (const task of tasks) {
-                if ((task.operation.type === "delete" || task.operation.type === "move")
-                    && task.status === "completed") {
-                    removeObjectFromFolderContent(task.operation.source);
-                }
-            }
+        if (!taskRunning && tasks.length > 0) {
+            loadFolder(currentPath);
         }
     }, [taskRunning])
 
@@ -150,6 +141,20 @@ export const FileOperationsProvider = ({children}) => {
 // }, [tasks]);
 
 
+    const pasteObjects = () => {
+        if (bufferIds.length === 0) {
+            return;
+        }
+
+        if (isCutMode) {
+            console.log(bufferIds);
+            moveObjects(bufferIds, currentPath);
+
+            endCutting();
+        }
+    }
+
+
     return (<FileOperationsContext.Provider
         value={{
             tasks,
@@ -160,7 +165,8 @@ export const FileOperationsProvider = ({children}) => {
             allTasksCompleted,
 
             deleteObject,
-            moveObjects
+            moveObjects,
+            pasteObjects,
         }}>
         {children}
     </FileOperationsContext.Provider>);

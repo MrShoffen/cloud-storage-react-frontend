@@ -9,6 +9,7 @@ import Index from "./pages/Index.jsx";
 import UnavailableAfterLoginRoute from "./context/Auth/UnavailableAfterLoginRoute.jsx";
 import AvailableAfterLoginRoute from "./context/Auth/AvailableAfterLoginRoute.jsx";
 import Files from "./pages/Files/Files.jsx";
+import FastLogin from "./pages/FastLogin.jsx";
 
 function App() {
 
@@ -36,9 +37,16 @@ function App() {
                                    </UnavailableAfterLoginRoute>
                                }/>
 
+                        <Route path="fast-sign-up"
+                               element={
+                                   <UnavailableAfterLoginRoute>
+                                       <FastLogin/>
+                                   </UnavailableAfterLoginRoute>
+                               }/>
+
                         {/*available after login only*/}
 
-                        <Route path="home/*"
+                        <Route path="files/*"
                                element={
                                    <AvailableAfterLoginRoute>
                                        <Files/>

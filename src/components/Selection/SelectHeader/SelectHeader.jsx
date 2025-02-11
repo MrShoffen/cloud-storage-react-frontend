@@ -15,6 +15,8 @@ import Typography from "@mui/material/Typography";
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import {useStorageSelection} from "../../../context/Storage/StorageSelectionProvider.jsx";
 import {useStorageOperations} from "../../../context/Files/FileOperationsProvider.jsx";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ContentCutIcon from "@mui/icons-material/ContentCut";
 
 
 const pathToName = (path) => {
@@ -29,7 +31,10 @@ export const SelectHeader = () => {
     const {isSelectionMode,
         setSelectionMode,
         selectedIds,
-        setSelectedIds} = useStorageSelection();
+        setSelectedIds,
+        startCutting,
+        startCopying,
+    } = useStorageSelection();
 
     const clearSelectionMode = () => {
         setSelectionMode(false);
@@ -84,7 +89,7 @@ export const SelectHeader = () => {
 
                 <Typography
                     sx={{
-                        width: '60%',
+                        width: '50%',
                         pl: '45px',
                         textAlign: 'left',
                         position: 'absolute',
@@ -113,7 +118,7 @@ export const SelectHeader = () => {
                     sx={{
                         position: 'absolute',
                         bottom: 14,
-                        right: 112,
+                        right: 137,
                         width: '35px',
                         height: '35px',
                         color: 'text.primary'
@@ -127,7 +132,7 @@ export const SelectHeader = () => {
                     sx={{
                         position: 'absolute',
                         bottom: 14,
-                        right: 77,
+                        right: 112,
                         width: '35px',
                         height: '35px',
                         color: 'text.primary'
@@ -137,6 +142,21 @@ export const SelectHeader = () => {
                 </IconButton>
 
                 <IconButton
+                    onClick={startCutting}
+                    sx={{
+                        position: 'absolute',
+                        bottom: 14,
+                        right: 77,
+                        width: '35px',
+                        height: '35px',
+                        color: 'text.primary'
+                    }}
+                >
+                    <ContentCutIcon sx={{fontSize: '25px'}}/>
+                </IconButton>
+
+                <IconButton
+                    onClick={startCopying}
                     sx={{
                         position: 'absolute',
                         bottom: 14,
@@ -146,8 +166,9 @@ export const SelectHeader = () => {
                         color: 'text.primary'
                     }}
                 >
-                    <MoreVertIcon sx={{fontSize: '25px'}}/>
+                    <ContentCopyIcon sx={{fontSize: '25px'}}/>
                 </IconButton>
+
 
                 <IconButton
                     onClick={clearSelectionMode}

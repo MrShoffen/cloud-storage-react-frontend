@@ -13,6 +13,7 @@ import {useStorageSelection} from "../../context/Storage/StorageSelectionProvide
 import {extractSimpleName} from "../../services/util/Utils.js";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
+import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
 
 export const FileBrowserHeader = () => {
 
@@ -32,6 +33,8 @@ export const FileBrowserHeader = () => {
         endCutting
     } = useStorageSelection();
 
+
+    const {pasteObjects} = useStorageOperations();
 
     function handleBack() {
         goToPrevFolder();
@@ -115,53 +118,45 @@ export const FileBrowserHeader = () => {
                             maxWidth: "100%",
                         }}
                     >
-                        {!isRootFolder &&
-                            <Button onClick={handleBack} variant='contained' sx={{
-                                minHeight: '38px',
-                                minWidth: '38px',
-                                p: 0,
-                                width: '38px',
-                                height: '38px',
-                                borderRadius: '50%'
-                            }}>
-                                <ArrowBackIcon/>
-                            </Button>
-                        }
 
-                        {!isCopyMode && !isCutMode ?
-                            <Box sx={{
-                                position: 'absolute',
-                                width: "70%",
 
-                                transform: 'translateX(-50%)',
-                                left: '50%',
-                                bottom: 10,
-                            }}>
-                                <Typography variant='h5' sx={{
-                                    width: '100%',
-                                    userSelect: 'none',
 
-                                    textAlign: 'center',
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
+                            {!isRootFolder &&
+                                <Button onClick={handleBack} variant='contained' sx={{
+                                    minHeight: '38px',
+                                    minWidth: '38px',
+                                    p: 0,
+                                    width: '38px',
+                                    height: '38px',
+                                    borderRadius: '50%'
                                 }}>
-                                    {!folderContentLoading && (currentFolder ? currentFolder.slice(0, -1) : 'Home')}
+                                    <ArrowBackIcon/>
+                                </Button>
+                            }
 
-                                </Typography>
-                            </Box>
-                            :
-                            <Grow
-                                timeout={400}
-                                in={isCutMode || isCopyMode}
+                            {!isCopyMode && !isCutMode ?
+                                <Box sx={{
+                                    position: 'absolute',
+                                    width: "70%",
 
-                                style={{
-                                    position: "relative",
-                                    width: '100%',
-                                    transform: "translate(50%,50%) 0.5s",
-                                    left: "0%",
-                                }}
-                            >
+                                    transform: 'translateX(-50%)',
+                                    left: '50%',
+                                    bottom: 10,
+                                }}>
+                                    <Typography variant='h5' sx={{
+                                        width: '100%',
+                                        userSelect: 'none',
+
+                                        textAlign: 'center',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}>
+                                        {!folderContentLoading && (currentFolder ? currentFolder.slice(0, -1) : 'Home')}
+
+                                    </Typography>
+                                </Box>
+                                :
 
                                 <Box sx={{
                                     position: 'absolute',
@@ -172,9 +167,11 @@ export const FileBrowserHeader = () => {
                                     borderRadius: '24px',
                                     borderColor: 'info.dark',
                                     background: 'linear-gradient(90deg, rgba(16,113,175,1)   0%,  rgba(28,73,163,1) 100%)',
-                                    transform: 'translateX(50%)',
+                                    transform: "translateX(-50%)",
+                                    left: '50%',
                                     bottom: 4,
-                                }}>
+                                }}
+                                >
                                     <IconButton
                                         onClick={() => {
                                             endCopying();
@@ -204,17 +201,19 @@ export const FileBrowserHeader = () => {
                                         color: 'white',
                                         pt: 0.8
                                     }}>
+                                        {isCopyMode &&
+                                            <ContentCopyIcon sx={{fontSize: '20px', pt: '1px', mr: 0.5, mb: -0.3}}/>}
+                                        {isCutMode &&
+                                            <ContentCutIcon sx={{fontSize: '20px', pt: '1px', mr: 0.5, mb: -0.3}}/>}
+
                                         Buffer: {bufferIds.length} <InsertDriveFileIcon
                                         sx={{fontSize: '20px', pt: '1px', ml: -0.3, mb: -0.3}}/>
-                                        {isCopyMode &&
-                                            <ContentCopyIcon sx={{fontSize: '20px', pt: '1px', ml: -0.3, mb: -0.3}}/>}
-                                        {isCutMode &&
-                                            <ContentCutIcon sx={{fontSize: '20px', pt: '1px', ml: -0.3, mb: -0.3}}/>}
 
                                     </Typography>
 
                                     <IconButton
                                         disabled={!isPasteAllowed()}
+                                        onClick={pasteObjects}
                                         sx={{
                                             position: 'absolute',
                                             bottom: 4.5,
@@ -231,9 +230,7 @@ export const FileBrowserHeader = () => {
                                         <ContentPasteGoIcon sx={{fontSize: '28px'}}/>
                                     </IconButton>
                                 </Box>
-                            </Grow>
-
-                        }
+                            }
 
                         <IconButton onClick={handleOpenMenu} variant='contained' sx={{ml: 'auto'}}>
                             <MoreVertIcon/>

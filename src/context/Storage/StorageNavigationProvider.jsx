@@ -38,17 +38,7 @@ export const StorageNavigationProvider = ({children}) => {
         setFolderContentLoading(false)
     }
 
-
     const [folderContent, setFolderContent] = useState(null);
-
-    const removeObjectFromFolderContent = (deletingPath) => {
-        setFolderContent(content =>
-            content.filter(object =>
-                object.path !== deletingPath
-            )
-        )
-    }
-
 
     const updateCurrentFolderContent = async (path = [""]) => {
         setSelectedIds([]);
@@ -57,7 +47,7 @@ export const StorageNavigationProvider = ({children}) => {
         setFolderContent(content);
 
         console.log(content);
-        window.history.pushState(null, "", '/cloud-storage/home/' + fullPath);
+        window.history.pushState(null, "", '/cloud-storage/files/' + fullPath);
     }
 
     const loadFolder = async (url = "") => {
@@ -67,7 +57,7 @@ export const StorageNavigationProvider = ({children}) => {
         setFolderContent(content);
         console.log(content);
 
-        window.history.pushState(null, "", '/cloud-storage/home/' + url);
+        window.history.pushState(null, "", '/cloud-storage/files/' + url);
 
         if (url === "") {
             setFolderContentLoading(false);
@@ -102,7 +92,6 @@ export const StorageNavigationProvider = ({children}) => {
             goToFolder,
             loadFolder,
 
-            removeObjectFromFolderContent,
             isPasteAllowed
         }}>
         {children}

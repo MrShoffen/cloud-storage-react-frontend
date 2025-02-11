@@ -19,8 +19,6 @@ export const useLongPress = (
                 });
                 target.current = event.target;
             }
-
-            // Запоминаем начальную позицию касания
             if (isTouchEvent(event)) {
                 startPos.current = {
                     x: event.touches[0].clientX,
@@ -39,7 +37,6 @@ export const useLongPress = (
     const clear = useCallback(
         (event, shouldTriggerClick = true) => {
             timeout.current && clearTimeout(timeout.current);
-            console.log('here');
             shouldTriggerClick && !longPressTriggered && onClick();
             setLongPressTriggered(false);
             if (shouldPreventDefault && target.current) {
@@ -56,8 +53,6 @@ export const useLongPress = (
                     x: event.touches[0].clientX,
                     y: event.touches[0].clientY
                 };
-
-                // Если палец переместился больше чем на 10 пикселей, сбрасываем таймер
                 if (
                     Math.abs(currentPos.x - startPos.current.x) > 50 ||
                     Math.abs(currentPos.y - startPos.current.y) > 50

@@ -16,12 +16,12 @@ export const ObjectsContainer = () => {
     const {folderContent} = useStorageNavigation();
     const {filesView, sortFolder} = useStorageView();
     const {
-        selectedIds, setSelectedIds, setSelectionMode, isCopyMode,
+        selectedIds, setSelectedIds, setSelectionMode,
         bufferIds,
         startCopying,
         startCutting
     } = useStorageSelection();
-    const {deleteObject} = useStorageOperations();
+    const {deleteObject, pasteObjects} = useStorageOperations();
 
     const animationVariants = {
         hidden: {opacity: 0},
@@ -36,6 +36,7 @@ export const ObjectsContainer = () => {
 
     const handleKeyDown = (event) => {
         event.stopPropagation();
+
         if (event.key === "Delete" || event.key === "Del") { // Проверяем, что нажата клавиша Del
             if (selectedIds.length > 0) {
                 deleteObject(selectedIds);
@@ -43,6 +44,7 @@ export const ObjectsContainer = () => {
                 setSelectedIds([]);
             }
         }
+
         if ((event.ctrlKey || event.metaKey) && event.key === "c") {
             event.preventDefault(); // Предотвращаем стандартное поведение (копирование)
             console.log("Ctrl + C pressed");
@@ -56,6 +58,14 @@ export const ObjectsContainer = () => {
 
             if (selectedIds.length > 0) {
                 startCutting();
+            }
+        }
+
+        if ((event.ctrlKey || event.metaKey) && event.key === "v") {
+            event.preventDefault();
+
+            if (bufferIds.length > 0) {
+                pasteObjects();
             }
         }
     };

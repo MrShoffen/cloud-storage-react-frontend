@@ -31,7 +31,7 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
     }
 
     const onDoubleClick = !isMob ? () => {
-        if (object.folder && !copied) {
+        if (object.folder && !copied && !cutted) {
             goToFolder(object.name);
         }
     } : null;

@@ -13,8 +13,8 @@ export default function ValidatedUsernameTextField({username, setUsername, usern
             errMessage = 'Username length must be greater than 5 characters.';
             isValid = false;
         }
-        if (value && !/^[a-zA-Z]+[a-zA-Z_]*[a-zA-Z]+$/.test(value)) {
-            errMessage += 'Only letters and under line allowed.';
+        if (value && !/^[a-zA-Z0-9]+[a-zA-Z_0-9]*[a-zA-Z0-9]+$/.test(value)) {
+            errMessage += 'Только латинские буквы и нижнее подчеркивание.';
             isValid = false;
         }
         if (value && value.length > 20) {

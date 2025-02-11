@@ -12,6 +12,7 @@ import {useStorageSelection} from "../../../context/Storage/StorageSelectionProv
 import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
 import ContentCutIcon from '@mui/icons-material/ContentCut';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import {useStorageOperations} from "../../../context/Files/FileOperationsProvider.jsx";
 
 export default function StorageTileObject({object, style, selectedIds, bufferIds}) {
     const isMob = isMobile;
@@ -20,6 +21,7 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
 
     const {goToFolder} = useStorageNavigation();
     const {setSelectionMode, isSelectionMode, isCutMode, isCopyMode} = useStorageSelection();
+    const {deleteObject, pasteObjects} = useStorageOperations();
 
 
     const onClick = isMob ? () => {
@@ -30,7 +32,7 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
     }
 
     const onDoubleClick = !isMob ? () => {
-        if (object.folder && !copied) {
+        if (object.folder && !copied && !cutted) {
             goToFolder(object.name);
         }
     } : () => {
@@ -53,6 +55,7 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
 
     const copied = bufferIds.includes(object.path) && isCopyMode;
     const cutted = bufferIds.includes(object.path) && isCutMode;
+
 
     return (
         <Card

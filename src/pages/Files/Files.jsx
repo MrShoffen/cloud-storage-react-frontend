@@ -33,7 +33,7 @@ export default function Files() {
 
 
     const loadFolderFromPath = () => {
-        let extracted = location.pathname.replace(/^\/cloud-storage\/home/, '');
+        let extracted = location.pathname.replace(/^\/cloud-storage\/files/, '');
         extracted = extracted.replace('/', '');
         let decodedUrl = decodeURIComponent(extracted);
         loadFolder(decodedUrl);
