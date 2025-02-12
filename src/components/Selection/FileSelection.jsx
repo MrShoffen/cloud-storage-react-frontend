@@ -6,6 +6,7 @@ import {isMobile} from "react-device-detect";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 import {FileFormatIcon} from "../../assets/FileFormatIcon.jsx";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
+import {API_DOWNLOAD_FILES, API_FILES} from "../../UrlConstants.jsx";
 
 export const FileSelection = ({
                                   containerRef,
@@ -115,6 +116,9 @@ export const FileSelection = ({
     }
 
 
+
+
+
     return (
         <>
             <Button
@@ -140,8 +144,8 @@ export const FileSelection = ({
 
 
             <Button
-                onClick={() => deleteObject(selectedIds)}
-            >delete</Button>
+                onClick={() => downloadFile()}
+            >download</Button>
 
             {!isCopyMode && !isCutMode &&
                 <Selecto

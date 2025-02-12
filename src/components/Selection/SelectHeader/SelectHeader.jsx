@@ -17,18 +17,20 @@ import {useStorageSelection} from "../../../context/Storage/StorageSelectionProv
 import {useStorageOperations} from "../../../context/Files/FileOperationsProvider.jsx";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
+import {sendDownloadFile} from "../../../services/fetch/auth/storage/SendDownloadFIle.js";
 
 
 const pathToName = (path) => {
     let sep = path.lastIndexOf("/", path.length - 2);
-    return path.substring(sep+1);
+    return path.substring(sep + 1);
 
 }
 
 export const SelectHeader = () => {
-    const {deleteObject} = useStorageOperations();
+    const {deleteObject, downloadObjects} = useStorageOperations();
 
-    const {isSelectionMode,
+    const {
+        isSelectionMode,
         setSelectionMode,
         selectedIds,
         setSelectedIds,
@@ -44,6 +46,11 @@ export const SelectHeader = () => {
     function handleDelete() {
         deleteObject(selectedIds);
         clearSelectionMode();
+    }
+
+    async function handleDownload() {
+        //todo add validation
+        downloadObjects(selectedIds[0]);
     }
 
     return (
@@ -115,6 +122,7 @@ export const SelectHeader = () => {
 
 
                 <IconButton
+                    onClick={handleDownload}
                     sx={{
                         position: 'absolute',
                         bottom: 14,

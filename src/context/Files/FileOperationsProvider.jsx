@@ -7,6 +7,7 @@ import {extractSimpleName} from "../../services/util/Utils.js";
 import ConflictException from "../../exception/ConflictException.jsx";
 import {useStorageSelection} from "../Storage/StorageSelectionProvider.jsx";
 import {sendCopyObject} from "../../services/fetch/auth/storage/SendCopyObjects.js";
+import {nanoid} from 'nanoid';
 
 const FileOperationsContext = createContext();
 
@@ -24,7 +25,7 @@ export const FileOperationsProvider = ({children}) => {
 
     const createTask = (objectPath, target, type, message) => {
         const operation = {type: type, source: objectPath, target: target};
-        return {id: tasks.length + 1, operation: operation, status: "pending", message: message};
+        return {id: nanoid(), operation: operation, status: "pending", message: message};
     }
 
 
@@ -36,7 +37,7 @@ export const FileOperationsProvider = ({children}) => {
 
     const deleteTask = (task) => {
         setTasks(prevTasks =>
-            prevTasks.filter((inTask) => inTask.operation.source !== task.operation.source));
+            prevTasks.filter((inTask) => inTask.id !== task.id));
     }
 
     const clearTasks = () => {
@@ -53,7 +54,7 @@ export const FileOperationsProvider = ({children}) => {
     const updateTask = (task, newStatus = null, newMessage = null) => {
         setTasks(prevTasks =>
             prevTasks.map(inTask =>
-                inTask.operation.source === task.operation.source
+                inTask.id === task.id
                     ? {
                         ...inTask, status: newStatus ? newStatus : inTask.status,
                         message: newMessage ? newMessage : inTask.message
@@ -89,6 +90,19 @@ export const FileOperationsProvider = ({children}) => {
         setTasks([...tasks, ...uniqueTasks]);
         setNewTasksAdded(true);
         executeTasks(uniqueTasks);
+    }
+
+    const downloadObjects = (objectPath) => {
+        const downloadTask = createTask(objectPath, null, "download", "В очереди на скачивание");
+        if (identicalTasks(downloadTask)) {
+            return;
+        }
+
+        setTasks([...tasks, downloadTask]);
+        setNewTasksAdded(true);
+        //todo start execution right in task with useEffect()
+
+
     }
 
     const [taskRunning, setTaskRunning] = useState(false);
@@ -193,10 +207,12 @@ export const FileOperationsProvider = ({children}) => {
             clearTasks,
             allTasksCompleted,
 
+
             deleteObject,
             moveObjects,
             copyObjects,
             pasteObjects,
+            downloadObjects
         }}>
         {children}
     </FileOperationsContext.Provider>);
