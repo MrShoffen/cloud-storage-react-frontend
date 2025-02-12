@@ -9,6 +9,8 @@ import {useStorageSelection} from "../Storage/StorageSelectionProvider.jsx";
 import {sendCopyObject} from "../../services/fetch/auth/storage/SendCopyObjects.js";
 import {nanoid} from 'nanoid';
 import {API_DOWNLOAD_FILES} from "../../UrlConstants.jsx";
+import {sendDownloadFile} from "../../services/fetch/auth/storage/SendDownloadFIle.js";
+import bytes from "bytes";
 
 const FileOperationsContext = createContext();
 
@@ -17,7 +19,7 @@ export const useStorageOperations = () => useContext(FileOperationsContext);
 
 export const FileOperationsProvider = ({children}) => {
 
-    const {loadFolder, currentPath} = useStorageNavigation();
+    const {loadFolder, currentPath, getObjectByPath} = useStorageNavigation();
     const {isCopyMode, isCutMode, bufferIds, endCopying, endCutting} = useStorageSelection();
 
     const [tasks, setTasks] = useState([]);
@@ -31,7 +33,8 @@ export const FileOperationsProvider = ({children}) => {
 
 
     const identicalTasks = (task1) => {
-        const pendingTasks = tasks.filter((task) => task.status === "pending");
+        const pendingTasks = tasks.filter((task) => task.status === "pending" || task.status === "progress");
+        console.log(pendingTasks);
         let filtered = pendingTasks.filter((task) => task.operation.source === task1.operation.source);
         return filtered.length > 0;
     }
@@ -96,6 +99,7 @@ export const FileOperationsProvider = ({children}) => {
     const downloadObjects = (objectPath) => {
         const task = createTask(objectPath, null, "download", "В очереди на скачивание");
         if (identicalTasks(task)) {
+            console.log('im here')
             return;
         }
 
@@ -120,70 +124,29 @@ export const FileOperationsProvider = ({children}) => {
         )
     }
 
+    const updateDownloadSpeed = (task, speed) => {
+        setTasks(prevTasks =>
+            prevTasks.map(inTask =>
+                inTask.id === task.id
+                    ? {
+                        ...inTask, message: "Скачиваем... " + bytes(speed) + "/с"
+                    }
+                    : inTask
+            )
+        )
+    }
+
     const executeDownloadTask = async (downloadTask) => {
         updateTask(downloadTask, "progress", "Скачиваем...")
-
-        const filePath = downloadTask.operation.source;
-
-        const params = new URLSearchParams({object: filePath});
-
-        const fetchUrl = `${API_DOWNLOAD_FILES}?${params.toString()}`;
-
-        //todo move to service
+        let size = getObjectByPath(downloadTask.operation.source).size;
         try {
-            const response = await fetch(fetchUrl, {
-                method: 'GET',
-                credentials: 'include',
-            });
-            console.log(response);
+            await sendDownloadFile(downloadTask, updateTask, updateDownloadTask, size, updateDownloadSpeed);
 
-            if (!response.ok) {
-                updateTask(downloadTask,"error", "Ошибка при скачивании. Попробуйте еще раз")
-                return;
-            }
-
-            const contentLength = response.headers.get('Content-Length');
-            const totalSize = contentLength ? parseInt(contentLength, 10) : null;
-
-            let loadedSize = 0;
-            const reader = response.body.getReader();
-            const chunks = [];
-
-
-            let count = 0;
-            while (true) {
-                count++;
-                const {done, value} = await reader.read();
-                if (done) break;
-
-                chunks.push(value);
-                loadedSize += value.length;
-
-                if (totalSize && count === 100) {
-                    count = 0;
-                    const progress = (loadedSize / totalSize) * 100;
-                    console.log(`Download progress: ${progress.toFixed(2)}%`);
-                    updateDownloadTask(downloadTask, progress);
-                }
-            }
-
-            const blob = new Blob(chunks);
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-
-            link.href = url;
-            link.setAttribute('download', extractSimpleName(filePath));
-            document.body.appendChild(link);
-            link.click();
-
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(link);
         } catch (error) {
-            updateTask(downloadTask,"error", "Ошибка при скачивании. Попробуйте еще раз")
-
+            updateTask(downloadTask, "error", "Ошибка при скачивании. Попробуйте еще раз")
         }
 
-        updateTask(downloadTask,"completed", "Скачивание завершено")
+        updateTask(downloadTask, "completed", "Скачивание завершено")
     }
 
     const [taskRunning, setTaskRunning] = useState(false);

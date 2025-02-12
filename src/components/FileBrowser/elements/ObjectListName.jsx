@@ -53,50 +53,49 @@ export const ObjectListName = ({object}) => {
                 </Typography>
             </Tooltip>
 
-            {!object.folder &&
-                <>
-                    <Typography
-                        sx={{
-                            width: '20%',
-                            textAlign: 'left',
-                            position: 'absolute',
-                            bottom: 14,
-                            left: '50%',
-                            fontSize: '12px',
-                            color: 'text.secondary',
-                            whiteSpace: 'nowrap',
-                            userSelect: 'none',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            '&:hover': {
-                                cursor: 'default',
-                            },
-                        }}
-                    >
-                        {bytes(object.size, {decimalPlaces: 0})}
-                    </Typography>
 
-                    <Typography
-                        sx={{
-                            width: '40%',
-                            textAlign: 'left',
-                            position: 'absolute',
-                            bottom: 14,
-                            left: '63%',
-                            fontSize: '12px',
-                            color: 'text.secondary',
-                            whiteSpace: 'nowrap',
-                            userSelect: 'none',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            '&:hover': {
-                                cursor: 'default',
-                            },
-                        }}
-                    >
-                        {formatDate(object.lastModified)}
-                    </Typography>
-                </>
+            <Typography
+                sx={{
+                    width: '20%',
+                    textAlign: 'left',
+                    position: 'absolute',
+                    bottom: 14,
+                    left: '50%',
+                    fontSize: '12px',
+                    color: 'text.secondary',
+                    whiteSpace: 'nowrap',
+                    userSelect: 'none',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    '&:hover': {
+                        cursor: 'default',
+                    },
+                }}
+            >
+                {bytes(object.size, {decimalPlaces: 0})}
+            </Typography>
+            {!object.folder &&
+                <Typography
+                    sx={{
+                        width: '40%',
+                        textAlign: 'left',
+                        position: 'absolute',
+                        bottom: 14,
+                        left: '63%',
+                        fontSize: '12px',
+                        color: 'text.secondary',
+                        whiteSpace: 'nowrap',
+                        userSelect: 'none',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        '&:hover': {
+                            cursor: 'default',
+                        },
+                    }}
+                >
+                    {formatDate(object.lastModified)}
+                </Typography>
+
             }
 
         </>

@@ -1,4 +1,4 @@
-import {API_COPY_FILES, API_MOVE_FILES} from "../../../../UrlConstants.jsx";
+import {API_COPY_FILES} from "../../../../UrlConstants.jsx";
 import {throwSpecifyException} from "../../../../exception/ThrowSpecifyException.jsx";
 
 

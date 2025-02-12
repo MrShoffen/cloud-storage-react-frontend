@@ -40,6 +40,10 @@ export const StorageNavigationProvider = ({children}) => {
 
     const [folderContent, setFolderContent] = useState(null);
 
+    const getObjectByPath = (path) => {
+        return folderContent.find(object => object.path === path);
+    }
+
     const updateCurrentFolderContent = async (path = [""]) => {
         setSelectedIds([]);
         const fullPath = path.join("");
@@ -92,6 +96,7 @@ export const StorageNavigationProvider = ({children}) => {
             goToFolder,
             loadFolder,
 
+            getObjectByPath,
             isPasteAllowed
         }}>
         {children}

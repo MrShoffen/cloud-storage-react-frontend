@@ -1,4 +1,4 @@
-import {API_FILES, API_GET_WEATHER_INFO_UNAUTH, API_LOCATIONS_INFO} from "../../../../UrlConstants.jsx";
+import {API_FILES} from "../../../../UrlConstants.jsx";
 import {throwSpecifyException} from "../../../../exception/ThrowSpecifyException.jsx";
 
 
