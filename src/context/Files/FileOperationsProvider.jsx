@@ -129,6 +129,7 @@ export const FileOperationsProvider = ({children}) => {
 
         const fetchUrl = `${API_DOWNLOAD_FILES}?${params.toString()}`;
 
+        //todo move to service
         try {
             const response = await fetch(fetchUrl, {
                 method: 'GET',
