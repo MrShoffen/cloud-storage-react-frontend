@@ -8,6 +8,7 @@ import ConflictException from "../../exception/ConflictException.jsx";
 import {useStorageSelection} from "../Storage/StorageSelectionProvider.jsx";
 import {sendCopyObject} from "../../services/fetch/auth/storage/SendCopyObjects.js";
 import {nanoid} from 'nanoid';
+import {API_DOWNLOAD_FILES} from "../../UrlConstants.jsx";
 
 const FileOperationsContext = createContext();
 
@@ -93,16 +94,95 @@ export const FileOperationsProvider = ({children}) => {
     }
 
     const downloadObjects = (objectPath) => {
-        const downloadTask = createTask(objectPath, null, "download", "В очереди на скачивание");
-        if (identicalTasks(downloadTask)) {
+        const task = createTask(objectPath, null, "download", "В очереди на скачивание");
+        if (identicalTasks(task)) {
             return;
         }
+
+        const downloadTask = {...task, progress: 0};
 
         setTasks([...tasks, downloadTask]);
         setNewTasksAdded(true);
         //todo start execution right in task with useEffect()
 
+        executeDownloadTask(downloadTask);
+    }
 
+    const updateDownloadTask = (task, progress) => {
+        setTasks(prevTasks =>
+            prevTasks.map(inTask =>
+                inTask.id === task.id
+                    ? {
+                        ...inTask, progress: progress
+                    }
+                    : inTask
+            )
+        )
+    }
+
+    const executeDownloadTask = async (downloadTask) => {
+        updateTask(downloadTask, "progress", "Скачиваем...")
+
+        const filePath = downloadTask.operation.source;
+
+        const params = new URLSearchParams({object: filePath});
+
+        const fetchUrl = `${API_DOWNLOAD_FILES}?${params.toString()}`;
+
+        try {
+            const response = await fetch(fetchUrl, {
+                method: 'GET',
+                credentials: 'include',
+            });
+            console.log(response);
+
+            if (!response.ok) {
+                updateTask(downloadTask,"error", "Ошибка при скачивании. Попробуйте еще раз")
+                return;
+            }
+
+            const contentLength = response.headers.get('Content-Length');
+            const totalSize = contentLength ? parseInt(contentLength, 10) : null;
+
+            let loadedSize = 0;
+            const reader = response.body.getReader();
+            const chunks = [];
+
+
+            let count = 0;
+            while (true) {
+                count++;
+                const {done, value} = await reader.read();
+                if (done) break;
+
+                chunks.push(value);
+                loadedSize += value.length;
+
+                if (totalSize && count === 100) {
+                    count = 0;
+                    const progress = (loadedSize / totalSize) * 100;
+                    console.log(`Download progress: ${progress.toFixed(2)}%`);
+                    updateDownloadTask(downloadTask, progress);
+                }
+            }
+
+            const blob = new Blob(chunks);
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+
+            link.href = url;
+            link.setAttribute('download', extractSimpleName(filePath));
+            document.body.appendChild(link);
+            link.click();
+
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(link);
+        } catch (error) {
+            updateTask(downloadTask,"error", "Ошибка при скачивании. Попробуйте еще раз")
+
+        }
+
+        updateTask(downloadTask,"completed", "Скачивание завершено")
     }
 
     const [taskRunning, setTaskRunning] = useState(false);
