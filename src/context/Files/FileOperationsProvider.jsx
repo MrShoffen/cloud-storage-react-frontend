@@ -186,7 +186,9 @@ export const FileOperationsProvider = ({children}) => {
             setTaskRunning(true);
             updateTask(task, "progress", "Переименовываем...")
             await sendMoveObject(task.operation.source, task.operation.target);
-            updateTask(task, "completed", "Новое имя присвоено: " + extractSimpleName(task.operation.target))
+            let extractSimpleName1 = extractSimpleName(task.operation.target);
+            const newName = extractSimpleName1.endsWith("/") ? extractSimpleName1.slice(0, -1) : extractSimpleName1;
+            updateTask(task, "completed", "Новое имя присвоено: " + newName)
 
         } catch (e) {
             updateTask(task, "error", e.message);

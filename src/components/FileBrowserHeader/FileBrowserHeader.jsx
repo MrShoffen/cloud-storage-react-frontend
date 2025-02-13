@@ -21,7 +21,6 @@ export const FileBrowserHeader = () => {
         goToPrevFolder,
         currentFolder,
         folderContentLoading,
-        isPasteAllowed
     } = useStorageNavigation();
 
     const {
@@ -210,7 +209,7 @@ export const FileBrowserHeader = () => {
                                 </Typography>
 
                                 <IconButton
-                                    disabled={!isPasteAllowed()}
+
                                     onClick={pasteObjects}
                                     sx={{
                                         position: 'absolute',

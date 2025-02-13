@@ -66,8 +66,8 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
                 position: 'relative',
                 opacity: copied || cutted ? 0.5 : 1,
                 minWidth: isLarge ? 160 : 100,
-                minHeight: isLarge ? 160 : 100,
-                maxHeight: isLarge ? 160 : 100,
+                minHeight: isLarge ? 185 : 110,
+
                 backgroundColor: selected ? "objectSelected" : "transparent",
                 borderRadius: 2,
                 '&:hover': {

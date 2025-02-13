@@ -103,7 +103,7 @@ export default function RenameModal({
                     </IconButton>
 
                     <Typography variant="h5" textAlign="center" sx={{width: '100%', mb: -1}}>
-                        {isConflict ? "Переименовать" : "Конфликт в названии"}
+                        {!isConflict ? "Переименовать" : "Конфликт в названии"}
                     </Typography>
 
                     <Box sx={{display: 'flex', flexDirection: 'column', gap: 1,}}>

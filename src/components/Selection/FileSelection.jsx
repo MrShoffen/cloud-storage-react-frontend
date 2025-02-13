@@ -15,7 +15,7 @@ export const FileSelection = ({
                               }) => {
     const isMob = isMobile;
 
-    const {deleteObject, moveObjects} = useStorageOperations();
+    const {moveObjects} = useStorageOperations();
 
 
     const {isSelectionMode, setSelectionMode, isCopyMode, isCutMode} = useStorageSelection();
@@ -90,7 +90,6 @@ export const FileSelection = ({
         }
 
         const elements = document.elementsFromPoint(coordinates.x, coordinates.y);
-
         const el = elements.find(elem => elem.classList.contains('selectable'));
 
         if (el) {
@@ -121,32 +120,6 @@ export const FileSelection = ({
 
     return (
         <>
-            <Button
-                onClick={() => {
-                    const allElements = document.querySelectorAll(".selectable");
-                    const elementsArray = Array.from(allElements); // Преобразование в массив
-
-// Получаем координаты всех элементов
-                    let allPoints = elementsArray.map(el => selectoRef.current.getElementPoints(el)[0]);
-
-                    console.log(allPoints);
-                    selectoRef.current.setSelectedTargets(elementsArray);
-
-                    let selectedTargets = selectoRef.current.getSelectedTargets();
-
-                    let idS = selectedTargets.map(el => el.dataset.id);
-                    setSelectedIds(idS);
-
-                    console.log(selectedTargets);
-
-                }}
-            >but</Button>
-
-
-            <Button
-                onClick={() => downloadFile()}
-            >download</Button>
-
             {!isCopyMode && !isCutMode &&
                 <Selecto
                     ref={selectoRef}

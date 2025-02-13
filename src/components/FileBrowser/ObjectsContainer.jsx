@@ -39,7 +39,9 @@ export const ObjectsContainer = () => {
     const handleKeyDown = (event) => {
         event.stopPropagation();
 
-        if (event.key === "Delete" || event.key === "Del") {
+        const key = event.key;
+
+        if (key === "Delete" || key === "Del") {
             if (selectedIds.length > 0) {
                 deleteObject(selectedIds);
                 setSelectionMode(false);
@@ -47,7 +49,7 @@ export const ObjectsContainer = () => {
             }
         }
 
-        if ((event.ctrlKey || event.metaKey) && event.key === "c") {
+        if ((event.ctrlKey || event.metaKey) &&( key === "c" || key ==="с" || key ==="C" || key ==="С")) {
             event.preventDefault();
             console.log("Ctrl + C pressed");
             if (selectedIds.length > 0) {
@@ -55,7 +57,7 @@ export const ObjectsContainer = () => {
             }
         }
 
-        if ((event.ctrlKey || event.metaKey) && event.key === "x") {
+        if ((event.ctrlKey || event.metaKey) && (key === "x" ||  key === "X" ||  key === "Ч"||  key === "ч")) {
             event.preventDefault();
 
             if (selectedIds.length > 0) {
@@ -63,7 +65,7 @@ export const ObjectsContainer = () => {
             }
         }
 
-        if ((event.ctrlKey || event.metaKey) && event.key === "v") {
+        if ((event.ctrlKey || event.metaKey) && (key === "v" ||  key === "V" ||  key === "м"||  key === "М")) {
             event.preventDefault();
 
             if (bufferIds.length > 0) {

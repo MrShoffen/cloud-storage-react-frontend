@@ -8,8 +8,9 @@ import {SignUp} from "./pages/SignUp.jsx";
 import Index from "./pages/Index.jsx";
 import UnavailableAfterLoginRoute from "./context/Auth/UnavailableAfterLoginRoute.jsx";
 import AvailableAfterLoginRoute from "./context/Auth/AvailableAfterLoginRoute.jsx";
-import Files from "./pages/Files/Files.jsx";
+import Files from "./pages/Files.jsx";
 import FastLogin from "./pages/FastLogin.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
                     <Route path="cloud-storage" element={<BaseLayout/>}>
                         <Route index element={<Index/>}/>
 
+                        <Route path="*" element={<ErrorPage />}/>
 
                         {/*available before login only*/}
                         <Route path="login"

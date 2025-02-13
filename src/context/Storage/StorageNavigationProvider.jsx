@@ -75,14 +75,14 @@ export const StorageNavigationProvider = ({children}) => {
         setFolderContentLoading(false);
     }
 
-    const isPasteAllowed = () => {
-        const folderPathes = folderContent.map(obj => obj.path);
-        let filtered = bufferIds.filter(path => folderPathes.includes(path));
-        console.log("filt")
-
-        console.log(filtered);
-        return filtered.length === 0;
-    }
+    // const isPasteAllowed = () => {
+    //     const folderPathes = folderContent.map(obj => obj.path);
+    //     let filtered = bufferIds.filter(path => folderPathes.includes(path));
+    //     console.log("filt")
+    //
+    //     console.log(filtered);
+    //     return filtered.length === 0;
+    // }
 
     return (<CloudStorageContext.Provider
         value={{
@@ -96,8 +96,7 @@ export const StorageNavigationProvider = ({children}) => {
             goToFolder,
             loadFolder,
 
-            getObjectByPath,
-            isPasteAllowed
+            getObjectByPath
         }}>
         {children}
     </CloudStorageContext.Provider>);
