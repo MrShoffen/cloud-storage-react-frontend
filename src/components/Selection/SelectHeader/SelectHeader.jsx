@@ -100,10 +100,9 @@ export const SelectHeader = () => {
                         color: 'white'
                     }}
                 >
-                    {selectedIds.length === 1 && <InfoOutlinedIcon sx={{fontSize: '20px'}}/>
-                        ||
-                        selectedIds.length > 1 && <CheckBoxOutlinedIcon sx={{fontSize: '20px'}}/>
-                    }
+
+                         <CheckBoxOutlinedIcon sx={{fontSize: '20px'}}/>
+
                 </IconButton>
 
                 <Typography

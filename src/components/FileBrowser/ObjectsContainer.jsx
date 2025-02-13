@@ -77,6 +77,8 @@ export const ObjectsContainer = () => {
 
 
 
+
+
     return (
         <AnimatePresence mode="wait">
             <motion.div
