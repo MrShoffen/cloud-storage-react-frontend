@@ -19,7 +19,7 @@ import UnauthorizedException from "../../exception/UnauthorizedException.jsx";
 export default function SecurityModal({open, onClose}) {
 
 
-    const {auth, logout} = useAuthContext();
+    const {auth} = useAuthContext();
 
 
     const [oldPassword, setOldPassword] = React.useState('');
@@ -40,7 +40,7 @@ export default function SecurityModal({open, onClose}) {
             setLoading(true);
             const editInformation = {oldPassword: oldPassword, newPassword: newPassword}
             await sendEditUser(editInformation, "/password");
-            showSuccess("Password updated!");
+            showSuccess("Пароль успешно изменен");
 
         } catch (error) {
             switch (true) {
@@ -128,7 +128,7 @@ export default function SecurityModal({open, onClose}) {
                             </IconButton>
 
                             <Typography variant="h5" textAlign="center" sx={{width: '100%', mb: 1}}>
-                                Security Settings
+                                Смена пароля
                             </Typography>
 
 
@@ -139,7 +139,7 @@ export default function SecurityModal({open, onClose}) {
                                     setPassword={setOldPassword}
                                     passwordError={oldPasswordError}
                                     setPasswordError={setOldPasswordError}
-                                    label="Current Password"
+                                    label="Текущий пароль"
                                 />
 
                                 <AnimatedElement condition={!oldPasswordError && oldPassword.length > 0}>
@@ -148,7 +148,7 @@ export default function SecurityModal({open, onClose}) {
                                         setPassword={setNewPassword}
                                         passwordError={newPasswordError}
                                         setPasswordError={setNewPasswordError}
-                                        label="New Password"
+                                        label="Новый пароль"
                                     />
                                 </AnimatedElement>
 
@@ -160,7 +160,7 @@ export default function SecurityModal({open, onClose}) {
                                         confirmPasswordError={confirmPasswordError}
                                         setConfirmPasswordError={setConfirmPasswordError}
                                         originalPassword={newPassword}
-                                        label="Confirm New Password"
+                                        label="Подтверждение пароля"
                                     />
                                 </AnimatedElement>
 
@@ -169,14 +169,14 @@ export default function SecurityModal({open, onClose}) {
                                         onClose();
                                         clearFields()
                                     }}>
-                                        Cancel
+                                        Отмена
                                     </Button>
 
                                     <Button variant="contained" size="small" onClick={handlePasswordClick}
                                             loading={loading}
                                             disabled={oldPasswordError || oldPassword.length === 0 || newPasswordError || newPassword.length === 0 || confirmPasswordError || confirmPassword.length === 0}
                                     >
-                                        Change Password
+                                        Сменить пароль
                                     </Button>
                                 </Box>
                             </Box>
@@ -207,17 +207,17 @@ export default function SecurityModal({open, onClose}) {
                                 variant="h6"
                                 sx={{textAlign: "center", mb: 1}}
                             >
-                                Are you sure you want to change your password?
+                                Вы уверены, что хотите сменить пароль?
                             </Typography >
                             <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary'}}>
                                 After changing your password, only this active session will remain – all others will be invalidated.
                             </Typography>
                             <Box display="flex" justifyContent="space-between" mt={2}>
                                 <Button variant="outlined" onClick={handlePasswordCancel}>
-                                    No
+                                    Нет
                                 </Button>
                                 <Button variant="contained" color="error" onClick={handlePasswordConfirm}>
-                                    Yes
+                                    Да
                                 </Button>
                             </Box>
                         </Card>

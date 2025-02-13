@@ -36,14 +36,10 @@ export const sendDownloadFile = async (downloadTask, updateTask, updateDownloadT
         ? extractSimpleName(filePath).replace("/", ".zip")
         : extractSimpleName(filePath);
 
-
-    const startTime = Date.now();  // Засекаем начальное время скачивания
-
     let lastLoadedSize = 0;
     let count = 0;
     // Запускаем интервал обновления скорости (раз в секунду)
     const speedInterval = setInterval(() => {
-        const elapsedTime = (Date.now() - startTime) / 1000; // Время в секундах
         const speed = (loadedSize - lastLoadedSize); // Скорость в КБ/с
         lastLoadedSize = loadedSize;
 
@@ -59,7 +55,7 @@ export const sendDownloadFile = async (downloadTask, updateTask, updateDownloadT
         chunks.push(value);
         loadedSize += value.length;
 
-        if (count === 10) {
+        if (count === 100) {
             count = 0;
             const progress = (loadedSize / size) * 100;
             // console.log(`Download progress: ${progress.toFixed(2)}%`);

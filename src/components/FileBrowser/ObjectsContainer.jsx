@@ -2,13 +2,14 @@ import {Box} from "@mui/material";
 import StorageTileObject from "./StorageObject/StorageTileObject.jsx";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import {AnimatePresence, motion} from "framer-motion";
-import {useRef} from "react";
+import {useRef, useState} from "react";
 import StorageListObject from "./StorageObject/StorageListObject.jsx";
 import './selected.css';
 import {FileSelection} from "../Selection/FileSelection.jsx";
 import {useStorageView} from "../../context/Storage/StorageViewProvider.jsx";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
+import RenameModal from "../../modals/FileChange/RenameModal.jsx";
 
 export const ObjectsContainer = () => {
 
@@ -18,7 +19,9 @@ export const ObjectsContainer = () => {
         selectedIds, setSelectedIds, setSelectionMode,
         bufferIds,
         startCopying,
-        startCutting
+        startCutting,
+        endCutting,
+        endCopying,
     } = useStorageSelection();
     const {deleteObject, pasteObjects} = useStorageOperations();
 
@@ -68,6 +71,9 @@ export const ObjectsContainer = () => {
             }
         }
     };
+
+
+
 
     return (
         <AnimatePresence mode="wait">

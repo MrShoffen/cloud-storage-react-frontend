@@ -22,7 +22,7 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
 
 
     const onClick = isMob ? () => {
-        if (object.folder && !isSelectionMode) {
+        if (object.folder && !isSelectionMode && !copied && !cutted) {
             goToFolder(object.name);
         }
     } : () => {
@@ -36,17 +36,17 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
     };
 
     const onLongPress = isMob ? () => {
-        if (navigator.vibrate)
-            navigator.vibrate(100);
-        setSelectionMode(true); //here need to disable while copying
+        if (navigator.vibrate) {
+            navigator.vibrate(70);
+        }
+        if (!isSelectionMode && !isCutMode && !isCopyMode) {
+            setSelectionMode(true);
+        }
     } : () => {
     }
 
     const longPressEvent = useLongPress(onLongPress, onClick);
 
-    const onDrag = (e) => {
-        console.log('dragging');
-    }
 
     const selected = selectedIds.includes(object.path);
 
@@ -59,7 +59,6 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
             data-id={object.path}
             className={'selectable'}
             onClick={onClick}
-            onDrag={onDrag}
 
             {...longPressEvent}
             onDoubleClick={onDoubleClick}

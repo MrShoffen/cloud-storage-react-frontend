@@ -18,7 +18,8 @@ import {useStorageOperations} from "../../../context/Files/FileOperationsProvide
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import {sendDownloadFile} from "../../../services/fetch/auth/storage/SendDownloadFIle.js";
-
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import RenameModal from "../../../modals/FileChange/RenameModal.jsx";
 
 const pathToName = (path) => {
     let sep = path.lastIndexOf("/", path.length - 2);
@@ -49,9 +50,19 @@ export const SelectHeader = () => {
     }
 
     async function handleDownload() {
-        //todo add validation
         downloadObjects(selectedIds[0]);
+        clearSelectionMode()
     }
+
+    const [modalRenameOpen, setModalRenameOpen] = useState(false);
+
+    function handleRenameClick() {
+        setModalRenameOpen(true);
+    }
+
+    const handleCloseRenameModal = () => {
+        setModalRenameOpen(false);
+    };
 
     return (
         <Container
@@ -69,9 +80,10 @@ export const SelectHeader = () => {
                 sx={{
                     height: "70px",
                     border: '1px solid',
-                    backgroundColor: 'selectHeader',
+                    background: 'linear-gradient(90deg, rgba(28,50,163,1) 0%, rgba(16,113,195,1) 100%)', // Градиент для прогресса
+
                     borderRadius: 2,
-                    borderColor: 'action.disabled',
+                    borderColor: 'info.dark',
                     ml: '3px',
                     mr: '3px',
                 }}
@@ -85,18 +97,18 @@ export const SelectHeader = () => {
                         left: 7,
                         width: '35px',
                         height: '35px',
-                        color: 'text.primary'
+                        color: 'white'
                     }}
                 >
-                    {selectedIds.length === 1 && <InfoOutlinedIcon sx={{fontSize: '25px'}}/>
+                    {selectedIds.length === 1 && <InfoOutlinedIcon sx={{fontSize: '20px'}}/>
                         ||
-                        selectedIds.length > 1 && <CheckBoxOutlinedIcon sx={{fontSize: '25px'}}/>
+                        selectedIds.length > 1 && <CheckBoxOutlinedIcon sx={{fontSize: '20px'}}/>
                     }
                 </IconButton>
 
                 <Typography
                     sx={{
-                        width: '50%',
+                        width: '49%',
                         pl: '45px',
                         textAlign: 'left',
                         position: 'absolute',
@@ -107,32 +119,47 @@ export const SelectHeader = () => {
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
-                        color: 'text.primary',
+                        color: 'white',
                         userSelect: 'none',
                         '&:hover': {
                             cursor: 'default',
                         },
                     }}
                 >
-                    {selectedIds.length === 1 && pathToName(selectedIds[0])
-                        ||
-                        selectedIds.length > 1 && (selectedIds.length + ' files')
-                    }
+
+                    {selectedIds.length === 1 ? ('1 file') : (selectedIds.length + ' files')}
+
                 </Typography>
 
 
                 <IconButton
                     onClick={handleDownload}
                     sx={{
+                        display: selectedIds.length === 1 ? 'flex' : 'none',
                         position: 'absolute',
                         bottom: 14,
-                        right: 137,
+                        right: 190,
                         width: '35px',
                         height: '35px',
-                        color: 'text.primary'
+                        color: 'white'
                     }}
                 >
-                    <DownloadIcon sx={{fontSize: '25px'}}/>
+                    <DownloadIcon sx={{fontSize: '20px'}}/>
+                </IconButton>
+
+                <IconButton
+                    onClick={handleRenameClick}
+                    sx={{
+                        display: selectedIds.length === 1 ? 'flex' : 'none',
+                        position: 'absolute',
+                        bottom: 14,
+                        right: 155,
+                        width: '35px',
+                        height: '35px',
+                        color: 'white'
+                    }}
+                >
+                    <DriveFileRenameOutlineIcon sx={{fontSize: '20px'}}/>
                 </IconButton>
 
                 <IconButton
@@ -140,13 +167,13 @@ export const SelectHeader = () => {
                     sx={{
                         position: 'absolute',
                         bottom: 14,
-                        right: 112,
+                        right: 120,
                         width: '35px',
                         height: '35px',
-                        color: 'text.primary'
+                        color: 'white'
                     }}
                 >
-                    <DeleteIcon sx={{fontSize: '25px'}}/>
+                    <DeleteIcon sx={{fontSize: '20px'}}/>
                 </IconButton>
 
                 <IconButton
@@ -154,13 +181,13 @@ export const SelectHeader = () => {
                     sx={{
                         position: 'absolute',
                         bottom: 14,
-                        right: 77,
+                        right: 85,
                         width: '35px',
                         height: '35px',
-                        color: 'text.primary'
+                        color: 'white'
                     }}
                 >
-                    <ContentCutIcon sx={{fontSize: '25px'}}/>
+                    <ContentCutIcon sx={{fontSize: '20px'}}/>
                 </IconButton>
 
                 <IconButton
@@ -168,13 +195,13 @@ export const SelectHeader = () => {
                     sx={{
                         position: 'absolute',
                         bottom: 14,
-                        right: 42,
+                        right: 48,
                         width: '35px',
                         height: '35px',
-                        color: 'text.primary'
+                        color: 'white'
                     }}
                 >
-                    <ContentCopyIcon sx={{fontSize: '25px'}}/>
+                    <ContentCopyIcon sx={{fontSize: '20px'}}/>
                 </IconButton>
 
 
@@ -182,16 +209,24 @@ export const SelectHeader = () => {
                     onClick={clearSelectionMode}
                     sx={{
                         position: 'absolute',
-                        bottom: 14,
-                        right: 7,
-                        width: '35px',
-                        height: '35px',
-                        color: 'text.primary'
+                        bottom: 16,
+                        right: 10,
+                        width: '30px',
+                        height: '30px',
+                        color: 'white',
+                        backgroundColor: 'error.main',
+                        '&:hover': {
+                            backgroundColor: 'error.dark',
+                        }
                     }}
                 >
-                    <CloseIcon sx={{fontSize: '30px'}}/>
+                    <CloseIcon sx={{fontSize: '25px'}}/>
                 </IconButton>
             </Toolbar>
+            <RenameModal open={modalRenameOpen}
+                         onClose={handleCloseRenameModal}
+                         selectedIds={selectedIds}
+                        clearSelectionMode={clearSelectionMode}/>
         </Container>
 
 

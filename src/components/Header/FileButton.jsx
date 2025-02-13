@@ -8,7 +8,7 @@ export const FileButton = () => {
 
     return (
         <Button
-            variant="contained"
+
             onClick={() => navigate('/cloud-storage/files')}
             sx={{
                 display: {xs: 'none', sm: "flex"},
@@ -22,6 +22,9 @@ export const FileButton = () => {
                 justifyContent: "center",
                 borderRadius: 2,
                 color: "text.secondary",
+                backgroundColor: 'inputSearch',
+                border: '1px solid',
+                borderColor: 'divider'
             }}
         >
             <StorageIcon sx={{

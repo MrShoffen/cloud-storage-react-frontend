@@ -35,7 +35,7 @@ export default function ProfileModal({open, onClose}) {
 
             const newData = await sendEditUser(editInformation, "/profile");
             login(newData);
-            showSuccess("Information updated successfully.");
+            showSuccess("Профиль успешно обновлен");
         } catch (error) {
             switch (true) {
                 case error instanceof ConflictException:
@@ -90,7 +90,7 @@ export default function ProfileModal({open, onClose}) {
                         </IconButton>
 
                         <Typography variant="h5" textAlign="center" sx={{width: '100%', mb: -2}}>
-                            Edit Profile
+                            Изменить профиль
                         </Typography>
 
                         <Box sx={{display: 'flex', flexDirection: 'column', gap: 1,}}>
@@ -110,7 +110,7 @@ export default function ProfileModal({open, onClose}) {
 
                             <Box display="flex" justifyContent="flex-end" gap={2}>
                                 <Button size="small" variant="outlined" onClick={onClose}>
-                                    Cancel
+                                    Отмена
                                 </Button>
                                 <Button
                                     size="small"
@@ -119,7 +119,7 @@ export default function ProfileModal({open, onClose}) {
                                     loading={loading || avatarLoading}
                                     disabled={(usernameError || username === auth.user.username || username.length === 0) && (avatarUrl === auth.user.avatarUrl)}
                                 >
-                                    Save
+                                    Сохранить
                                 </Button>
                             </Box>
 

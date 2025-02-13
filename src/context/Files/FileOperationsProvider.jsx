@@ -11,6 +11,7 @@ import {nanoid} from 'nanoid';
 import {API_DOWNLOAD_FILES} from "../../UrlConstants.jsx";
 import {sendDownloadFile} from "../../services/fetch/auth/storage/SendDownloadFIle.js";
 import bytes from "bytes";
+import RenameModal from "../../modals/FileChange/RenameModal.jsx";
 
 const FileOperationsContext = createContext();
 
@@ -19,7 +20,7 @@ export const useStorageOperations = () => useContext(FileOperationsContext);
 
 export const FileOperationsProvider = ({children}) => {
 
-    const {loadFolder, currentPath, getObjectByPath} = useStorageNavigation();
+    const {loadFolder, currentPath, getObjectByPath, folderContent} = useStorageNavigation();
     const {isCopyMode, isCutMode, bufferIds, endCopying, endCutting} = useStorageSelection();
 
     const [tasks, setTasks] = useState([]);
@@ -87,8 +88,39 @@ export const FileOperationsProvider = ({children}) => {
         executeTasks(uniqueTasks);
     }
 
+    const moveObjectInternal = (sourcePath, targetPath) => {
+        const moveTasks = sourcePath.map(source => createTask(source, targetPath, "move", "В очереди для перемещения"));
+        let uniqueTasks = moveTasks.filter((task) => !identicalTasks(task));
+
+        setTasks([...tasks, ...uniqueTasks]);
+        setNewTasksAdded(true);
+        executeTasks(uniqueTasks);
+    }
+
+    const renameObject = (oldPath, newPath) => {
+        let task = createTask(oldPath, newPath, "move", "В очереди для переименования");
+
+        if (identicalTasks(task)) {
+            return;
+        }
+
+        setTasks([...tasks, task]);
+        setNewTasksAdded(true);
+
+        executeRename(task);
+    }
+
     const copyObjects = (sourceObjects, target) => {
         const copyTasks = sourceObjects.map(source => createTask(source, target + extractSimpleName(source), "copy", "В очереди для копирования"));
+        let uniqueTasks = copyTasks.filter((task) => !identicalTasks(task));
+
+        setTasks([...tasks, ...uniqueTasks]);
+        setNewTasksAdded(true);
+        executeTasks(uniqueTasks);
+    }
+
+    const copyObjectInternal = (sourceObjects, target) => {
+        const copyTasks = sourceObjects.map(source => createTask(source, target, "copy", "В очереди для копирования"));
         let uniqueTasks = copyTasks.filter((task) => !identicalTasks(task));
 
         setTasks([...tasks, ...uniqueTasks]);
@@ -147,6 +179,21 @@ export const FileOperationsProvider = ({children}) => {
         }
 
         updateTask(downloadTask, "completed", "Скачивание завершено")
+    }
+
+    async function executeRename(task) {
+        try {
+            setTaskRunning(true);
+            updateTask(task, "progress", "Переименовываем...")
+            await sendMoveObject(task.operation.source, task.operation.target);
+            updateTask(task, "completed", "Новое имя присвоено: " + extractSimpleName(task.operation.target))
+
+        } catch (e) {
+            updateTask(task, "error", e.message);
+        }
+
+        setTaskRunning(false);
+
     }
 
     const [taskRunning, setTaskRunning] = useState(false);
@@ -223,9 +270,23 @@ export const FileOperationsProvider = ({children}) => {
 //
 // }, [tasks]);
 
+    const [nameConflict, setNameConflict] = useState(false);
+
+    const nameAlreadyExists = (path) => {
+        let fltrd = folderContent.filter(obj => obj.name === extractSimpleName(path));
+        return fltrd.length > 0;
+    }
 
     const pasteObjects = () => {
         if (bufferIds.length === 0) {
+            return;
+        }
+
+        console.log(bufferIds)
+
+        if (bufferIds.length === 1 && nameAlreadyExists(bufferIds[0])) {
+            setNameConflict(true);
+
             return;
         }
 
@@ -239,8 +300,32 @@ export const FileOperationsProvider = ({children}) => {
             copyObjects(bufferIds, currentPath);
             endCopying();
         }
+
     }
 
+    const clearSelectionMode = () => {
+        endCutting();
+        endCopying();
+    }
+
+
+    const handleModalConflictClose = () => {
+        setNameConflict(false);
+        clearSelectionMode();
+    }
+
+    const resolveConflict = (newName) => {
+        if (isCutMode) {
+            moveObjectInternal(bufferIds, currentPath + newName);
+            endCutting();
+        }
+        if (isCopyMode) {
+            copyObjectInternal(bufferIds, currentPath + newName);
+            endCopying();
+        }
+
+        handleModalConflictClose();
+    }
 
     return (<FileOperationsContext.Provider
         value={{
@@ -256,8 +341,16 @@ export const FileOperationsProvider = ({children}) => {
             moveObjects,
             copyObjects,
             pasteObjects,
-            downloadObjects
+            downloadObjects,
+            renameObject
         }}>
         {children}
+        <RenameModal selectedIds={bufferIds}
+                     open={nameConflict}
+                     onClose={handleModalConflictClose}
+                     clearSelectionMode={clearSelectionMode}
+                     isConflict={true}
+                     resolveConflict={resolveConflict}
+        />
     </FileOperationsContext.Provider>);
 }

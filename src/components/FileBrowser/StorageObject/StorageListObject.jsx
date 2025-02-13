@@ -19,7 +19,7 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
     const {setSelectionMode, isSelectionMode, isCutMode, isCopyMode} = useStorageSelection();
 
     const onClick = isMob ? () => {
-        if (object.folder && !isSelectionMode) {
+        if (object.folder && !isSelectionMode && !copied && !cutted) {
             goToFolder(object.name);
         }
     } : () => {
@@ -32,9 +32,13 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
     } : null;
 
     const onLongPress = isMob ? () => {
-        if (navigator.vibrate)
+        if (navigator.vibrate) {
             navigator.vibrate(70);
-        setSelectionMode(true);
+        }
+        if (!isSelectionMode && !isCutMode && !isCopyMode) {
+            setSelectionMode(true);
+        }
+
     } : null;
 
     const longPressEvent = useLongPress(onLongPress, onClick);
@@ -69,10 +73,12 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
             }}
             elevation={0}
         >
-            <Box sx={{position: 'absolute', width: '20px', left: 8, bottom: 5, }}>
-   <FileFormatIcon name={object.name} style={style}/>
-                {copied && <ContentCopyIcon sx={{color: 'black', position: 'absolute', fontSize: '15px', bottom:11, left: 3}}/>}
-                {cutted && <ContentCutIcon sx={{color: 'black', position: 'absolute', fontSize: '15px', bottom:11, left: 3}}/>}
+            <Box sx={{position: 'absolute', width: '20px', left: 8, bottom: 5,}}>
+                <FileFormatIcon name={object.name} style={style}/>
+                {copied && <ContentCopyIcon
+                    sx={{color: 'black', position: 'absolute', fontSize: '15px', bottom: 11, left: 3}}/>}
+                {cutted && <ContentCutIcon
+                    sx={{color: 'black', position: 'absolute', fontSize: '15px', bottom: 11, left: 3}}/>}
 
             </Box>
 
