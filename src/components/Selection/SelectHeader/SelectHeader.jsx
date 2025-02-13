@@ -84,8 +84,8 @@ export const SelectHeader = () => {
 
                     borderRadius: 2,
                     borderColor: 'info.dark',
-                    ml: '3px',
-                    mr: '3px',
+                    ml: '8px',
+                    mr: '8px',
                 }}
             >
 

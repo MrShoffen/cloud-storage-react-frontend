@@ -310,7 +310,6 @@ export const FileOperationsProvider = ({children}) => {
         endCopying();
     }
 
-
     const handleModalConflictClose = () => {
         setNameConflict(false);
         clearSelectionMode();
