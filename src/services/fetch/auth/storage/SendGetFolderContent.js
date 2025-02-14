@@ -1,4 +1,4 @@
-import {API_FILES} from "../../../../UrlConstants.jsx";
+import {API_FILES, API_FILES_LIST} from "../../../../UrlConstants.jsx";
 import {throwSpecifyException} from "../../../../exception/ThrowSpecifyException.jsx";
 
 
@@ -7,7 +7,7 @@ export const sendGetFolderContent = async (folderName = "") => {
 
     const params = new URLSearchParams({folder: folderName});
 
-    const url = `${API_FILES}?${params.toString()}`;
+    const url = `${API_FILES_LIST}?${params.toString()}`;
 
     const response = await fetch(url, {
         method: 'GET',

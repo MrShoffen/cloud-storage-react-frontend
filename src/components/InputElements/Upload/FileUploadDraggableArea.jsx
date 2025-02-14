@@ -38,20 +38,35 @@ export const FileUploadDraggableArea = ({dragRef, isDragging, setIsDragging}) =>
         }
     };
 
+    const dragCounter = useRef(0);
     // Обработчик перетаскивания
     const handleDragOver = useCallback((e) => {
         e.preventDefault();
-        setIsDragging(true);
+        e.stopPropagation();
+    }, []);
+
+    const handleDragEnter = useCallback((e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dragCounter.current += 1;
+        if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+            setIsDragging(true);
+        }
     }, []);
 
     const handleDragLeave = useCallback((e) => {
         e.preventDefault();
-        setIsDragging(false);
+        e.stopPropagation();
+        dragCounter.current -= 1;
+        if (dragCounter.current === 0) {
+            setIsDragging(false);
+        }
     }, []);
 
     const handleDrop = useCallback((e) => {
         e.preventDefault();
         setIsDragging(false);
+        dragCounter.current = 0;
 
         const droppedItems = Array.from(e.dataTransfer.items);
         console.log(droppedItems);
@@ -92,7 +107,7 @@ export const FileUploadDraggableArea = ({dragRef, isDragging, setIsDragging}) =>
 
         Promise.all(droppedItems.map((item) => processItem(item)))
             .then(() => {
-                setFiles((prev) => [...prev, ...newFiles]);
+                // setFiles((prev) => [...prev, ...newFiles]);
                 uploadObjects(newFiles);
             });
     }, []);
@@ -131,9 +146,12 @@ export const FileUploadDraggableArea = ({dragRef, isDragging, setIsDragging}) =>
 
     // Добавляем обработчики событий на весь документ
     useEffect(() => {
-        dragRef.current.addEventListener('dragover', handleDragOver);
-        dragRef.current.addEventListener('dragleave', handleDragLeave);
-        dragRef.current.addEventListener('drop', handleDrop);
+        // dragRef.current.addEventListener('dragover', handleDragOver);
+        const node = dragRef.current;
+        node.addEventListener('dragenter', handleDragEnter);
+        node.addEventListener('dragover', handleDragOver);
+        node.addEventListener('dragleave', handleDragLeave);
+        node.addEventListener('drop', handleDrop);
 
     }, [handleDragOver, handleDragLeave, handleDrop]);
 

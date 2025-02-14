@@ -1,58 +1,95 @@
 import axios from "axios";
 import {API_UPLOAD_FILES} from "../../../../UrlConstants.jsx";
+import {throwSpecifyException} from "../../../../exception/ThrowSpecifyException.jsx";
 
 
-async function fetchData(formData, uploadTask, updateDownloadTask, index, size) {
-    const response = await axios.post(API_UPLOAD_FILES, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-        withCredentials: true,
-        onUploadProgress: (progressEvent) => {
-            const percent = progressEvent.loaded / progressEvent.total;
-            console.log(percent);
-            let delta = (1/size)*100*percent;
-            // console.log(delta);
-            updateDownloadTask(uploadTask, ((index)/size)*100 + delta);
-        },
-    });
+export async function sendUpload(files, updateDownloadTask, updateTask, uploadTask, currPath) {
+
+    const formData = new FormData();
+    files.forEach(({file, path}) => {
+        formData.append("object", file, path);
+    })
+    formData.append("folder", currPath);
+
+
+    let shouldReadProgress = true;
+
+    try {
+        const response = await axios.post(API_UPLOAD_FILES, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            withCredentials: true,
+            onUploadProgress: (progressEvent) => {
+                if (progressEvent.progress === 1) {
+                    updateTask(uploadTask, "progress", "Сохраняем в хранилище...")
+                }
+
+                updateDownloadTask(uploadTask, progressEvent.progress * 100);
+            },
+        })
+
+        let resp = response.data[0];
+
+        if (resp.status !== 201) {
+            updateTask(uploadTask, "error", resp.detail);
+
+        } else {
+            updateTask(uploadTask, "completed", "Загружено");
+        }
+    } catch (error) {
+        // console.log(error)
+    }
+
+
 }
 
-export const handleUpload = async (newFiles, currentPath, uploadTask, updateDownloadTask) => {
-    try {
+export const handleUpload = async (files, currentPath, uploadTask, updateUploadTask, updateTask) => {
+
+    //     const size = files.length;
+    //
+    //
+    // const filesWithoutFolder = [];
+    // const innerFolders = {};
+    //
+    // files.forEach(({file, path}) => {
+    //     const fileName = path; // Предполагаем, что file - это объект с полем name
+    //     const firstSlash = fileName.indexOf("/");
+    //
+    //     if (firstSlash === -1) {
+    //         filesWithoutFolder.push({file, path});
+    //     } else {
+    //         const prefix = fileName.substring(0, firstSlash + 1);
+    //         if (!innerFolders[prefix]) {
+    //             innerFolders[prefix] = [];
+    //         }
+    //         innerFolders[prefix].push({file, path});
+    //     }
+    // });
+    //
+    // const firstForm = new FormData();
+    // filesWithoutFolder.forEach(({file, path}) => {
+    //     firstForm.append("object", file, path);
+    // })
+    // firstForm.append("folder",  currentPath);
+    // await fetchData(firstForm, updateUploadTask, uploadTask);
+    //
+    //
+    // for (const prefix of Object.keys(innerFolders)) {
+    //
+    //     const filesInFolder = innerFolders[prefix];
+    //
+    //     const form = new FormData();
+    //     filesInFolder.forEach(({file, path}) => {
+    //         form.append("object", file,  path);
+    //     })
+    //
+    //     form.append("folder", currentPath);
+    //     await fetchData(form, updateUploadTask, uploadTask);
+    // }
+    //
+    // console.log(filesWithoutFolder);
+    // console.log(innerFolders);
 
 
-        // newFiles.forEach(({file, path}) => {
-        //     const formData = new FormData();
-        //
-        //     formData.append('object', file, path);
-        //     formData.append('folder', currentPath);
-        //
-        // })
-        const size = newFiles.length;
-
-        for (let i = 0; i < newFiles.length; i++) {
-            const file = newFiles[i].file;
-            const path = newFiles[i].path;
-
-            const formData = new FormData();
-            formData.append('object', file, currentPath + path);
-            formData.append('folder', "foldPath");
-
-            await fetchData(formData, uploadTask, updateDownloadTask, i, size);
-            updateDownloadTask(uploadTask, ((i+1)/size)*100);
-        }
-
-        let currentProgress = uploadTask.progress;
-
-        // console.log(tasks);
-        //
-        // increaseUploadTask(uploadTask,size);
-        // console.log('Upload success:', response.data);
-
-    } catch (error) {
-        // console.log('Upload failed:', error);
-    } finally {
-
-    }
 };

@@ -1,19 +1,15 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
-import {sendGetFolderContent} from "../../services/fetch/auth/storage/SendGetFolderContent.js";
 import {sendDeleteObject} from "../../services/fetch/auth/storage/SendDeleteObject.js";
 import {useStorageNavigation} from "../Storage/StorageNavigationProvider.jsx";
 import {sendMoveObject} from "../../services/fetch/auth/storage/SendMoveObject.js";
-import {extractSimpleName} from "../../services/util/Utils.js";
-import ConflictException from "../../exception/ConflictException.jsx";
+import {extractSimpleName, getCurrentDateTime} from "../../services/util/Utils.js";
 import {useStorageSelection} from "../Storage/StorageSelectionProvider.jsx";
 import {sendCopyObject} from "../../services/fetch/auth/storage/SendCopyObjects.js";
 import {nanoid} from 'nanoid';
-import {API_DOWNLOAD_FILES, API_IMAGE_UPLOAD, API_UPLOAD_FILES} from "../../UrlConstants.jsx";
 import {sendDownloadFile} from "../../services/fetch/auth/storage/SendDownloadFIle.js";
 import bytes from "bytes";
 import RenameModal from "../../modals/FileChange/RenameModal.jsx";
-import axios from "axios";
-import {handleUpload} from "../../services/fetch/auth/storage/SendUploadFIle.js";
+import {handleUpload, sendUpload} from "../../services/fetch/auth/storage/SendUploadFIle.js";
 
 const FileOperationsContext = createContext();
 
@@ -31,6 +27,9 @@ export const FileOperationsProvider = ({children}) => {
 
     const [nameConflict, setNameConflict] = useState(false);
     const [conflictedIds, setConflictedIds] = useState([]);
+
+    const [taskRunning, setTaskRunning] = useState(false);
+
 
     const nameAlreadyExists = (path) => {
         let fltrd = folderContent.filter(obj => obj.name === extractSimpleName(path));
@@ -89,50 +88,77 @@ export const FileOperationsProvider = ({children}) => {
         )
     }
 
-    const increaseUploadTask = (task, size) => {
-        setTasks(prevTasks =>
-            prevTasks.map(inTask => {
-                if (inTask.id === task.id) {
-                    // Создаем новый объект с обновленным значением progress
-                    return {
-                        ...inTask,
-                        progress: inTask.progress + 1,
-                    };
+    const uploadObjects = (files) => {
+
+        const filesWithoutFolder = [];
+        const innerFolders = {};
+
+        files.forEach(({file, path}) => {
+            const fileName = path; // Предполагаем, что file - это объект с полем name
+            const firstSlash = fileName.indexOf("/");
+
+            if (firstSlash === -1) {
+                filesWithoutFolder.push({file, path});
+            } else {
+                const prefix = fileName.substring(0, firstSlash + 1);
+                if (!innerFolders[prefix]) {
+                    innerFolders[prefix] = [];
                 }
-                return inTask; // Возвращаем неизмененный объект, если id не совпадает
+                innerFolders[prefix].push({file, path});
+            }
+        });
+
+        let namesWF = filesWithoutFolder.map(({file}) => file.name);
+        let namesIF = Object.keys(innerFolders);
+
+        const allNames = [...namesWF, ...namesIF];
+
+
+        const uploadTasks = allNames.map(source => {
+            let task = createTask(source, null, "upload", "В очереди на загрузку");
+            let files = innerFolders[source] ? innerFolders[source] :
+                [filesWithoutFolder.find(({file}) => file.name === source)];
+            return {task, files}
+        });
+
+
+        let uniqueTasks = uploadTasks
+            .map(({task, files}) => {
+                task = {...task, progress: 0}
+                return {task, files}
             })
-        );
-    }
+            .filter((task) => !identicalTasks(task));
 
-
-    const uploadObjects = (files, curPath) => {
-        const task = createTask("files", null, "upload", "В очереди для загрузки");
-
-        const uploadTask = {...task, progress: 0};
-
-
-        setTasks([...tasks, uploadTask]);
+        console.log(uniqueTasks);
+        setTasks(tasks => [...tasks, ...uniqueTasks.map(({task}) => task)]);
         setNewTasksAdded(true);
-        //todo start execution right in task with useEffect()
 
-        const content = currentPathRef.current.textContent;
-
-
-        executeUploadTask(uploadTask, files, content);
-
-
+        executeUploadTasks(uniqueTasks);
     }
 
-    const executeUploadTask = async (uploadTask, files, content) => {
+
+    const executeUploadTasks = async (uniqueTasks) => {
+        const currPath = currentPathRef.current.textContent;
 
 
+        // for (const {task, files} of uniqueTasks) {
+        //     updateTask(task, "progress", "Загружаем...")
+        //     sendUpload(files, updateDownloadTask, updateTask, task, currPath);
+        //     // updateTask(task, "completed", "Файлы загружены")
+        // }
 
-        updateTask(uploadTask, "progress", "Загружаем...")
+        setTaskRunning(true);
 
-        await handleUpload(files, content, uploadTask, updateDownloadTask);
+        Promise.all(uniqueTasks.map(async ({task, files}) => {
+            updateTask(task, "progress", "Загружаем...")
+            await sendUpload(files, updateDownloadTask, updateTask, task, currPath);
+            if (currPath === currentPath) {
+                setTimeout(() => loadFolder(currPath), 300);
+            }
+        }));
+        setTaskRunning(false);
 
 
-        // updateTask(uploadTask, "completed", "Скачивание завершено")
     }
 
 
@@ -269,7 +295,6 @@ export const FileOperationsProvider = ({children}) => {
 
     }
 
-    const [taskRunning, setTaskRunning] = useState(false);
 
     const executeTasks = async (pendingTasks) => {
         setTaskRunning(true);
@@ -286,6 +311,7 @@ export const FileOperationsProvider = ({children}) => {
             if (task.operation.type === "copy") {
                 await executeCopyTask(task);
             }
+
         }
 
         setTaskRunning(false);

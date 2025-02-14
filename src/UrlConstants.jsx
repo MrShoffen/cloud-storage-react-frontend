@@ -14,6 +14,7 @@ export const API_LOGIN = API_BASE_URL + API_CONTEXT + '/auth/login';
 export const API_LOGOUT = API_BASE_URL + API_CONTEXT + '/auth/logout';
 
 export const API_FILES = API_BASE_URL + API_CONTEXT + '/files';
+export const API_FILES_LIST = API_BASE_URL + API_CONTEXT + '/files/list';
 export const API_MOVE_FILES = API_BASE_URL + API_CONTEXT + '/files/move';
 export const API_COPY_FILES = API_BASE_URL + API_CONTEXT + '/files/copy';
 export const API_DOWNLOAD_FILES  = API_BASE_URL + API_CONTEXT + '/files/download';

@@ -102,8 +102,8 @@ export const Task = ({task}) => {
                         alignItems: 'center', // Выравнивание по вертикали по центру
                     }}
                 >
-                    <Box sx={{ position: 'absolute', width: '15px', left: -1, top: simpleName.endsWith('/') ? 53 : 20 }}>
-                        <FileFormatIcon name={simpleName} style="list" />
+                    <Box sx={{position: 'absolute', width: '15px', left: -1, top: simpleName.endsWith('/') ? 53 : 20}}>
+                        <FileFormatIcon name={simpleName} style="list"/>
                     </Box>
                     <Typography
                         sx={{
@@ -133,15 +133,15 @@ export const Task = ({task}) => {
 
             {status === "progress" && (operation === "download" || operation === "upload") &&
                 <LinearProgress
-                    variant="determinate"
+                    variant={task.progress === 100 ? "query" : "determinate"}
                     value={task.progress}
                     sx={{
-                    width: '100%', position: 'absolute', height: 5, bottom: 0,
-                    backgroundColor: 'transparent', // Убираем стандартный цвет фона
-                    '& .MuiLinearProgress-bar': {
-                        background: 'linear-gradient(90deg, rgba(28,50,163,1) 0%, rgba(16,113,195,1) 100%)', // Градиент для прогресса
-                    },
-                }}/>
+                        width: '100%', position: 'absolute', height: 5, bottom: 0,
+                        backgroundColor: 'transparent', // Убираем стандартный цвет фона
+                        '& .MuiLinearProgress-bar': {
+                            background: 'linear-gradient(90deg, rgba(28,50,163,1) 0%, rgba(16,113,195,1) 100%)', // Градиент для прогресса
+                        },
+                    }}/>
             }
 
 
