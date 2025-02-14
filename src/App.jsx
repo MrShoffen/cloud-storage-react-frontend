@@ -11,6 +11,7 @@ import AvailableAfterLoginRoute from "./context/Auth/AvailableAfterLoginRoute.js
 import Files from "./pages/Files.jsx";
 import FastLogin from "./pages/FastLogin.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
+import {Help} from "./pages/Help.jsx";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
                         <Route index element={<Index/>}/>
 
                         <Route path="*" element={<ErrorPage />}/>
+                        <Route path="help" element={<Help />}/>
 
                         {/*available before login only*/}
                         <Route path="login"

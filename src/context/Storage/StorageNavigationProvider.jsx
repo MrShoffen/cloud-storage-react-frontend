@@ -102,6 +102,6 @@ export const StorageNavigationProvider = ({children}) => {
             getObjectByPath
         }}>
         {children}
-        <Box ref={currentPathRef} className={"hiddenPath"}>{currentPath}</Box>
+        <Box ref={currentPathRef} sx={{color: 'transparent'}} className={"hiddenPath"}>{currentPath}</Box>
     </CloudStorageContext.Provider>);
 }

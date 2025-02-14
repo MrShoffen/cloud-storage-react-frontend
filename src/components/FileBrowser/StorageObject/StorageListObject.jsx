@@ -9,11 +9,19 @@ import {useStorageSelection} from "../../../context/Storage/StorageSelectionProv
 import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
+import FilePreviewModal from "../../../modals/FilePreviewModal/FilePreviewModal.jsx";
 
 const isMob = isMobile;
 
 
 export default function StorageListObject({object, style, selectedIds, bufferIds}) {
+    const [previewModal, setPreviewModal] = React.useState(false);
+
+    const handleClosePreview = () => {
+        console.log('closing');
+        setPreviewModal(false);
+        setTimeout(() => setPreviewModal(false), 200)
+    }
 
     const {goToFolder} = useStorageNavigation();
     const {setSelectionMode, isSelectionMode, isCutMode, isCopyMode} = useStorageSelection();
@@ -21,6 +29,10 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
     const onClick = isMob ? () => {
         if (object.folder && !isSelectionMode && !copied && !cutted) {
             goToFolder(object.name);
+            return;
+        }
+        if (!isSelectionMode) {
+            setPreviewModal(true);
         }
     } : () => {
     }
@@ -28,7 +40,9 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
     const onDoubleClick = !isMob ? () => {
         if (object.folder && !copied && !cutted) {
             goToFolder(object.name);
+            return;
         }
+        setPreviewModal(true);
     } : null;
 
     const onLongPress = isMob ? () => {
@@ -93,6 +107,7 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
                     }}
                 />
             }
+            <FilePreviewModal open={previewModal} onClose={handleClosePreview} object={object}/>
 
 
         </Card>

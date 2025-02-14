@@ -15,6 +15,7 @@ import axios from "axios";
 import {API_IMAGE_UPLOAD} from "../UrlConstants.jsx";
 import * as React from "react";
 import {FileUploadDraggableArea} from "../components/InputElements/Upload/FileUploadDraggableArea.jsx";
+import {UsageHint} from "../components/hints/UsageHint.jsx";
 
 const LoadingBox = () => {
     return (
@@ -65,25 +66,26 @@ export default function Files() {
     }, [folderContent]); // Зависимость от location.pathname
 
 
-    const dragRef =useRef();
+    const dragRef = useRef();
 
     const [isDragging, setIsDragging] = useState(false);
 
 
-
-
     return (
-        <Box ref={dragRef} sx={{height: '100%',
+        <Box ref={dragRef} sx={{
+            height: '100%',
 
         }}>
 
-            <FileBrowserHeader />
+            <FileBrowserHeader/>
+
 
             <Container disableGutters sx={{mt: 23, width: '100%'}}>
                 <Box sx={{p: 1, pt: 1}}>
                     {folderContentLoading ? <LoadingBox/> : <ObjectsContainer/>}
                 </Box>
             </Container>
+
 
             <FileUploadDraggableArea dragRef={dragRef}
                                      isDragging={isDragging}

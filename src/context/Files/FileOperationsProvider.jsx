@@ -141,21 +141,16 @@ export const FileOperationsProvider = ({children}) => {
         const currPath = currentPathRef.current.textContent;
 
 
-        // for (const {task, files} of uniqueTasks) {
-        //     updateTask(task, "progress", "Загружаем...")
-        //     sendUpload(files, updateDownloadTask, updateTask, task, currPath);
-        //     // updateTask(task, "completed", "Файлы загружены")
-        // }
-
         setTaskRunning(true);
 
-        Promise.all(uniqueTasks.map(async ({task, files}) => {
+        await Promise.all(uniqueTasks.map(async ({task, files}) => {
             updateTask(task, "progress", "Загружаем...")
             await sendUpload(files, updateDownloadTask, updateTask, task, currPath);
-            if (currPath === currentPath) {
-                setTimeout(() => loadFolder(currPath), 300);
-            }
+
+
         }));
+        setTimeout(() => loadFolder(currPath), 300);
+
         setTaskRunning(false);
 
 
@@ -348,7 +343,6 @@ export const FileOperationsProvider = ({children}) => {
 
     }
 
-
     const executeDeleteTask = async (task) => {
         try {
             updateTask(task, "progress", "Удаляем...");
@@ -359,16 +353,6 @@ export const FileOperationsProvider = ({children}) => {
             updateTask(task, "error", e.message);
         }
     }
-
-
-// useEffect(() => {
-//     const pendingTasks = tasks.filter((task) => task.status === "pending");
-//     console.log(pendingTasks);
-//
-//
-//
-// }, [tasks]);
-
 
     const pasteObjects = () => {
         if (bufferIds.length === 0) {

@@ -39,7 +39,7 @@ export const accountMenuItems = (openProfileModal, openSecurityModal) => {
                 Настройки безопасности
             </MenuItem>
             <Divider/>
-            <MenuItem>
+            <MenuItem onClick={() =>navigate("/cloud-storage/help")}>
                 <ListItemIcon>
                     <Help fontSize="small"/>
                 </ListItemIcon>

@@ -255,35 +255,35 @@ export const FileUploadDraggableArea = ({dragRef, isDragging, setIsDragging}) =>
                 </Box>
             }
 
-            {files.length > 0 && (
-                <div className="file-list">
-                    <h4>Выбранные файлы:</h4>
-                    <ul>
-                        {files.map((file, index) => (
-                            <li key={index}>{file.path}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+            {/*{files.length > 0 && (*/}
+            {/*    <div className="file-list">*/}
+            {/*        <h4>Выбранные файлы:</h4>*/}
+            {/*        <ul>*/}
+            {/*            {files.map((file, index) => (*/}
+            {/*                <li key={index}>{file.path}</li>*/}
+            {/*            ))}*/}
+            {/*        </ul>*/}
+            {/*    </div>*/}
+            {/*)}*/}
 
-            <div className="upload-controls">
-                <button
-                    onClick={handleUpload}
-                    disabled={!files.length || isUploading}
-                >
-                    {isUploading ? 'Идет загрузка...' : 'Начать загрузку'}
-                </button>
+            {/*<div className="upload-controls">*/}
+            {/*    <button*/}
+            {/*        onClick={handleUpload}*/}
+            {/*        disabled={!files.length || isUploading}*/}
+            {/*    >*/}
+            {/*        {isUploading ? 'Идет загрузка...' : 'Начать загрузку'}*/}
+            {/*    </button>*/}
 
-                {isUploading && (
-                    <div className="progress-bar">
-                        <div
-                            className="progress-fill"
-                            style={{width: `${progress}%`}}
-                        />
-                        <span>{progress}%</span>
-                    </div>
-                )}
-            </div>
+            {/*    {isUploading && (*/}
+            {/*        <div className="progress-bar">*/}
+            {/*            <div*/}
+            {/*                className="progress-fill"*/}
+            {/*                style={{width: `${progress}%`}}*/}
+            {/*            />*/}
+            {/*            <span>{progress}%</span>*/}
+            {/*        </div>*/}
+            {/*    )}*/}
+            {/*</div>*/}
         </>
     );
 };

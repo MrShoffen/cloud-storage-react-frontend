@@ -2,7 +2,7 @@ import {Box} from "@mui/material";
 import StorageTileObject from "./StorageObject/StorageTileObject.jsx";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import {AnimatePresence, motion} from "framer-motion";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import StorageListObject from "./StorageObject/StorageListObject.jsx";
 import './selected.css';
 import {FileSelection} from "../Selection/FileSelection.jsx";
@@ -10,10 +10,11 @@ import {useStorageView} from "../../context/Storage/StorageViewProvider.jsx";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
 import RenameModal from "../../modals/FileChange/RenameModal.jsx";
+import {UsageHint} from "../hints/UsageHint.jsx";
 
 export const ObjectsContainer = () => {
 
-    const {folderContent} = useStorageNavigation();
+    const {folderContent, folderPath} = useStorageNavigation();
     const {filesView, sortFolder} = useStorageView();
     const {
         selectedIds, setSelectedIds, setSelectionMode,
@@ -49,7 +50,7 @@ export const ObjectsContainer = () => {
             }
         }
 
-        if ((event.ctrlKey || event.metaKey) &&( key === "c" || key ==="с" || key ==="C" || key ==="С")) {
+        if ((event.ctrlKey || event.metaKey) && (key === "c" || key === "с" || key === "C" || key === "С")) {
             event.preventDefault();
             console.log("Ctrl + C pressed");
             if (selectedIds.length > 0) {
@@ -57,7 +58,7 @@ export const ObjectsContainer = () => {
             }
         }
 
-        if ((event.ctrlKey || event.metaKey) && (key === "x" ||  key === "X" ||  key === "Ч"||  key === "ч")) {
+        if ((event.ctrlKey || event.metaKey) && (key === "x" || key === "X" || key === "Ч" || key === "ч")) {
             event.preventDefault();
 
             if (selectedIds.length > 0) {
@@ -65,7 +66,7 @@ export const ObjectsContainer = () => {
             }
         }
 
-        if ((event.ctrlKey || event.metaKey) && (key === "v" ||  key === "V" ||  key === "м"||  key === "М")) {
+        if ((event.ctrlKey || event.metaKey) && (key === "v" || key === "V" || key === "м" || key === "М")) {
             event.preventDefault();
 
             if (bufferIds.length > 0) {
@@ -74,10 +75,14 @@ export const ObjectsContainer = () => {
         }
     };
 
+    const [showHint, setShowHint] = useState(false);
 
+    useEffect(() => {
+        if ((folderContent === null || folderContent.length == 0) && folderPath.length == 1) {
+            setTimeout(() => setShowHint(true), 300);
+        }
 
-
-
+    }, [folderContent])
 
     return (
         <AnimatePresence mode="wait">
@@ -100,7 +105,7 @@ export const ObjectsContainer = () => {
                             sx={{
                                 width: '100%',
                                 display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fill, minmax(min(' + (filesView === 'largeTiles' ? '160px' : '100px') + ',100%), 1fr))',
+                                gridTemplateColumns: 'repeat(auto-fill, minmax(min(' + (filesView === 'largeTiles' ? '150px' : '100px') + ',100%), 1fr))',
                                 gap: 1,
                                 pb: 30,
                                 '&:focus': {
@@ -149,6 +154,11 @@ export const ObjectsContainer = () => {
                         </Box>
                 }
 
+                {showHint &&
+                    <Box sx={{mt: -30}}>
+                        <UsageHint/>
+                    </Box>
+                }
                 <FileSelection containerRef={containerRef} selectedIds={selectedIds} moveableRef={moveableRef}
                                selectoRef={selectoRef}
                                setSelectedIds={setSelectedIds}/>

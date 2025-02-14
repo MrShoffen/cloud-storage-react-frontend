@@ -51,7 +51,7 @@ export const FileBrowserHeader = () => {
 
     useEffect(() => {
         if (scrollBoxRef.current) {
-            scrollBoxRef.current.scrollLeft = scrollBoxRef.current.scrollWidth;
+            scrollBoxRef.current.scrollLeft =500;
         }
     }, [currentFolder, folderContentLoading]);
 
@@ -85,7 +85,7 @@ export const FileBrowserHeader = () => {
                       }}
                 >
                     <Box
-                        reaf={scrollBoxRef}
+                        ref={scrollBoxRef}
                         sx={{
                             pl: 1,
                             pr: 1,

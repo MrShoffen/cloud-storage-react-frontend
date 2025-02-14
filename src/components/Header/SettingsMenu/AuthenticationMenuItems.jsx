@@ -28,7 +28,8 @@ export const authenticationMenuItems = () => {
                 Регистрация
             </MenuItem>
             <Divider/>
-            <MenuItem>
+            <MenuItem onClick={() =>navigate("/cloud-storage/help")}>
+
                 <ListItemIcon>
                     <Help fontSize="small"/>
                 </ListItemIcon>
