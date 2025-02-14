@@ -34,7 +34,8 @@ export default function RenameModal({
     const getNotConflictedFilename = () => {
         if (selectedIds.length === 1) {
             let name = extractSimpleName(selectedIds[0]);
-            const unique = getCurrentDateTime();
+            const unique = getCurrentDateTime().toString();
+            console.log(name);
             console.log('not ' + unique)
             return unique + ' - ' + (isFolder ? name.slice(0, -1) : name);
         }
@@ -43,7 +44,8 @@ export default function RenameModal({
 
     useEffect(() => {
         if (isConflict) {
-            setfilename(getNotConflictedFilename);
+            setTimeout(() => setfilename(getNotConflictedFilename()), 300)
+
         } else {
             setfilename(getFilename)
         }

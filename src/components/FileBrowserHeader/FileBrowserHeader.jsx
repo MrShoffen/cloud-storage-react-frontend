@@ -20,6 +20,7 @@ export const FileBrowserHeader = () => {
         isRootFolder,
         goToPrevFolder,
         currentFolder,
+        currentPath,
         folderContentLoading,
     } = useStorageNavigation();
 

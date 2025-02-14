@@ -17,6 +17,7 @@ export const API_FILES = API_BASE_URL + API_CONTEXT + '/files';
 export const API_MOVE_FILES = API_BASE_URL + API_CONTEXT + '/files/move';
 export const API_COPY_FILES = API_BASE_URL + API_CONTEXT + '/files/copy';
 export const API_DOWNLOAD_FILES  = API_BASE_URL + API_CONTEXT + '/files/download';
+export const API_UPLOAD_FILES  = API_BASE_URL + API_CONTEXT + '/files/upload';
 
 
 export const API_USER_INFO = API_BASE_URL + API_CONTEXT + '/users/me';

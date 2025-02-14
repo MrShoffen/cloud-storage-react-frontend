@@ -68,7 +68,7 @@ export const FileTasksModal = () => {
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
                 overflow: 'hidden',
-
+                boxShadow: 8,
                 borderRadius: 2,
                 borderColor: 'divider',
 
@@ -79,7 +79,7 @@ export const FileTasksModal = () => {
                 sx={{
                     position: 'relative',
                     width: '100%',
-                    background: 'linear-gradient(324deg, rgba(28,73,163,1) 0%, rgba(121,16,175,1) 79%)',
+                    background: 'linear-gradient(90deg, rgba(28,50,163,1) 0%, rgba(16,113,195,1) 100%)', // Градиент для прогресса
                     height: '50px',
                 }}
             >

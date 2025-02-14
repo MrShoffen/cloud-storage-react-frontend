@@ -5,7 +5,7 @@ import {throwSpecifyException} from "../../../../exception/ThrowSpecifyException
 export const sendGetFolderContent = async (folderName = "") => {
 
 
-    const params = new URLSearchParams({object: folderName});
+    const params = new URLSearchParams({folder: folderName});
 
     const url = `${API_FILES}?${params.toString()}`;
 

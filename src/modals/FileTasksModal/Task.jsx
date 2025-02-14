@@ -95,32 +95,33 @@ export const Task = ({task}) => {
                     sx={{
                         position: 'absolute',
                         display: 'flex',
-                        height: 10,
-                        width: "78%",
+                        height: '100%',
+                        width: '78%',
                         top: 3,
-                        left: 7
+                        left: 7,
+                        alignItems: 'center', // Выравнивание по вертикали по центру
                     }}
                 >
-                    <Box sx={{position: 'absolute', width: '15px', left: -1, top: simpleName.endsWith('/') ? 53 : 20,}}>
-                        <FileFormatIcon name={simpleName} style="list"/>
+                    <Box sx={{ position: 'absolute', width: '15px', left: -1, top: simpleName.endsWith('/') ? 53 : 20 }}>
+                        <FileFormatIcon name={simpleName} style="list" />
                     </Box>
-                    <Typography sx={{
-                        color: 'error.main',
-                        fontSize: '12px',
-                        fontWeight: 400,
-                        width: '100%',
-                        // top: 20,
-                        left: 20,
-                        position: 'absolute',
-
-                        userSelect: 'none',
-                    }}>{message}</Typography>
-
+                    <Typography
+                        sx={{
+                            pl: '20px',
+                            color: 'error.main',
+                            fontSize: '13px',
+                            fontWeight: 400,
+                            width: '100%',
+                            userSelect: 'none',
+                        }}
+                    >
+                        {message}
+                    </Typography>
                 </Box>
 
             }
 
-            {status === "progress" && operation !== "download" &&
+            {status === "progress" && operation !== "download" && operation !== "upload" &&
                 <LinearProgress sx={{
                     width: '100%', position: 'absolute', height: 5, bottom: 0,
                     backgroundColor: 'transparent', // Убираем стандартный цвет фона
@@ -130,7 +131,7 @@ export const Task = ({task}) => {
                 }}/>
             }
 
-            {status === "progress" && operation === "download" &&
+            {status === "progress" && (operation === "download" || operation === "upload") &&
                 <LinearProgress
                     variant="determinate"
                     value={task.progress}

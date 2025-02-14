@@ -8,10 +8,12 @@ import ConflictException from "../../exception/ConflictException.jsx";
 import {useStorageSelection} from "../Storage/StorageSelectionProvider.jsx";
 import {sendCopyObject} from "../../services/fetch/auth/storage/SendCopyObjects.js";
 import {nanoid} from 'nanoid';
-import {API_DOWNLOAD_FILES} from "../../UrlConstants.jsx";
+import {API_DOWNLOAD_FILES, API_IMAGE_UPLOAD, API_UPLOAD_FILES} from "../../UrlConstants.jsx";
 import {sendDownloadFile} from "../../services/fetch/auth/storage/SendDownloadFIle.js";
 import bytes from "bytes";
 import RenameModal from "../../modals/FileChange/RenameModal.jsx";
+import axios from "axios";
+import {handleUpload} from "../../services/fetch/auth/storage/SendUploadFIle.js";
 
 const FileOperationsContext = createContext();
 
@@ -20,12 +22,30 @@ export const useStorageOperations = () => useContext(FileOperationsContext);
 
 export const FileOperationsProvider = ({children}) => {
 
-    const {loadFolder, currentPath, getObjectByPath, folderContent} = useStorageNavigation();
-    const {isCopyMode, isCutMode, bufferIds, endCopying, endCutting} = useStorageSelection();
+    const {loadFolder, currentPath, getObjectByPath, folderContent, currentPathRef} = useStorageNavigation();
+    const {isCopyMode, isCutMode, bufferIds, endCopying, endCutting, selectedIds} = useStorageSelection();
 
     const [tasks, setTasks] = useState([]);
     const [newTasksAdded, setNewTasksAdded] = useState(false);
 
+
+    const [nameConflict, setNameConflict] = useState(false);
+    const [conflictedIds, setConflictedIds] = useState([]);
+
+    const nameAlreadyExists = (path) => {
+        let fltrd = folderContent.filter(obj => obj.name === extractSimpleName(path));
+        return fltrd.length > 0;
+    }
+
+    const checkConflicts = (ids) => {
+        if (ids.length == 1 && nameAlreadyExists(ids[0])) {
+            setConflictedIds(ids);
+            setNameConflict(true);
+            return true;
+        }
+
+        return false;
+    }
 
     const createTask = (objectPath, target, type, message) => {
         const operation = {type: type, source: objectPath, target: target};
@@ -69,6 +89,52 @@ export const FileOperationsProvider = ({children}) => {
         )
     }
 
+    const increaseUploadTask = (task, size) => {
+        setTasks(prevTasks =>
+            prevTasks.map(inTask => {
+                if (inTask.id === task.id) {
+                    // Создаем новый объект с обновленным значением progress
+                    return {
+                        ...inTask,
+                        progress: inTask.progress + 1,
+                    };
+                }
+                return inTask; // Возвращаем неизмененный объект, если id не совпадает
+            })
+        );
+    }
+
+
+    const uploadObjects = (files, curPath) => {
+        const task = createTask("files", null, "upload", "В очереди для загрузки");
+
+        const uploadTask = {...task, progress: 0};
+
+
+        setTasks([...tasks, uploadTask]);
+        setNewTasksAdded(true);
+        //todo start execution right in task with useEffect()
+
+        const content = currentPathRef.current.textContent;
+
+
+        executeUploadTask(uploadTask, files, content);
+
+
+    }
+
+    const executeUploadTask = async (uploadTask, files, content) => {
+
+
+
+        updateTask(uploadTask, "progress", "Загружаем...")
+
+        await handleUpload(files, content, uploadTask, updateDownloadTask);
+
+
+        // updateTask(uploadTask, "completed", "Скачивание завершено")
+    }
+
 
     const deleteObject = (objects) => {
         let deleteTasks = objects.map(path => createTask(path, null, "delete", "В очереди на удаление"));
@@ -81,6 +147,11 @@ export const FileOperationsProvider = ({children}) => {
 
     const moveObjects = (sourceObjects, target) => {
         const moveTasks = sourceObjects.map(source => createTask(source, target + extractSimpleName(source), "move", "В очереди для перемещения"));
+
+        if (sourceObjects.length == 1 && checkConflicts([target + extractSimpleName(sourceObjects[0])])) {
+            return;
+        }
+
         let uniqueTasks = moveTasks.filter((task) => !identicalTasks(task));
 
         setTasks([...tasks, ...uniqueTasks]);
@@ -272,12 +343,6 @@ export const FileOperationsProvider = ({children}) => {
 //
 // }, [tasks]);
 
-    const [nameConflict, setNameConflict] = useState(false);
-
-    const nameAlreadyExists = (path) => {
-        let fltrd = folderContent.filter(obj => obj.name === extractSimpleName(path));
-        return fltrd.length > 0;
-    }
 
     const pasteObjects = () => {
         if (bufferIds.length === 0) {
@@ -286,9 +351,7 @@ export const FileOperationsProvider = ({children}) => {
 
         console.log(bufferIds)
 
-        if (bufferIds.length === 1 && nameAlreadyExists(bufferIds[0])) {
-            setNameConflict(true);
-
+        if (checkConflicts(bufferIds)) {
             return;
         }
 
@@ -305,9 +368,11 @@ export const FileOperationsProvider = ({children}) => {
 
     }
 
+
     const clearSelectionMode = () => {
         endCutting();
         endCopying();
+        setConflictedIds([]);
     }
 
     const handleModalConflictClose = () => {
@@ -319,10 +384,17 @@ export const FileOperationsProvider = ({children}) => {
         if (isCutMode) {
             moveObjectInternal(bufferIds, currentPath + newName);
             endCutting();
-        }
-        if (isCopyMode) {
+        } else if (isCopyMode) {
             copyObjectInternal(bufferIds, currentPath + newName);
             endCopying();
+        } else {
+            const path = conflictedIds[0];
+            console.log(path);
+            let sep = path.lastIndexOf("/", path.length - 2);
+            const newPath = path.substring(0, sep + 1) + newName;
+            console.log(newName);
+            console.log(newPath);
+            moveObjectInternal(selectedIds, newPath);
         }
 
         handleModalConflictClose();
@@ -343,10 +415,11 @@ export const FileOperationsProvider = ({children}) => {
             copyObjects,
             pasteObjects,
             downloadObjects,
-            renameObject
+            renameObject,
+            uploadObjects
         }}>
         {children}
-        <RenameModal selectedIds={bufferIds}
+        <RenameModal selectedIds={conflictedIds}
                      open={nameConflict}
                      onClose={handleModalConflictClose}
                      clearSelectionMode={clearSelectionMode}

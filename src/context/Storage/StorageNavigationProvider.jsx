@@ -1,6 +1,7 @@
-import React, {createContext, useContext, useState} from "react";
+import React, {createContext, useContext, useRef, useState} from "react";
 import {sendGetFolderContent} from "../../services/fetch/auth/storage/SendGetFolderContent.js";
 import {useStorageSelection} from "./StorageSelectionProvider.jsx";
+import {Box} from "@mui/material";
 
 
 const CloudStorageContext = createContext();
@@ -16,6 +17,7 @@ export const StorageNavigationProvider = ({children}) => {
     const currentFolder = folderPath[folderPath.length - 1];
     const isRootFolder = currentFolder === "";
     const currentPath = folderPath.join("");
+    const currentPathRef = useRef();
 
     const goToPrevFolder = async () => {
         setFolderContentLoading(true);
@@ -95,9 +97,11 @@ export const StorageNavigationProvider = ({children}) => {
             goToPrevFolder,
             goToFolder,
             loadFolder,
+            currentPathRef,
 
             getObjectByPath
         }}>
         {children}
+        <Box ref={currentPathRef} className={"hiddenPath"}>{currentPath}</Box>
     </CloudStorageContext.Provider>);
 }

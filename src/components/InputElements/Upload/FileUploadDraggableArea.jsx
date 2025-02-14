@@ -4,8 +4,13 @@ import {API_IMAGE_UPLOAD} from "../../../UrlConstants.jsx";
 import {Box, Container} from "@mui/material";
 import * as React from "react";
 import Typography from "@mui/material/Typography";
+import {useStorageOperations} from "../../../context/Files/FileOperationsProvider.jsx";
+import {useStorageNavigation} from "../../../context/Storage/StorageNavigationProvider.jsx";
 
 export const FileUploadDraggableArea = ({dragRef, isDragging, setIsDragging}) => {
+
+    const {uploadObjects} = useStorageOperations();
+
 
     const [files, setFiles] = useState([]);
     const [progress, setProgress] = useState(0);
@@ -85,9 +90,11 @@ export const FileUploadDraggableArea = ({dragRef, isDragging, setIsDragging}) =>
             }
         };
 
-        Promise.all(droppedItems.map((item) => processItem(item))).then(() => {
-            setFiles((prev) => [...prev, ...newFiles]);
-        });
+        Promise.all(droppedItems.map((item) => processItem(item)))
+            .then(() => {
+                setFiles((prev) => [...prev, ...newFiles]);
+                uploadObjects(newFiles);
+            });
     }, []);
 
     // Отправка файлов
@@ -128,11 +135,6 @@ export const FileUploadDraggableArea = ({dragRef, isDragging, setIsDragging}) =>
         dragRef.current.addEventListener('dragleave', handleDragLeave);
         dragRef.current.addEventListener('drop', handleDrop);
 
-        return () => {
-            dragRef.current.removeEventListener('dragover', handleDragOver);
-            dragRef.current.removeEventListener('dragleave', handleDragLeave);
-            dragRef.current.removeEventListener('drop', handleDrop);
-        };
     }, [handleDragOver, handleDragLeave, handleDrop]);
 
     return (
