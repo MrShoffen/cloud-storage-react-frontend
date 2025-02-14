@@ -2,7 +2,7 @@ import {Box} from "@mui/material";
 import StorageTileObject from "./StorageObject/StorageTileObject.jsx";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import {AnimatePresence, motion} from "framer-motion";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import StorageListObject from "./StorageObject/StorageListObject.jsx";
 import './selected.css';
 import {FileSelection} from "../Selection/FileSelection.jsx";
@@ -11,6 +11,7 @@ import {useStorageSelection} from "../../context/Storage/StorageSelectionProvide
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
 import RenameModal from "../../modals/FileChange/RenameModal.jsx";
 import {UsageHint} from "../hints/UsageHint.jsx";
+import FilePreviewModal from "../../modals/FilePreviewModal/FilePreviewModal.jsx";
 
 export const ObjectsContainer = () => {
 
@@ -31,6 +32,30 @@ export const ObjectsContainer = () => {
         visible: {opacity: 1},
         exit: {opacity: 0}
     };
+
+
+    const [objectPreview, setObjectPreview] = useState(null);
+
+    const handleOpenPreview = (object) => {
+        setObjectPreview(object);
+
+        setPreviewModal(true);
+
+    }
+
+    const [previewModal, setPreviewModal] = React.useState(false);
+
+    const handleClosePreview = () => {
+        console.log('closing');
+        setPreviewModal(false);
+        let offsetTop = containerRef.current.offsetTop;
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+        // setTimeout(() => setPreviewModal(false), 200)
+    }
 
     const containerRef = useRef(null);
     const moveableRef = useRef(null);
@@ -86,6 +111,9 @@ export const ObjectsContainer = () => {
 
     return (
         <AnimatePresence mode="wait">
+
+            <FilePreviewModal open={previewModal} onClose={handleClosePreview} object={objectPreview}/>
+
             <motion.div
                 key={`${folderContent?.map(item => item.id || item.name).join(",")}`}
                 initial="hidden"
@@ -124,7 +152,9 @@ export const ObjectsContainer = () => {
                                     (item) => <StorageTileObject selectedIds={selectedIds}
                                                                  bufferIds={bufferIds}
                                                                  object={item}
-                                                                 style={filesView}/>)}
+                                                                 style={filesView}
+                                                                 handlePreview={handleOpenPreview}
+                                    />)}
                         </Box>
                         :
                         <Box
@@ -150,6 +180,7 @@ export const ObjectsContainer = () => {
                                     (item) => <StorageListObject object={item}
                                                                  style={filesView}
                                                                  bufferIds={bufferIds}
+                                                                 handlePreview={handleOpenPreview}
                                                                  selectedIds={selectedIds}/>)}
                         </Box>
                 }

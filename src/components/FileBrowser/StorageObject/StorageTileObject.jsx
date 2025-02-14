@@ -14,20 +14,11 @@ import {API_DOWNLOAD_FILES, API_FILES_PREVIEW, API_PREVIEW} from "../../../UrlCo
 import {sendGetPreview} from "../../../services/fetch/auth/storage/SendGetPreview.js";
 import FilePreviewModal from "../../../modals/FilePreviewModal/FilePreviewModal.jsx";
 
-export default function StorageTileObject({object, style, selectedIds, bufferIds}) {
+export default function StorageTileObject({object, style, selectedIds, bufferIds, handlePreview}) {
     const isMob = isMobile;
     const isLarge = style === 'largeTiles'
     const {goToFolder} = useStorageNavigation();
     const {setSelectionMode, isSelectionMode, isCutMode, isCopyMode} = useStorageSelection();
-
-    const [previewModal, setPreviewModal] = React.useState(false);
-
-    const handleClosePreview = () => {
-        console.log('closing');
-        setPreviewModal(false);
-        setTimeout(() => setPreviewModal(false), 200)
-    }
-
 
     const onClick = isMob ? () => {
         if (object.folder && !isSelectionMode && !copied && !cutted) {
@@ -35,7 +26,7 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
             return;
         }
         if (!isSelectionMode) {
-            setPreviewModal(true);
+            handlePreview(object);
         }
     } : () => {
     }
@@ -45,7 +36,8 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
             goToFolder(object.name);
             return;
         }
-        setPreviewModal(true);
+        // setPreviewModal(true);
+        handlePreview(object);
 
     } : () => {
     };
@@ -110,7 +102,7 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
                 position: 'relative',
                 opacity: copied || cutted ? 0.5 : 1,
                 minWidth: isLarge ? 160 : 100,
-                minHeight: isLarge ? 185 : 110,
+                minHeight: isLarge ? 185 : 120,
 
                 backgroundColor: selected ? "objectSelected" : "transparent",
                 borderRadius: 2,
@@ -127,7 +119,7 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
                                     position: 'absolute',
                                     transform: 'translate(-50%, 0%)',
                                     left: '50%',
-
+                                    userSelect: 'none',
                                 }}
                                 src={API_PREVIEW + preview}
                                 onError={() => setPreview("")}
@@ -141,7 +133,6 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
 
             </Box>
             <ObjectName object={object}/>
-            <FilePreviewModal open={previewModal} onClose={handleClosePreview} object={object}/>
         </Card>
     );
 }

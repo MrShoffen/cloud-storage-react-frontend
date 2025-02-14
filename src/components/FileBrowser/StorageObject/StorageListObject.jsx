@@ -14,14 +14,7 @@ import FilePreviewModal from "../../../modals/FilePreviewModal/FilePreviewModal.
 const isMob = isMobile;
 
 
-export default function StorageListObject({object, style, selectedIds, bufferIds}) {
-    const [previewModal, setPreviewModal] = React.useState(false);
-
-    const handleClosePreview = () => {
-        console.log('closing');
-        setPreviewModal(false);
-        setTimeout(() => setPreviewModal(false), 200)
-    }
+export default function StorageListObject({object, style, selectedIds, bufferIds, handlePreview}) {
 
     const {goToFolder} = useStorageNavigation();
     const {setSelectionMode, isSelectionMode, isCutMode, isCopyMode} = useStorageSelection();
@@ -32,7 +25,7 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
             return;
         }
         if (!isSelectionMode) {
-            setPreviewModal(true);
+            handlePreview(object);
         }
     } : () => {
     }
@@ -42,7 +35,7 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
             goToFolder(object.name);
             return;
         }
-        setPreviewModal(true);
+        handlePreview(object);
     } : null;
 
     const onLongPress = isMob ? () => {
@@ -107,8 +100,6 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
                     }}
                 />
             }
-            <FilePreviewModal open={previewModal} onClose={handleClosePreview} object={object}/>
-
 
         </Card>
     );
