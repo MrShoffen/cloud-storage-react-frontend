@@ -1,5 +1,5 @@
 import {Box, Card} from "@mui/material";
-import React from "react";
+import React, {useEffect} from "react";
 
 import {ObjectName} from "../elements/ObjectName.jsx";
 import {useStorageNavigation} from "../../../context/Storage/StorageNavigationProvider.jsx";
@@ -10,20 +10,32 @@ import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
 import ContentCutIcon from '@mui/icons-material/ContentCut';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {useStorageOperations} from "../../../context/Files/FileOperationsProvider.jsx";
+import {API_DOWNLOAD_FILES, API_FILES_PREVIEW, API_PREVIEW} from "../../../UrlConstants.jsx";
+import {sendGetPreview} from "../../../services/fetch/auth/storage/SendGetPreview.js";
+import FilePreviewModal from "../../../modals/FilePreviewModal/FilePreviewModal.jsx";
 
 export default function StorageTileObject({object, style, selectedIds, bufferIds}) {
     const isMob = isMobile;
-
     const isLarge = style === 'largeTiles'
-
     const {goToFolder} = useStorageNavigation();
     const {setSelectionMode, isSelectionMode, isCutMode, isCopyMode} = useStorageSelection();
-    const {deleteObject, pasteObjects} = useStorageOperations();
+
+    const [previewModal, setPreviewModal] = React.useState(false);
+
+    const handleClosePreview = () => {
+        console.log('closing');
+        setPreviewModal(false);
+        setTimeout(() => setPreviewModal(false), 200)
+    }
 
 
     const onClick = isMob ? () => {
         if (object.folder && !isSelectionMode && !copied && !cutted) {
             goToFolder(object.name);
+            return;
+        }
+        if (!isSelectionMode) {
+            setPreviewModal(true);
         }
     } : () => {
     }
@@ -31,7 +43,10 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
     const onDoubleClick = !isMob ? () => {
         if (object.folder && !copied && !cutted) {
             goToFolder(object.name);
+            return;
         }
+        setPreviewModal(true);
+
     } : () => {
     };
 
@@ -52,6 +67,35 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
 
     const copied = bufferIds.includes(object.path) && isCopyMode;
     const cutted = bufferIds.includes(object.path) && isCutMode;
+
+
+    const [preview, setPreview] = React.useState("");
+    useEffect(() => {
+        if (!preview && object.path && allowedPictureFormat(object)) {
+            getPreview(object.path);
+        }
+
+
+    }, []);
+
+    const allowedPictureFormat = (object) => {
+        if (object.folder) {
+            return false;
+        }
+        let dotIndex = object.path.lastIndexOf(".");
+        let format = object.path.substring(dotIndex + 1);
+
+        return format === 'jpg' || format === 'png'
+            || format === 'gif' || format === 'jpeg' || format === 'bmp';
+
+    }
+
+    const getPreview = async (path) => {
+        let previewUrl = await sendGetPreview(path);
+        // console.log(previewUrl);
+        setPreview(previewUrl);
+
+    }
 
 
     return (
@@ -77,13 +121,27 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
             elevation={0}
         >
             <Box sx={{width: '100%', position: 'absolute', top: 8, left: '50%', transform: 'translate(-50%)'}}>
-                <FileFormatIcon name={object.name} style={style}/>
+                {preview ? <img alt={""}
+                                style={{
+                                    height: isLarge ? '150px' : '80px',
+                                    position: 'absolute',
+                                    transform: 'translate(-50%, 0%)',
+                                    left: '50%',
+
+                                }}
+                                src={API_PREVIEW + preview}
+                                onError={() => setPreview("")}
+                    />
+                    :
+                    <FileFormatIcon name={object.name} style={style}/>
+
+                }
                 {copied && <ContentCopyIcon/>}
                 {cutted && <ContentCutIcon/>}
 
             </Box>
             <ObjectName object={object}/>
-
+            <FilePreviewModal open={previewModal} onClose={handleClosePreview} object={object}/>
         </Card>
     );
 }

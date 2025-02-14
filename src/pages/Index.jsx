@@ -3,6 +3,7 @@ import {useState} from "react";
 import AddIcon from "@mui/icons-material/Add";
 import {FilePageButton} from "../components/FilePageButton/FilePageButton.jsx";
 import {useAuthContext} from "../context/Auth/AuthContext.jsx";
+import {UsageHint} from "../components/hints/UsageHint.jsx";
 
 export default function Index() {
 
@@ -34,6 +35,8 @@ export default function Index() {
                     // Адаптивные отступы внутри карточки
                 }}
             >
+
+                <UsageHint/>
                 <div>
                     <p className="read-the-docs">
                         Click on the Vite and React logos to learn more

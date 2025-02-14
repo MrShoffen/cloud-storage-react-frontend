@@ -19,6 +19,7 @@ export const API_MOVE_FILES = API_BASE_URL + API_CONTEXT + '/files/move';
 export const API_COPY_FILES = API_BASE_URL + API_CONTEXT + '/files/copy';
 export const API_DOWNLOAD_FILES  = API_BASE_URL + API_CONTEXT + '/files/download';
 export const API_UPLOAD_FILES  = API_BASE_URL + API_CONTEXT + '/files/upload';
+export const API_FILES_PREVIEW  = API_BASE_URL + API_CONTEXT + '/files/preview';
 
 
 export const API_USER_INFO = API_BASE_URL + API_CONTEXT + '/users/me';
@@ -27,3 +28,5 @@ export const API_USER_INFO = API_BASE_URL + API_CONTEXT + '/users/me';
 //autofill cities api and image upload api
 
 export const API_IMAGE_UPLOAD = isProduction ? '/image-upload-api' : 'http://192.168.0.190:8081/image-upload-api';
+
+export const API_PREVIEW = isProduction ? '/preview/' : 'http://192.168.0.125:9000/user-files/';

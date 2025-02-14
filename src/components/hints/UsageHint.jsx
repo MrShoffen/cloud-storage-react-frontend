@@ -4,6 +4,8 @@ import selection from "../../assets/help/selection.mp4";
 import head from "../../assets/help/header.jpg";
 import combo from "../../assets/help/combo.jpg";
 import view from "../../assets/help/view.mp4";
+import {API_PREVIEW} from "../../UrlConstants.jsx";
+import ReactPlayer from "react-player";
 
 
 export const UsageHint = () => {
@@ -25,6 +27,13 @@ export const UsageHint = () => {
                     <source src={selection} type="video/mp4"/>
                     Ваш браузер не поддерживает видео.
                 </video>
+
+                <ReactPlayer
+                    url={API_PREVIEW + '5/test.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=user%2F20250214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250214T180250Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=4bf43635d6164c7cf51c47deb3a186a83a03f383b020bada2ed92a3b7a94871a'} // Ссылка на видео
+                    controls={true} // Включить элементы управления (пауза, громкость и т.д.)
+                    width="100%"   // Ширина плеера
+                    height="auto"  // Высота плеера (автоматическая)
+                />
             </Box>
 
             <Divider sx={{ml: -10, mr: -10}}/>

@@ -5,6 +5,8 @@ import {throwSpecifyException} from "../../../../exception/ThrowSpecifyException
 
 export async function sendUpload(files, updateDownloadTask, updateTask, uploadTask, currPath) {
 
+    console.log(currPath);
+    console.log(files + ' === ' + currPath)
     const formData = new FormData();
     files.forEach(({file, path}) => {
         formData.append("object", file, path);
