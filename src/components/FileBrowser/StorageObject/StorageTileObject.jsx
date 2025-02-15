@@ -11,6 +11,8 @@ import ContentCutIcon from '@mui/icons-material/ContentCut';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {API_PREVIEW} from "../../../UrlConstants.jsx";
 import {sendGetPreview} from "../../../services/fetch/auth/storage/SendGetPreview.js";
+import {FilePreview} from "./FilePreview.jsx";
+
 
 export default function StorageTileObject({object, style, selectedIds, bufferIds, handlePreview}) {
     const isMob = isMobile;
@@ -79,7 +81,8 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
         let format = object.path.substring(dotIndex + 1);
 
         return format === 'jpg' || format === 'png'
-            || format === 'gif' || format === 'jpeg' || format === 'bmp';
+            || format === 'gif' || format === 'jpeg' || format === 'bmp'
+            || format === 'mp4' || format === 'webm' || format === 'mov';
 
     }
 
@@ -106,6 +109,7 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
                         opacity: copied || cutted ? 0.5 : 1,
                         minWidth: isLarge ? 160 : 100,
                         minHeight: isLarge ? 185 : 120,
+                        maxHeight: isLarge ? 185 : 120,
 
                         backgroundColor: selected ? "objectSelected" : "transparent",
                         borderRadius: 2,
@@ -116,21 +120,19 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
                     elevation={0}
                 >
 
-                    <Box sx={{width: '100%', position: 'absolute', top: 8, left: '50%', transform: 'translate(-50%)'}}>
-                        {preview ? <img alt={""}
-                                        style={{
-                                            height: isLarge ? '150px' : '80px',
-                                            position: 'absolute',
-                                            transform: 'translate(-50%, 0%)',
-                                            left: '50%',
-                                            userSelect: 'none',
-                                            pointerEvents: 'none',
-                                        }}
-                                        src={API_PREVIEW + preview}
-                                        onError={() => setPreview("")}
-                            />
+                    <Box sx={{width: '100%', height: '80%',
+                        pl: '5px',
+                        pr: '5px',
+                        pt: '5px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        overflow: 'hidden',
+                    }}>
+                        {preview ?
+                            <FilePreview  preview={preview} name={object.name} />
                             :
-                            <FileFormatIcon name={object.name} style={style}/>
+                            <FileFormatIcon  name={object.name} style={style}/>
 
                         }
                         {copied && <ContentCopyIcon/>}

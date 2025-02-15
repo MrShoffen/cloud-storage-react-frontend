@@ -1735,6 +1735,7 @@ export const FileFormatIcon = ({name, style = 'regularTiles'}) => {
         >
             <img src={icon} style={{
                 width: '100%',
+                marginTop: '8px',
                 userSelect: 'none',
                 pointerEvents: 'none',
 
