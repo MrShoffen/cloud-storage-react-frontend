@@ -116,6 +116,9 @@ export const FileOperationsProvider = ({children}) => {
 
         const uploadTasks = allNames.map(source => {
             let task = createTask(source, null, "upload", "В очереди на загрузку");
+            if (nameAlreadyExists(source)){
+                task = {...task, status: "error", message: "'" + extractSimpleName(source) + "'" +  ' уже существует в папке' };
+            }
             let files = innerFolders[source] ? innerFolders[source] :
                 [filesWithoutFolder.find(({file}) => file.name === source)];
             return {task, files}
@@ -127,7 +130,7 @@ export const FileOperationsProvider = ({children}) => {
                 task = {...task, progress: 0}
                 return {task, files}
             })
-            .filter((task) => !identicalTasks(task));
+            .filter(({task}) => !identicalTasks(task));
 
         console.log(uniqueTasks);
         setTasks(tasks => [...tasks, ...uniqueTasks.map(({task}) => task)]);

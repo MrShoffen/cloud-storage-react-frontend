@@ -42,7 +42,7 @@ export const StorageNavigationProvider = ({children}) => {
         setFolderContentLoading(false)
     }
 
-    const [folderContent, setFolderContent] = useState(null);
+    const [folderContent, setFolderContent] = useState([]);
 
     const createSpoofObject = (object) => {
         setFolderContent( [...folderContent, object])

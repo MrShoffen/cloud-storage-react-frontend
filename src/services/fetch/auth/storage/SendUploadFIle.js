@@ -28,7 +28,7 @@ export async function sendUpload(files, updateDownloadTask, updateTask, uploadTa
 
                 updateDownloadTask(uploadTask, progressEvent.progress * 100);
             },
-        })
+        });
 
         let resp = response.data[0];
 
@@ -40,7 +40,7 @@ export async function sendUpload(files, updateDownloadTask, updateTask, uploadTa
         }
     } catch (error) {
         console.log(error);
-        updateTask(uploadTask, "error", error.detail);
+        updateTask(uploadTask, "error", "Ошибка при загрузке. Попробуйте позже");
     }
 
 
