@@ -2,7 +2,7 @@ import {API_FILES_PREVIEW} from "../../../../UrlConstants.jsx";
 
 export const sendGetPreview = async (path) => {
 
-    const params = new URLSearchParams({object: path});
+    const params = new URLSearchParams({path: path});
 
     const fetchUrl = `${API_FILES_PREVIEW}?${params.toString()}`;
 

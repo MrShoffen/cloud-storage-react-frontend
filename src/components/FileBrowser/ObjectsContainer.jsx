@@ -9,7 +9,6 @@ import {FileSelection} from "../Selection/FileSelection.jsx";
 import {useStorageView} from "../../context/Storage/StorageViewProvider.jsx";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
-import RenameModal from "../../modals/FileChange/RenameModal.jsx";
 import {UsageHint} from "../hints/UsageHint.jsx";
 import FilePreviewModal from "../../modals/FilePreviewModal/FilePreviewModal.jsx";
 
@@ -38,7 +37,6 @@ export const ObjectsContainer = () => {
 
     const handleOpenPreview = (object) => {
         setObjectPreview(object);
-
         setPreviewModal(true);
 
     }

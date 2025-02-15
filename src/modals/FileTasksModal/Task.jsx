@@ -1,14 +1,11 @@
 import {Box, Card, LinearProgress} from "@mui/material";
 import {FileFormatIcon} from "../../assets/FileFormatIcon.jsx";
-import {ObjectListName} from "../../components/FileBrowser/elements/ObjectListName.jsx";
-import CheckIcon from "@mui/icons-material/Check";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import {extractSimpleName} from "../../services/util/Utils.js";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
-import {API_DOWNLOAD_FILES} from "../../UrlConstants.jsx";
 
 
 export const Task = ({task}) => {

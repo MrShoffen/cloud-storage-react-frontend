@@ -1,21 +1,12 @@
-import {Box, CircularProgress, Container, Divider} from "@mui/material";
-import Typography from "@mui/material/Typography";
+import {Box, CircularProgress, Container} from "@mui/material";
 import {useStorageNavigation} from "../context/Storage/StorageNavigationProvider.jsx";
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {ObjectsContainer} from "../components/FileBrowser/ObjectsContainer.jsx";
 import {FileBrowserHeader} from "../components/FileBrowserHeader/FileBrowserHeader.jsx";
-import {SelectHeader} from "../components/Selection/SelectHeader/SelectHeader.jsx";
 import {FileTasksModal} from "../modals/FileTasksModal/FileTasksModal.jsx";
-import selection from "../assets/help/selection.mp4"
-import combo from "../assets/help/combo.jpg"
-import head from "../assets/help/header.jpg"
-import view from "../assets/help/view.mp4";
-import axios from "axios";
-import {API_IMAGE_UPLOAD} from "../UrlConstants.jsx";
 import * as React from "react";
 import {FileUploadDraggableArea} from "../components/InputElements/Upload/FileUploadDraggableArea.jsx";
-import {UsageHint} from "../components/hints/UsageHint.jsx";
 
 const LoadingBox = () => {
     return (

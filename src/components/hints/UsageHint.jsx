@@ -8,8 +8,6 @@ import view from "../../assets/help/view.mp4";
 import navigation from "../../assets/help/navigation.mp4";
 import header from "../../assets/help/header.mp4";
 import tasks from "../../assets/help/tasks.mp4";
-import {API_PREVIEW} from "../../UrlConstants.jsx";
-import ReactPlayer from "react-player";
 
 
 export const UsageHint = () => {

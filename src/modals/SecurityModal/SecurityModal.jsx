@@ -1,18 +1,15 @@
 import React, {useState} from "react";
-import {Box, Button, Divider, Modal, Slide, Typography} from "@mui/material";
+import {Box, Button, Modal, Slide, Typography} from "@mui/material";
 import {useAuthContext} from "../../context/Auth/AuthContext.jsx";
 import AnimatedElement from "../../components/InputElements/AnimatedElement.jsx";
 import {useNavigate} from "react-router-dom";
-import {styled} from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import ValidatedPasswordField from "../../components/InputElements/TextField/ValidatedPasswordField.jsx";
 import ValidatedPasswordConfirmField from "../../components/InputElements/TextField/ValidatedPasswordConfirmField.jsx";
-import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import {useNotification} from "../../context/Notification/NotificationProvider.jsx";
 import {sendEditUser} from "../../services/fetch/auth/user/SendEditUser.js";
-import ForbiddenException from "../../exception/ForbiddenException.jsx";
 import UnauthorizedException from "../../exception/UnauthorizedException.jsx";
 
 

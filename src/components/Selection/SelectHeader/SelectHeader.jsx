@@ -1,23 +1,15 @@
-import {AppBar, Box, Button, Container, Drawer, Toolbar} from "@mui/material";
+import {Container, Toolbar} from "@mui/material";
 import React, {useState} from "react";
-import {useStorageNavigation} from "../../../context/Storage/StorageNavigationProvider.jsx";
-import MainLabel from "../../Header/MainLabel.jsx";
-import {HeaderSearchField} from "../../InputElements/HeaderSearchField.jsx";
-import DarkModeSwitcher from "../../Header/DarkModeSwitcher.jsx";
-import {Settings} from "../../Header/SettingsMenu/Settings.jsx";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Typography from "@mui/material/Typography";
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import {useStorageSelection} from "../../../context/Storage/StorageSelectionProvider.jsx";
 import {useStorageOperations} from "../../../context/Files/FileOperationsProvider.jsx";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
-import {sendDownloadFile} from "../../../services/fetch/auth/storage/SendDownloadFIle.js";
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import RenameModal from "../../../modals/FileChange/RenameModal.jsx";
 

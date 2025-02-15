@@ -1,6 +1,5 @@
 import './Circular.css'
 import {useEffect, useState} from "react";
-import {useAuthContext} from "../../../context/Auth/AuthContext.jsx";
 
 
 export const CircularLoading = ({loading}) => {

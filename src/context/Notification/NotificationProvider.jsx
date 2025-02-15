@@ -1,7 +1,7 @@
-import React, {createContext, useContext, useState, useEffect} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import {AlertTitle, Slide, Grow} from '@mui/material';
+import {AlertTitle} from '@mui/material';
 
 const NotificationContext = createContext();
 export const useNotification = () => useContext(NotificationContext);

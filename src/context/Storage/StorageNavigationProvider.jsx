@@ -30,6 +30,8 @@ export const StorageNavigationProvider = ({children}) => {
         await updateCurrentFolderContent(updatedPath);
         setFolderContentLoading(false);
     }
+
+
     const goToFolder = async (folderName) => {
         setFolderContentLoading(true);
 
@@ -41,6 +43,11 @@ export const StorageNavigationProvider = ({children}) => {
     }
 
     const [folderContent, setFolderContent] = useState(null);
+
+    const createSpoofObject = (object) => {
+        setFolderContent( [...folderContent, object])
+    }
+
 
     const getObjectByPath = (path) => {
         return folderContent.find(object => object.path === path);
@@ -98,6 +105,7 @@ export const StorageNavigationProvider = ({children}) => {
             goToFolder,
             loadFolder,
             currentPathRef,
+            createSpoofObject,
 
             getObjectByPath
         }}>

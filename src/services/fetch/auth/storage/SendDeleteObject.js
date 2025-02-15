@@ -5,7 +5,7 @@ import {throwSpecifyException} from "../../../../exception/ThrowSpecifyException
 export const sendDeleteObject = async (objectName) => {
 
 
-    const params = new URLSearchParams({object: objectName});
+    const params = new URLSearchParams({path: objectName});
 
     const url = `${API_FILES}?${params.toString()}`;
 

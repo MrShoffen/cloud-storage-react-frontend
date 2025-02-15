@@ -1,6 +1,4 @@
-import {Card, Container, Fab} from "@mui/material";
-import {useState} from "react";
-import AddIcon from "@mui/icons-material/Add";
+import {Card, Container} from "@mui/material";
 import {FilePageButton} from "../components/FilePageButton/FilePageButton.jsx";
 import {useAuthContext} from "../context/Auth/AuthContext.jsx";
 import {UsageHint} from "../components/hints/UsageHint.jsx";

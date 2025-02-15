@@ -1,17 +1,14 @@
-import React, {useEffect, useState} from "react";
-import {Box, Button, Grow, Modal, Slide, Typography, Zoom} from "@mui/material";
+import React, {useEffect} from "react";
+import {Box, Modal, Typography} from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import ValidatedFileName from "../../components/InputElements/TextField/ValidatedFileName.jsx";
-import {extractSimpleName, formatDate, getCurrentDateTime} from "../../services/util/Utils.js";
-import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
+import {extractSimpleName, formatDate} from "../../services/util/Utils.js";
 import bytes from "bytes";
 import {sendGetPreview} from "../../services/fetch/auth/storage/SendGetPreview.js";
 import {API_PREVIEW} from "../../UrlConstants.jsx";
 import ReactPlayer from "react-player";
 
-import DocViewer, {DocViewerRenderers} from "react-doc-viewer";
 import {FileFormatIcon} from "../../assets/FileFormatIcon.jsx";
 
 export default function FilePreviewModal({
@@ -34,7 +31,7 @@ export default function FilePreviewModal({
     const [preview, setPreview] = React.useState("");
     useEffect(() => {
 
-        if (open && !preview && object.path && allowedPreviewFormat(format)) {
+        if (open  && allowedPreviewFormat(format)) {
             getPreview(object.path);
         }
 
@@ -50,7 +47,7 @@ export default function FilePreviewModal({
 
     const getContentViewer = (format) => {
         let src = API_PREVIEW + preview;
-
+        console.log(object);
 
         if (format === 'jpg' || format === 'png'
             || format === 'gif' || format === 'jpeg' || format === 'bmp') {
@@ -90,7 +87,7 @@ export default function FilePreviewModal({
     }
 
     return (
-        <Modal disableEnforceFocus  open={open} onClose={onClose} sx={{position: 'fixed', top: 0}}>
+        <Modal  open={open} onClose={onClose} sx={{position: 'fixed', top: 0}}>
 
                 <Card variant="outlined"
                       sx={{

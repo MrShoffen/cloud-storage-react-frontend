@@ -1,16 +1,12 @@
 import {useAuthContext} from "../context/Auth/AuthContext.jsx";
 import {Card, CircularProgress, Container} from "@mui/material";
-import {FilePageButton} from "../components/FilePageButton/FilePageButton.jsx";
 import {useEffect, useState} from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import * as React from "react";
-import {API_FILES, API_IMAGE_UPLOAD} from "../UrlConstants.jsx";
-import {throwSpecifyException} from "../exception/ThrowSpecifyException.jsx";
+import {API_IMAGE_UPLOAD} from "../UrlConstants.jsx";
 import {sendRegistrationForm} from "../services/fetch/unauth/SendRegistrationForm.js";
-import ConflictException from "../exception/ConflictException.jsx";
 import {sendLoginForm} from "../services/fetch/unauth/SendLoginForm.js";
-import UnauthorizedException from "../exception/UnauthorizedException.jsx";
 
 
 export default function FastLogin() {

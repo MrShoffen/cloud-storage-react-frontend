@@ -2,14 +2,14 @@ import React, {createContext, useContext, useEffect, useState} from "react";
 import {sendDeleteObject} from "../../services/fetch/auth/storage/SendDeleteObject.js";
 import {useStorageNavigation} from "../Storage/StorageNavigationProvider.jsx";
 import {sendMoveObject} from "../../services/fetch/auth/storage/SendMoveObject.js";
-import {extractSimpleName, getCurrentDateTime} from "../../services/util/Utils.js";
+import {extractSimpleName} from "../../services/util/Utils.js";
 import {useStorageSelection} from "../Storage/StorageSelectionProvider.jsx";
 import {sendCopyObject} from "../../services/fetch/auth/storage/SendCopyObjects.js";
 import {nanoid} from 'nanoid';
 import {sendDownloadFile} from "../../services/fetch/auth/storage/SendDownloadFIle.js";
 import bytes from "bytes";
 import RenameModal from "../../modals/FileChange/RenameModal.jsx";
-import {handleUpload, sendUpload} from "../../services/fetch/auth/storage/SendUploadFIle.js";
+import {sendUpload} from "../../services/fetch/auth/storage/SendUploadFIle.js";
 
 const FileOperationsContext = createContext();
 
@@ -169,9 +169,7 @@ export const FileOperationsProvider = ({children}) => {
     const moveObjects = (sourceObjects, target) => {
         const moveTasks = sourceObjects.map(source => createTask(source, target + extractSimpleName(source), "move", "В очереди для перемещения"));
 
-        if (sourceObjects.length == 1 && checkConflicts([target + extractSimpleName(sourceObjects[0])])) {
-            return;
-        }
+
 
         let uniqueTasks = moveTasks.filter((task) => !identicalTasks(task));
 

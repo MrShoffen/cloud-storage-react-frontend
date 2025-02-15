@@ -9,7 +9,6 @@ import {useStorageSelection} from "../../../context/Storage/StorageSelectionProv
 import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
-import FilePreviewModal from "../../../modals/FilePreviewModal/FilePreviewModal.jsx";
 
 const isMob = isMobile;
 
@@ -18,6 +17,8 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
 
     const {goToFolder} = useStorageNavigation();
     const {setSelectionMode, isSelectionMode, isCutMode, isCopyMode} = useStorageSelection();
+
+    const hiddenFolderTag = object.name === '*empty-folder-tag*'
 
     const onClick = isMob ? () => {
         if (object.folder && !isSelectionMode && !copied && !cutted) {
@@ -56,51 +57,55 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
     const cutted = bufferIds.includes(object.path) && isCutMode;
 
     return (
-        <Card
-            data-id={object.path}
-            className={'selectable'}
-            onDoubleClick={onDoubleClick}
+        <>
+            {!hiddenFolderTag &&
+                <Card
+                    data-id={object.path}
+                    className={'selectable'}
+                    onDoubleClick={onDoubleClick}
 
-            {...longPressEvent}
-            onClick={onClick}
+                    {...longPressEvent}
+                    onClick={onClick}
 
-            sx={{
-                position: 'relative',
-                minWidth: 20,
-                opacity: copied || cutted ? 0.5 : 1,
-                minHeight: 50,
-                backgroundColor: selected ? "objectSelected" : "transparent",
-                borderRadius: 2,
-                display: 'flex',         // Добавляем flex-контейнер
-                alignItems: 'center',    // Выравниваем по вертикали
-                paddingLeft: 5,          // Немного отступа от края
-                '&:hover': {
-                    backgroundColor: selected ? "objectSelected" : "objectHover",
-                }
-            }}
-            elevation={0}
-        >
-            <Box sx={{position: 'absolute', width: '20px', left: 8, bottom: 5,}}>
-                <FileFormatIcon name={object.name} style={style}/>
-                {copied && <ContentCopyIcon
-                    sx={{color: 'black', position: 'absolute', fontSize: '15px', bottom: 11, left: 3}}/>}
-                {cutted && <ContentCutIcon
-                    sx={{color: 'black', position: 'absolute', fontSize: '15px', bottom: 11, left: 3}}/>}
-
-            </Box>
-
-            <ObjectListName object={object}/>
-
-            {selected &&
-                <CheckIcon
                     sx={{
-                        position: 'absolute',
-                        right: '8px', // Отступ от правого края
-                        color: 'primary.dark', // Цвет галочки
+                        position: 'relative',
+                        minWidth: 20,
+                        opacity: copied || cutted ? 0.5 : 1,
+                        minHeight: 50,
+                        backgroundColor: selected ? "objectSelected" : "transparent",
+                        borderRadius: 2,
+                        display: 'flex',         // Добавляем flex-контейнер
+                        alignItems: 'center',    // Выравниваем по вертикали
+                        paddingLeft: 5,          // Немного отступа от края
+                        '&:hover': {
+                            backgroundColor: selected ? "objectSelected" : "objectHover",
+                        }
                     }}
-                />
-            }
+                    elevation={0}
+                >
+                    <Box sx={{position: 'absolute', width: '20px', left: 8, bottom: 5,}}>
+                        <FileFormatIcon name={object.name} style={style}/>
+                        {copied && <ContentCopyIcon
+                            sx={{color: 'black', position: 'absolute', fontSize: '15px', bottom: 11, left: 3}}/>}
+                        {cutted && <ContentCutIcon
+                            sx={{color: 'black', position: 'absolute', fontSize: '15px', bottom: 11, left: 3}}/>}
 
-        </Card>
+                    </Box>
+
+                    <ObjectListName object={object}/>
+
+                    {selected &&
+                        <CheckIcon
+                            sx={{
+                                position: 'absolute',
+                                right: '8px', // Отступ от правого края
+                                color: 'primary.dark', // Цвет галочки
+                            }}
+                        />
+                    }
+
+                </Card>
+            }
+        </>
     );
 }

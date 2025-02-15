@@ -1,42 +1,15 @@
-import {useCallback, useEffect, useRef, useState} from "react";
-import axios from "axios";
-import {API_IMAGE_UPLOAD} from "../../../UrlConstants.jsx";
-import {Box, Container} from "@mui/material";
 import * as React from "react";
+import {useCallback, useEffect, useRef} from "react";
+import {Box} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {useStorageOperations} from "../../../context/Files/FileOperationsProvider.jsx";
-import {useStorageNavigation} from "../../../context/Storage/StorageNavigationProvider.jsx";
+import {useNotification} from "../../../context/Notification/NotificationProvider.jsx";
 
 export const FileUploadDraggableArea = ({dragRef, isDragging, setIsDragging}) => {
 
     const {uploadObjects} = useStorageOperations();
 
-
-    const [files, setFiles] = useState([]);
-    const [progress, setProgress] = useState(0);
-    const [isUploading, setIsUploading] = useState(false);
-
-    const fileInputRef = useRef(null);
-    const folderInputRef = useRef(null);
-
-    // Обработчик выбора файлов/папок
-    const handleInputChange = (e, isFolder) => {
-        const newFiles = Array.from(e.target.files);
-
-        if (isFolder) {
-            const filesWithPath = newFiles.map((file) => ({
-                file,
-                path: file.webkitRelativePath,
-            }));
-            setFiles((prev) => [...prev, ...filesWithPath]);
-        } else {
-            const filesWithoutPath = newFiles.map((file) => ({
-                file,
-                path: file.name,
-            }));
-            setFiles((prev) => [...prev, ...filesWithoutPath]);
-        }
-    };
+    const {showWarn} = useNotification();
 
     const dragCounter = useRef(0);
     // Обработчик перетаскивания
@@ -107,42 +80,13 @@ export const FileUploadDraggableArea = ({dragRef, isDragging, setIsDragging}) =>
 
         Promise.all(droppedItems.map((item) => processItem(item)))
             .then(() => {
-                // setFiles((prev) => [...prev, ...newFiles]);
                 uploadObjects(newFiles);
+                if(newFiles.length === 0){
+                    showWarn("Нельзя загружать пустые папки")
+                }
             });
     }, []);
 
-    // Отправка файлов
-    const handleUpload = async () => {
-        if (!files.length || isUploading) return;
-
-        const formData = new FormData();
-        files.forEach(({file}) => {
-            formData.append('image', file);
-        });
-
-        try {
-            setIsUploading(true);
-            const response = await axios.post(API_IMAGE_UPLOAD, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                onUploadProgress: (progressEvent) => {
-                    const percent = Math.round(
-                        (progressEvent.loaded * 100) / progressEvent.total
-                    );
-                    setProgress(percent);
-                },
-            });
-            console.log('Upload success:', response.data);
-            setFiles([]);
-            setProgress(0);
-        } catch (error) {
-            console.log('Upload failed:', error.message);
-        } finally {
-            setIsUploading(false);
-        }
-    };
 
     // Добавляем обработчики событий на весь документ
     useEffect(() => {
@@ -157,7 +101,6 @@ export const FileUploadDraggableArea = ({dragRef, isDragging, setIsDragging}) =>
 
     return (
         <>
-
             {isDragging &&
                 <Box
                     sx={{
@@ -217,73 +160,9 @@ export const FileUploadDraggableArea = ({dragRef, isDragging, setIsDragging}) =>
                         >
                             Максимальный размер для загрузки - 2Гб
                         </Typography>
-
-                        {/*/!* Fullscreen Drop Zone *!/*/}
-                        {/*{isDragging && (*/}
-                        {/*    <div className="fullscreen-drop-zone">*/}
-                        {/*        Перетащите файлы или папки сюда*/}
-                        {/*    </div>*/}
-                        {/*)}*/}
-
-                        {/*<div className="input-buttons">*/}
-                        {/*    <input*/}
-                        {/*        type="file"*/}
-                        {/*        ref={fileInputRef}*/}
-                        {/*        multiple*/}
-                        {/*        onChange={(e) => handleInputChange(e, false)}*/}
-                        {/*        style={{display: 'none'}}*/}
-                        {/*    />*/}
-                        {/*    <button onClick={() => fileInputRef.current.click()}>*/}
-                        {/*        Выбрать файлы*/}
-                        {/*    </button>*/}
-
-                        {/*    <input*/}
-                        {/*        type="file"*/}
-                        {/*        ref={folderInputRef}*/}
-                        {/*        webkitdirectory="true"*/}
-                        {/*        directory="true"*/}
-                        {/*        onChange={(e) => handleInputChange(e, true)}*/}
-                        {/*        style={{display: 'none'}}*/}
-                        {/*    />*/}
-                        {/*    <button onClick={() => folderInputRef.current.click()}>*/}
-                        {/*        Выбрать папку*/}
-                        {/*    </button>*/}
-                        {/*</div>*/}
-
-
                     </Box>
                 </Box>
             }
-
-            {/*{files.length > 0 && (*/}
-            {/*    <div className="file-list">*/}
-            {/*        <h4>Выбранные файлы:</h4>*/}
-            {/*        <ul>*/}
-            {/*            {files.map((file, index) => (*/}
-            {/*                <li key={index}>{file.path}</li>*/}
-            {/*            ))}*/}
-            {/*        </ul>*/}
-            {/*    </div>*/}
-            {/*)}*/}
-
-            {/*<div className="upload-controls">*/}
-            {/*    <button*/}
-            {/*        onClick={handleUpload}*/}
-            {/*        disabled={!files.length || isUploading}*/}
-            {/*    >*/}
-            {/*        {isUploading ? 'Идет загрузка...' : 'Начать загрузку'}*/}
-            {/*    </button>*/}
-
-            {/*    {isUploading && (*/}
-            {/*        <div className="progress-bar">*/}
-            {/*            <div*/}
-            {/*                className="progress-fill"*/}
-            {/*                style={{width: `${progress}%`}}*/}
-            {/*            />*/}
-            {/*            <span>{progress}%</span>*/}
-            {/*        </div>*/}
-            {/*    )}*/}
-            {/*</div>*/}
         </>
     );
 };

@@ -1,19 +1,20 @@
-import {API_COPY_FILES} from "../../../../UrlConstants.jsx";
+import {API_FILES} from "../../../../UrlConstants.jsx";
 import {throwSpecifyException} from "../../../../exception/ThrowSpecifyException.jsx";
 
 
-export const sendCopyObject = async (source, target) => {
+export const sendCreateFolder = async (path) => {
 
-    const params = new URLSearchParams({from: source, path: target});
 
-    const url = `${API_COPY_FILES}?${params.toString()}`;
+    const params = new URLSearchParams({ path: path});
+
+    const url = `${API_FILES}?${params.toString()}`;
 
     const response = await fetch(url, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        credentials: 'include'
+        credentials: 'include',
     });
 
 

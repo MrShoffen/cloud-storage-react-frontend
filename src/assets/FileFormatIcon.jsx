@@ -403,7 +403,7 @@ import z from "./icons/z.svg";
 import zip from "./icons/zip.svg";
 import zsh from "./icons/zsh.svg";
 import unknown from "./icons/unknown.svg";
-import {Box, Button, SvgIcon} from "@mui/material";
+import {Box} from "@mui/material";
 import folderIc from "./icons/folder.svg";
 import React from "react";
 

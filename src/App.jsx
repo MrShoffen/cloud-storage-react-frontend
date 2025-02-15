@@ -1,6 +1,6 @@
 import './App.css'
 
-import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {BaseLayout} from "./pages/BaseLayout.jsx";
 import {GlobalProvider} from "./context/GlobalProvider.jsx";
 import {SignIn} from "./pages/SignIn.jsx";

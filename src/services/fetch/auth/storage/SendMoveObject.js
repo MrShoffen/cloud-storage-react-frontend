@@ -5,15 +5,16 @@ import {throwSpecifyException} from "../../../../exception/ThrowSpecifyException
 export const sendMoveObject = async (source, target) => {
 
 
-    const data = {sourcePath: source, targetPath: target};
+    const params = new URLSearchParams({from: source, path: target});
 
-    const response = await fetch(API_MOVE_FILES, {
+    const url = `${API_MOVE_FILES}?${params.toString()}`;
+
+    const response = await fetch(url, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(data),
     });
 
 

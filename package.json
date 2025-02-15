@@ -15,35 +15,22 @@
     "@fontsource/roboto": "^5.1.1",
     "@mui/icons-material": "^6.4.2",
     "@mui/material": "^6.4.2",
-    "@rpldy/upload-button": "^1.9.1",
-    "@rpldy/uploady": "^1.9.1",
     "axios": "^1.7.9",
     "bytes": "^3.1.2",
     "depcheck": "^1.4.7",
     "framer-motion": "^12.4.1",
-    "moveable": "^0.53.0",
     "nanoid": "^5.0.9",
     "react": "^18.3.1",
     "react-device-detect": "^2.2.3",
-    "react-doc-viewer": "^0.1.14",
     "react-dom": "^18.3.1",
-    "react-drag-select": "^1.0.0",
-    "react-pdf": "^9.2.1",
     "react-player": "^2.16.0",
     "react-router-dom": "^7.1.5",
-    "react-selectable-fast": "^3.4.0",
-    "react-selecto": "^1.26.3",
-    "uploady": "^0.6.6",
-    "uuid": "^11.0.5"
+    "react-selecto": "^1.26.3"
   },
   "devDependencies": {
     "@types/react": "^18.3.18",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.17.0",
-    "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.16",
-    "globals": "^15.14.0",
     "vite": "^6.0.5"
   }
 }

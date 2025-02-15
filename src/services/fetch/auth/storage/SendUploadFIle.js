@@ -1,6 +1,5 @@
 import axios from "axios";
 import {API_UPLOAD_FILES} from "../../../../UrlConstants.jsx";
-import {throwSpecifyException} from "../../../../exception/ThrowSpecifyException.jsx";
 
 
 export async function sendUpload(files, updateDownloadTask, updateTask, uploadTask, currPath) {
@@ -11,7 +10,7 @@ export async function sendUpload(files, updateDownloadTask, updateTask, uploadTa
     files.forEach(({file, path}) => {
         formData.append("object", file, path);
     })
-    formData.append("folder", currPath);
+    formData.append("path", currPath);
 
 
     let shouldReadProgress = true;
@@ -40,7 +39,8 @@ export async function sendUpload(files, updateDownloadTask, updateTask, uploadTa
             updateTask(uploadTask, "completed", "Загружено");
         }
     } catch (error) {
-        // console.log(error)
+        console.log(error);
+        updateTask(uploadTask, "error", error.detail);
     }
 
 

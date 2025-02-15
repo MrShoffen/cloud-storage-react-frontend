@@ -9,16 +9,17 @@ import {useStorageSelection} from "../../../context/Storage/StorageSelectionProv
 import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
 import ContentCutIcon from '@mui/icons-material/ContentCut';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import {useStorageOperations} from "../../../context/Files/FileOperationsProvider.jsx";
-import {API_DOWNLOAD_FILES, API_FILES_PREVIEW, API_PREVIEW} from "../../../UrlConstants.jsx";
+import {API_PREVIEW} from "../../../UrlConstants.jsx";
 import {sendGetPreview} from "../../../services/fetch/auth/storage/SendGetPreview.js";
-import FilePreviewModal from "../../../modals/FilePreviewModal/FilePreviewModal.jsx";
 
 export default function StorageTileObject({object, style, selectedIds, bufferIds, handlePreview}) {
     const isMob = isMobile;
     const isLarge = style === 'largeTiles'
     const {goToFolder} = useStorageNavigation();
     const {setSelectionMode, isSelectionMode, isCutMode, isCopyMode} = useStorageSelection();
+
+
+    const hiddenFolderTag = object.name === '*empty-folder-tag*'
 
     const onClick = isMob ? () => {
         if (object.folder && !isSelectionMode && !copied && !cutted) {
@@ -91,49 +92,54 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
 
 
     return (
-        <Card
-            data-id={object.path}
-            className={'selectable'}
-            onClick={onClick}
+        <>
+            {!hiddenFolderTag &&
+                <Card
+                    data-id={object.path}
+                    className={'selectable'}
+                    onClick={onClick}
 
-            {...longPressEvent}
-            onDoubleClick={onDoubleClick}
-            sx={{
-                position: 'relative',
-                opacity: copied || cutted ? 0.5 : 1,
-                minWidth: isLarge ? 160 : 100,
-                minHeight: isLarge ? 185 : 120,
+                    {...longPressEvent}
+                    onDoubleClick={onDoubleClick}
+                    sx={{
+                        position: 'relative',
+                        opacity: copied || cutted ? 0.5 : 1,
+                        minWidth: isLarge ? 160 : 100,
+                        minHeight: isLarge ? 185 : 120,
 
-                backgroundColor: selected ? "objectSelected" : "transparent",
-                borderRadius: 2,
-                '&:hover': {
-                    backgroundColor: selected ? "objectSelected" : "objectHover",
-                }
-            }}
-            elevation={0}
-        >
-            <Box sx={{width: '100%', position: 'absolute', top: 8, left: '50%', transform: 'translate(-50%)'}}>
-                {preview ? <img alt={""}
-                                style={{
-                                    height: isLarge ? '150px' : '80px',
-                                    position: 'absolute',
-                                    transform: 'translate(-50%, 0%)',
-                                    left: '50%',
-                                    userSelect: 'none',
-                                    pointerEvents: 'none',
-                                }}
-                                src={API_PREVIEW + preview}
-                                onError={() => setPreview("")}
-                    />
-                    :
-                    <FileFormatIcon name={object.name} style={style}/>
+                        backgroundColor: selected ? "objectSelected" : "transparent",
+                        borderRadius: 2,
+                        '&:hover': {
+                            backgroundColor: selected ? "objectSelected" : "objectHover",
+                        }
+                    }}
+                    elevation={0}
+                >
 
-                }
-                {copied && <ContentCopyIcon/>}
-                {cutted && <ContentCutIcon/>}
+                    <Box sx={{width: '100%', position: 'absolute', top: 8, left: '50%', transform: 'translate(-50%)'}}>
+                        {preview ? <img alt={""}
+                                        style={{
+                                            height: isLarge ? '150px' : '80px',
+                                            position: 'absolute',
+                                            transform: 'translate(-50%, 0%)',
+                                            left: '50%',
+                                            userSelect: 'none',
+                                            pointerEvents: 'none',
+                                        }}
+                                        src={API_PREVIEW + preview}
+                                        onError={() => setPreview("")}
+                            />
+                            :
+                            <FileFormatIcon name={object.name} style={style}/>
 
-            </Box>
-            <ObjectName object={object}/>
-        </Card>
+                        }
+                        {copied && <ContentCopyIcon/>}
+                        {cutted && <ContentCutIcon/>}
+
+                    </Box>
+                    <ObjectName object={object}/>
+                </Card>
+            }
+        </>
     );
 }

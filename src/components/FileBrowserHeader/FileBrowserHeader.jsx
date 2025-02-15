@@ -13,6 +13,8 @@ import {useStorageSelection} from "../../context/Storage/StorageSelectionProvide
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
+import AddIcon from '@mui/icons-material/Add';
+import {FolderMenu} from "./FolderMenu/FolderMenu.jsx";
 
 export const FileBrowserHeader = () => {
 
@@ -45,6 +47,14 @@ export const FileBrowserHeader = () => {
     }
     const handleOpenMenu = (event) => {
         setAnchorEl(event.currentTarget);
+    }
+
+    const [anchorElFolder, setAnchorElFolder] = useState(null);
+    const handleCloseFolderMenu = () => {
+        setAnchorElFolder(null);
+    }
+    const handleOpenFolderMenu = (event) => {
+        setAnchorElFolder(event.currentTarget);
     }
 
     const scrollBoxRef = useRef(null);
@@ -135,16 +145,16 @@ export const FileBrowserHeader = () => {
                         {!isCopyMode && !isCutMode ?
                             <Box sx={{
                                 position: 'absolute',
-                                width: "70%",
+                                width: "50%",
 
                                 transform: 'translateX(-50%)',
                                 left: '50%',
-                                bottom: 10,
+                                bottom: 13,
                             }}>
                                 <Typography variant='h5' sx={{
                                     width: '100%',
                                     userSelect: 'none',
-
+                                    fontSize: '20px',
                                     textAlign: 'center',
                                     whiteSpace: 'nowrap',
                                     overflow: 'hidden',
@@ -229,8 +239,11 @@ export const FileBrowserHeader = () => {
                                 </IconButton>
                             </Box>
                         }
+                        <IconButton onClick={handleOpenFolderMenu} variant='contained' sx={{ml: 'auto'}}>
+                            <AddIcon/>
+                        </IconButton>
 
-                        <IconButton onClick={handleOpenMenu} variant='contained' sx={{ml: 'auto'}}>
+                        <IconButton onClick={handleOpenMenu} variant='contained' sx={{ml: '0'}}>
                             <MoreVertIcon/>
                         </IconButton>
 
@@ -238,6 +251,7 @@ export const FileBrowserHeader = () => {
                 </Card>
             </Box>
             <FileMenu anchorEl={anchorEl} handleCloseMenu={handleCloseMenu}/>
+            <FolderMenu anchorEl={anchorElFolder} handleCloseMenu={handleCloseFolderMenu}/>
 
         </Container>
     )

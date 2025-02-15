@@ -1,13 +1,12 @@
 import {API_DOWNLOAD_FILES} from "../../../../UrlConstants.jsx";
 import {extractSimpleName} from "../../../util/Utils.js";
-import bytes from "bytes";
 import {sendGetObjectStats} from "./SendGetObjectStats.js";
 
 
 export const sendDownloadFile = async (downloadTask, updateTask, updateDownloadTask, size, updateDownloadSpeed) => {
     const filePath = downloadTask.operation.source;
 
-    const params = new URLSearchParams({object: filePath});
+    const params = new URLSearchParams({path: filePath});
 
     const fetchUrl = `${API_DOWNLOAD_FILES}?${params.toString()}`;
 
