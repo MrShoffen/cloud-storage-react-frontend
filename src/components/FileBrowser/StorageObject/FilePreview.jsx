@@ -12,6 +12,13 @@ function VideoThumbnail({videoUrl}) {
     useEffect(() => {
         if (!videoUrl) return;
 
+
+        const cachedThumbnail = localStorage.getItem(videoUrl);
+        if (cachedThumbnail) {
+            setThumbnail(cachedThumbnail);
+            return;
+        }
+
         const video = document.createElement('video');
         video.src = videoUrl;
         video.crossOrigin = "anonymous";
@@ -33,6 +40,9 @@ function VideoThumbnail({videoUrl}) {
 
             const thumbnailData = canvas.toDataURL('image/jpeg');
             setThumbnail(thumbnailData);
+
+            localStorage.setItem(videoUrl, thumbnailData);
+
             video.pause();
             video.src = "";
         };
@@ -122,9 +132,7 @@ export const FilePreview = ({name, preview}) => {
     }
 
     return (
-        <Box
-
-        >
+        <Box>
             <FileFormatIcon name={preview} style={"list"}/>
         </Box>
     )
