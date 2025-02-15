@@ -38,7 +38,7 @@ export const UsageHint = () => {
                         sx={{width: '100%', textAlign: 'center', mb: 0,}}>
                 Навигация и просмотр
             </Typography>
-            <Typography sx={{width: '100%', textAlign: 'center', mt: 2, mb: -3, fontSize: '18px'}}>
+            <Typography sx={{width: '100%', textAlign: 'center', mt: 2, mb: 0, fontSize: '18px'}}>
                 Для перехода между папками и открытия файлов используется двойной клик.
             </Typography>
             <Box sx={{display: 'flex', justifyContent: 'center'}}>

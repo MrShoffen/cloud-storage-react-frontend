@@ -410,6 +410,28 @@ export const FileOperationsProvider = ({children}) => {
         handleModalConflictClose();
     }
 
+
+    useEffect(() => {
+
+        let activeTasks = tasks.filter((task) => task.status === "pending" || task.status === "progress");
+
+        const handleBeforeUnload = (event) => {
+            // Отменяем событие и показываем предупреждение
+            if (activeTasks.length > 0) {
+                event.preventDefault();
+                event.returnValue = ''; // Это необходимо для поддержки старых браузеров
+            }
+        };
+
+        // Добавляем обработчик события beforeunload
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        // Убираем обработчик при размонтировании компонента
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [tasks]);
+
     return (<FileOperationsContext.Provider
         value={{
             tasks,

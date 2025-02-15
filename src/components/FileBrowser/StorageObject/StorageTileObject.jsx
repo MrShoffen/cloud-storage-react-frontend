@@ -120,6 +120,7 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
                                     transform: 'translate(-50%, 0%)',
                                     left: '50%',
                                     userSelect: 'none',
+                                    pointerEvents: 'none',
                                 }}
                                 src={API_PREVIEW + preview}
                                 onError={() => setPreview("")}

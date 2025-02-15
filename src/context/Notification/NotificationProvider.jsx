@@ -30,7 +30,7 @@ export const NotificationProvider = ({children}) => {
     });
 
 
-    const showNotification = ({message, severity = 'info', duration = 9000}) => {
+    const showNotification = ({message, severity = 'info', duration = 5000}) => {
         setNotification({
             open: true,
             message,
@@ -46,7 +46,7 @@ export const NotificationProvider = ({children}) => {
         setNotification((prev) => ({...prev, open: false}));
     };
 
-    const showWarn = (warning, duration = 9000) => {
+    const showWarn = (warning, duration = 5000) => {
         showNotification({
             message: warning,
             severity: 'warning',
@@ -54,7 +54,7 @@ export const NotificationProvider = ({children}) => {
         });
     };
 
-    const showInfo = (info, duration = 9000) => {
+    const showInfo = (info, duration = 5000) => {
         showNotification({
             message: info,
             severity: 'info',

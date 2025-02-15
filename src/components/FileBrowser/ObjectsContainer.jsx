@@ -112,7 +112,6 @@ export const ObjectsContainer = () => {
     return (
         <AnimatePresence mode="wait">
 
-            <FilePreviewModal open={previewModal} onClose={handleClosePreview} object={objectPreview}/>
 
             <motion.div
                 key={`${folderContent?.map(item => item.id || item.name).join(",")}`}
@@ -121,6 +120,7 @@ export const ObjectsContainer = () => {
                 variants={animationVariants}
                 transition={{duration: 0.2}}
             >
+                <FilePreviewModal open={previewModal} onClose={handleClosePreview} object={objectPreview}/>
 
                 {
                     (filesView === 'regularTiles' || filesView === 'largeTiles')

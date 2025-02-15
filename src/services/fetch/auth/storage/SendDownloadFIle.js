@@ -1,6 +1,7 @@
 import {API_DOWNLOAD_FILES} from "../../../../UrlConstants.jsx";
 import {extractSimpleName} from "../../../util/Utils.js";
 import bytes from "bytes";
+import {sendGetObjectStats} from "./SendGetObjectStats.js";
 
 
 export const sendDownloadFile = async (downloadTask, updateTask, updateDownloadTask, size, updateDownloadSpeed) => {
@@ -9,6 +10,12 @@ export const sendDownloadFile = async (downloadTask, updateTask, updateDownloadT
     const params = new URLSearchParams({object: filePath});
 
     const fetchUrl = `${API_DOWNLOAD_FILES}?${params.toString()}`;
+
+    if(size === 0){
+        let stats = await sendGetObjectStats(filePath);
+        size = stats.size;
+    }
+    console.log(size);
 
     const response = await fetch(fetchUrl, {
         method: 'GET',

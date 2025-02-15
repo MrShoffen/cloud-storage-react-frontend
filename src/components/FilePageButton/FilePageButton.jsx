@@ -16,7 +16,8 @@ export const FilePageButton = () => {
             right: 15,
             bottom: 20,
             width: 80,
-            height: 80
+            height: 80,
+            zIndex: 99999,
         }}
         >
             <StorageIcon sx={{fontSize: '30px'}}/>
