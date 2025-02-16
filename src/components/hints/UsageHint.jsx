@@ -25,7 +25,7 @@ export const UsageHint = () => {
                 Или нажмите кнопку + в правом верхнем углу.
             </Typography>
             <Box sx={{display: 'flex', justifyContent: 'center'}}>
-                <video width="640" height="360" autoPlay loop muted style={{maxWidth: '640px', width: '100%'}}>
+                <video width="640"  playsInline height="360" autoPlay loop muted style={{maxWidth: '640px', width: '100%'}}>
                     <source src={drag} type="video/mp4"/>
                     Ваш браузер не поддерживает видео.
                 </video>
@@ -41,7 +41,7 @@ export const UsageHint = () => {
                 Для перехода между папками и открытия файлов используется двойной клик.
             </Typography>
             <Box sx={{display: 'flex', justifyContent: 'center'}}>
-                <video width="640" height="360" autoPlay loop muted style={{maxWidth: '640px', width: '100%'}}>
+                <video width="640"  playsInline height="360" autoPlay loop muted style={{maxWidth: '640px', width: '100%'}}>
                     <source src={navigation} type="video/mp4"/>
                     Ваш браузер не поддерживает видео.
                 </video>
@@ -61,7 +61,7 @@ export const UsageHint = () => {
                 Файлы можно выделять по одному - короткими нажатиями или с помощью зажатия кнопкой мыши для множественного выделения.
                 Выделенные файлы можно перемещать в другие папки.
             </Typography>
-            <video width="640" height="360" autoPlay loop muted style={{maxWidth: '640px', width: '100%'}}>
+            <video width="640"  playsInline height="360" autoPlay loop muted style={{maxWidth: '640px', width: '100%'}}>
                 <source src={selection} type="video/mp4"/>
                 Ваш браузер не поддерживает видео.
             </video>
@@ -71,7 +71,7 @@ export const UsageHint = () => {
             <Box sx={{display: 'flex', justifyContent: 'center', mb: 1}}>
                 <img src={head} alt="combo" style={{width: '100%', maxWidth: '640px'}}/>
             </Box>
-            <video width="640" height="360" autoPlay loop muted style={{maxWidth: '640px', width: '100%'}}>
+            <video width="640"  playsInline height="360" autoPlay loop muted style={{maxWidth: '640px', width: '100%'}}>
                 <source src={header} type="video/mp4"/>
                 Ваш браузер не поддерживает видео.
             </video>
@@ -94,7 +94,7 @@ export const UsageHint = () => {
                 Режим отображения и сортировки можно поменять в меню справа
             </Typography>
             <Box sx={{display: 'flex', justifyContent: 'center'}}>
-                <video width="640" height="360" autoPlay loop muted style={{maxWidth: '640px'}}>
+                <video width="640"  playsInline height="360" autoPlay loop muted style={{maxWidth: '640px'}}>
                     <source src={view} type="video/mp4"/>
                     Ваш браузер не поддерживает видео.
                 </video>
@@ -103,7 +103,7 @@ export const UsageHint = () => {
                 При выполнении операций с файлами - в правом нижнем углу появляется окно
                 в котором можно просматривать операции и их статус
             </Typography>
-            <video width="640" height="360" autoPlay loop muted style={{maxWidth: '640px'}}>
+            <video width="640"  playsInline height="360" autoPlay loop muted style={{maxWidth: '640px'}}>
                 <source src={tasks} type="video/mp4"/>
                 Ваш браузер не поддерживает видео.
             </video>
