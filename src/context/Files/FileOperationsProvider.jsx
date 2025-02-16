@@ -10,6 +10,10 @@ import {sendDownloadFile} from "../../services/fetch/auth/storage/SendDownloadFI
 import bytes from "bytes";
 import RenameModal from "../../modals/FileChange/RenameModal.jsx";
 import {sendUpload} from "../../services/fetch/auth/storage/SendUploadFIle.js";
+import {sendGetObjectStats} from "../../services/fetch/auth/storage/SendGetObjectStats.js";
+import {useNotification} from "../Notification/NotificationProvider.jsx";
+import StorageExceedException from "../../exception/StorageExceedException.jsx";
+import NotFoundException from "../../exception/NotFoundException.jsx";
 
 const FileOperationsContext = createContext();
 
@@ -30,6 +34,7 @@ export const FileOperationsProvider = ({children}) => {
 
     const [taskRunning, setTaskRunning] = useState(false);
 
+    const {showError} = useNotification();
 
     const nameAlreadyExists = (path) => {
         let fltrd = folderContent.filter(obj => obj.name === extractSimpleName(path));
@@ -116,8 +121,12 @@ export const FileOperationsProvider = ({children}) => {
 
         const uploadTasks = allNames.map(source => {
             let task = createTask(source, null, "upload", "В очереди на загрузку");
-            if (nameAlreadyExists(source)){
-                task = {...task, status: "error", message: "'" + extractSimpleName(source) + "'" +  ' уже существует в папке' };
+            if (nameAlreadyExists(source)) {
+                task = {
+                    ...task,
+                    status: "error",
+                    message: "'" + extractSimpleName(source) + "'" + ' уже существует в папке'
+                };
             }
             let files = innerFolders[source] ? innerFolders[source] :
                 [filesWithoutFolder.find(({file}) => file.name === source)];
@@ -146,13 +155,24 @@ export const FileOperationsProvider = ({children}) => {
 
         setTaskRunning(true);
 
-        await Promise.all(uniqueTasks.map(async ({task, files}) => {
-            updateTask(task, "progress", "Загружаем...")
-            await sendUpload(files, updateDownloadTask, updateTask, task, currPath);
+        try {
+            await Promise.all(uniqueTasks.map(async ({task, files}) => {
+                updateTask(task, "progress", "Загружаем...")
+                await sendUpload(files, updateDownloadTask, updateTask, task, currPath);
 
 
-        }));
-        setTimeout(() => loadFolder(currPath), 300);
+            }));
+        } catch (e) {
+            switch (true) {
+                case e instanceof StorageExceedException:
+                    showError(e.message);
+            }
+            clearTasks();
+        }
+        setTimeout(() => {
+            loadFolder(currPath);
+            updateStorageUsed();
+        }, 300);
 
         setTaskRunning(false);
 
@@ -171,7 +191,6 @@ export const FileOperationsProvider = ({children}) => {
 
     const moveObjects = (sourceObjects, target) => {
         const moveTasks = sourceObjects.map(source => createTask(source, target + extractSimpleName(source), "move", "В очереди для перемещения"));
-
 
 
         let uniqueTasks = moveTasks.filter((task) => !identicalTasks(task));
@@ -295,21 +314,29 @@ export const FileOperationsProvider = ({children}) => {
     const executeTasks = async (pendingTasks) => {
         setTaskRunning(true);
 
-        for (const task of pendingTasks) {
+        try {
+            for (const task of pendingTasks) {
 
 
-            if (task.operation.type === "delete") {
-                await executeDeleteTask(task);
-            }
-            if (task.operation.type === "move") {
-                await executeMoveTask(task);
-            }
-            if (task.operation.type === "copy") {
-                await executeCopyTask(task);
-            }
+                if (task.operation.type === "delete") {
+                    await executeDeleteTask(task);
+                }
+                if (task.operation.type === "move") {
+                    await executeMoveTask(task);
+                }
+                if (task.operation.type === "copy") {
+                    await executeCopyTask(task);
+                }
 
+            }
+        } catch (e) {
+            switch (true) {
+                case e instanceof StorageExceedException:
+                    showError(e.message);
+            }
+            clearTasks();
         }
-
+        updateStorageUsed();
         setTaskRunning(false);
     }
 
@@ -339,7 +366,16 @@ export const FileOperationsProvider = ({children}) => {
             updateTask(task, "completed", "Копирование успешно выполнено")
 
         } catch (e) {
-            updateTask(task, "error", e.message);
+
+            switch (true) {
+                case e instanceof StorageExceedException:
+                    updateTask(task, "error", e.message);
+                    throw e;
+                    break;
+                default:
+                    updateTask(task, "error", e.message);
+
+            }
         }
 
     }
@@ -433,6 +469,26 @@ export const FileOperationsProvider = ({children}) => {
         };
     }, [tasks]);
 
+    const [storageUsed, setStorageUsed] = React.useState(0);
+
+    const updateStorageUsed = async () => {
+        try {
+            let stats = await sendGetObjectStats("");
+            setStorageUsed(stats.size);
+        } catch (e) {
+            switch (true) {
+                case e instanceof NotFoundException:
+                    setStorageUsed(0);
+            }
+        }
+
+    }
+
+    useEffect(() => {
+        updateStorageUsed();
+
+    }, [])
+
     return (<FileOperationsContext.Provider
         value={{
             tasks,
@@ -449,7 +505,9 @@ export const FileOperationsProvider = ({children}) => {
             pasteObjects,
             downloadObjects,
             renameObject,
-            uploadObjects
+            uploadObjects,
+
+            storageUsed
         }}>
         {children}
         <RenameModal selectedIds={conflictedIds}

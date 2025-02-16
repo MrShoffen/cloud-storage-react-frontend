@@ -1,5 +1,6 @@
 import axios from "axios";
 import {API_UPLOAD_FILES} from "../../../../UrlConstants.jsx";
+import StorageExceedException from "../../../../exception/StorageExceedException.jsx";
 
 
 export async function sendUpload(files, updateDownloadTask, updateTask, uploadTask, currPath) {
@@ -39,7 +40,10 @@ export async function sendUpload(files, updateDownloadTask, updateTask, uploadTa
             updateTask(uploadTask, "completed", "Загружено");
         }
     } catch (error) {
-        console.log(error);
+        if( error.response && error.response.data.status === 413){
+            console.log(error.response.data.detail);
+            throw new StorageExceedException(error.response.data.detail);
+        }
         updateTask(uploadTask, "error", "Ошибка при загрузке. Попробуйте позже");
     }
 

@@ -63,12 +63,13 @@ export const FileTasksModal = () => {
                 width: "96%",
                 maxWidth: '450px',
                 height: "400px",
-                border: '1px solid',
-                backgroundColor: "menu",
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
                 overflow: 'hidden',
-                boxShadow: 8,
+
+                // border: '1px solid',
+                // backdropFilter: 'blur(12px)',
+                // WebkitBackdropFilter: 'blur(12px)',
+                // boxShadow: 8,
+                backgroundColor: "transparent",
                 borderRadius: 2,
                 borderColor: 'divider',
 
@@ -78,7 +79,11 @@ export const FileTasksModal = () => {
             <Box
                 sx={{
                     position: 'relative',
-                    width: '100%',
+                    marginLeft: 'auto',
+                    width: '80%',
+                    borderTopLeftRadius: 10,
+                    border: '1px solid',
+                    borderColor: 'divider',
                     background: 'linear-gradient(90deg, rgba(28,50,163,1) 0%, rgba(16,113,195,1) 100%)', // Градиент для прогресса
                     height: '50px',
                 }}
@@ -129,11 +134,16 @@ export const FileTasksModal = () => {
                     Операции
                 </Typography>
             </Box>
-            <Divider/>
             <Box
                 sx={{
                     width: '100%',
-
+                    backgroundColor: 'menu',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderTopLeftRadius: 10,
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    boxShadow: 8,
                     p: 1, pb: 0, height: '340px', overflowY: 'auto',
                 }}>
                 {tasks.slice().reverse().map((task) => <Task task={task}/>)}

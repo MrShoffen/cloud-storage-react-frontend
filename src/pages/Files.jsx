@@ -7,6 +7,7 @@ import {FileBrowserHeader} from "../components/FileBrowserHeader/FileBrowserHead
 import {FileTasksModal} from "../modals/FileTasksModal/FileTasksModal.jsx";
 import * as React from "react";
 import {FileUploadDraggableArea} from "../components/InputElements/Upload/FileUploadDraggableArea.jsx";
+import {CapacityModal} from "../modals/CapacityModal/CapacityModal.jsx";
 
 const LoadingBox = () => {
     return (
@@ -83,6 +84,7 @@ export default function Files() {
                                      setIsDragging={setIsDragging}/>
 
             <FileTasksModal/>
+            <CapacityModal/>
         </Box>
     )
 }

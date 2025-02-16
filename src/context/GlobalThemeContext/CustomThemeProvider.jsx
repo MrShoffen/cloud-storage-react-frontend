@@ -97,8 +97,10 @@ export const CustomThemeProvider = ({children}) => {
         });
     }
 
-    function initDb(){
-        openDB().then((db) => setDb(db));
+    async function initAndCleanDb() {
+        let db = await openDB();
+        setDb(db);
+        await cleanExpiredData(db, 3600000);
     }
 
     function getFromDB(key) {
@@ -108,9 +110,13 @@ export const CustomThemeProvider = ({children}) => {
             const request = store.get(key);
 
             request.onsuccess = () => {
-                resolve(request.result);
+                const data = request.result;
+                if (!data) {
+                    resolve(null); // Данных нет
+                    return;
+                }
+                resolve(data.value);
             };
-
             request.onerror = (event) => {
                 reject(event.target.error);
             };
@@ -121,7 +127,13 @@ export const CustomThemeProvider = ({children}) => {
         return new Promise((resolve, reject) => {
             const transaction = db.transaction(STORE_NAME, 'readwrite');
             const store = transaction.objectStore(STORE_NAME);
-            const request = store.put(value, key);
+
+            const dataWithTimestamp = {
+                value: value,
+                timestamp: Date.now(), // Текущее время в миллисекундах
+            };
+
+            const request = store.put(dataWithTimestamp, key);
 
             request.onsuccess = () => {
                 resolve();
@@ -134,8 +146,46 @@ export const CustomThemeProvider = ({children}) => {
     }
 
 
+    async function cleanExpiredData(db, ttl) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(STORE_NAME, 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.getAll();
+
+            request.onsuccess = () => {
+                const currentTime = Date.now();
+                const expiredKeys = [];
+
+                request.result.forEach((item) => {
+                    const dataAge = currentTime - item.timestamp;
+                    if (dataAge > ttl) {
+                        expiredKeys.push(item.key);
+                    }
+                });
+
+                // Удаляем все устаревшие данные
+                if (expiredKeys.length > 0) {
+                    expiredKeys.forEach((key) => {
+                        store.delete(key);
+                    });
+                }
+
+                resolve();
+            };
+
+            request.onerror = (event) => {
+                reject(event.target.error);
+            };
+        });
+    }
+
     useEffect(() => {
-        initDb();
+        initAndCleanDb();
+
+        setInterval(async () => {
+            const db = await openDB();
+            await cleanExpiredData(db, 3600000);
+        }, 1200000);
     }, []);
 
 
