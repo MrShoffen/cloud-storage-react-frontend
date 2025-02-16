@@ -61,7 +61,7 @@ export const FileBrowserHeader = () => {
 
     useEffect(() => {
         if (scrollBoxRef.current) {
-            scrollBoxRef.current.scrollLeft =500;
+            scrollBoxRef.current.scrollLeft = 500;
         }
     }, [currentFolder, folderContentLoading]);
 
@@ -243,9 +243,13 @@ export const FileBrowserHeader = () => {
                             <AddIcon/>
                         </IconButton>
 
-                        <IconButton onClick={handleOpenMenu} variant='contained' sx={{ml: '0'}}>
-                            <MoreVertIcon/>
-                        </IconButton>
+                        {!isCopyMode && !isCutMode &&
+
+                            <IconButton onClick={handleOpenMenu} variant='contained' sx={{ml: '0'}}>
+                                <MoreVertIcon/>
+                            </IconButton>
+                        }
+
 
                     </Box>
                 </Card>

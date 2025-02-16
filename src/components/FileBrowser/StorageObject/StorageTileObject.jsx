@@ -121,6 +121,7 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
                 >
 
                     <Box sx={{width: '100%', height: '80%',
+                        position: 'relative',
                         pl: '5px',
                         pr: '5px',
                         pt: '5px',
