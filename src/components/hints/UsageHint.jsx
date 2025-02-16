@@ -21,7 +21,8 @@ export const UsageHint = () => {
             </Typography>
             <Typography variant="subtitle1"
                         sx={{width: '100%', textAlign: 'center', mt: 2, mb: 0, fontSize: '18px'}}>
-                Перетащите файлы сюда для загрузки.
+                Перетащите файлы для загрузки.
+                Или нажмите кнопку + в правом верхнем углу.
             </Typography>
             <Box sx={{display: 'flex', justifyContent: 'center'}}>
                 <video width="640" height="360" autoPlay loop muted style={{maxWidth: '640px', width: '100%'}}>

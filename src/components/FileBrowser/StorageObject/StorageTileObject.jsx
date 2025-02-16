@@ -135,8 +135,8 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
                             <FileFormatIcon  name={object.name} style={style}/>
 
                         }
-                        {copied && <ContentCopyIcon/>}
-                        {cutted && <ContentCutIcon/>}
+                        {copied && <ContentCopyIcon sx={{position: 'absolute', left: 0, top: 0, transform: 'translate(0%,0%)', zIndex: 40}}/>}
+                        {cutted && <ContentCutIcon sx={{position: 'absolute', left: 0, top: 0, transform: 'translate(0%,0%)', zIndex: 40}}/>}
 
                     </Box>
                     <ObjectName object={object}/>

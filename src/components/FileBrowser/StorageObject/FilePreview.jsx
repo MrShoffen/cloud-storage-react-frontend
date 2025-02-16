@@ -5,15 +5,19 @@ import React, {useEffect, useState} from "react";
 import {API_PREVIEW} from "../../../UrlConstants.jsx";
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import CircleIcon from '@mui/icons-material/Circle';
+import {useCustomThemeContext} from "../../../context/GlobalThemeContext/CustomThemeProvider.jsx";
+
+
 
 function VideoThumbnail({videoUrl}) {
     const [thumbnail, setThumbnail] = useState(null);
 
-    useEffect(() => {
+    const { getFromDB, saveToDB} = useCustomThemeContext();
+
+    async function fetchThumb() {
         if (!videoUrl) return;
 
-
-        const cachedThumbnail = localStorage.getItem(videoUrl);
+        const cachedThumbnail = await getFromDB(videoUrl);
         if (cachedThumbnail) {
             setThumbnail(cachedThumbnail);
             return;
@@ -32,8 +36,12 @@ function VideoThumbnail({videoUrl}) {
 
         video.onseeked = () => {
             const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
+            let width = video.videoWidth;
+            let height = video.videoHeight;
+            const ratio = width / height;
+
+            canvas.width = 180;
+            canvas.height = 180 / ratio;
 
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -41,11 +49,18 @@ function VideoThumbnail({videoUrl}) {
             const thumbnailData = canvas.toDataURL('image/jpeg');
             setThumbnail(thumbnailData);
 
-            localStorage.setItem(videoUrl, thumbnailData);
+            saveToDB(videoUrl, thumbnailData)
+                .catch((error) => {
+                    console.error('Ошибка при сохранении в IndexedDB:', error);
+                });
 
             video.pause();
             video.src = "";
         };
+    }
+
+    useEffect( () => {
+         fetchThumb();
 
     }, [videoUrl]);
 
@@ -60,10 +75,10 @@ function VideoThumbnail({videoUrl}) {
                              maxWidth: '100%',
                              maxHeight: '100%',
                              width: 'auto',
-
+                            // scale: '2',
                              borderRadius: '8px',
                              height: 'auto',
-                             objectFit: 'contain',
+                             objectFit: 'cover',
                              userSelect: 'none',
                              pointerEvents: 'none',
                          }}

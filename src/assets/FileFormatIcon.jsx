@@ -438,7 +438,7 @@ export const FileFormatIcon = ({name, style = 'regularTiles'}) => {
             <Box
                 sx={{
                     width: style === 'regularTiles' ? '85%' : style === 'largeTiles' ? '92%' : '150%',
-                    top: style === 'list' ? -35 : 0,
+                    top: style === 'list' ? -28 : 0,
                     transform: 'translate(-50%, -50%)',
                     marginTop: '50%',
                     // backgroundColor: 'white',
