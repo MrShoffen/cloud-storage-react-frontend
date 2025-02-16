@@ -2,11 +2,15 @@ import Selecto from "react-selecto";
 import Moveable from "react-moveable";
 import * as React from "react";
 import {useEffect, useRef, useState} from "react";
-import {Box} from "@mui/material";
+import {Box, Divider, List, ListItemIcon, ListItemText, Menu, MenuItem} from "@mui/material";
 import {isMobile} from "react-device-detect";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 import {FileFormatIcon} from "../../assets/FileFormatIcon.jsx";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
+import {ContentCopy, ContentCut, ContentPaste} from "@mui/icons-material";
+import Typography from "@mui/material/Typography";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const FileSelection = ({
                                   containerRef,
@@ -15,10 +19,9 @@ export const FileSelection = ({
                               }) => {
     const isMob = isMobile;
 
-    const {moveObjects} = useStorageOperations();
+    const {moveObjects, deleteObject, } = useStorageOperations();
 
-
-    const {isSelectionMode, setSelectionMode, isCopyMode, isCutMode} = useStorageSelection();
+    const {isSelectionMode, setSelectionMode, isCopyMode, isCutMode, startCopying, startCutting} = useStorageSelection();
 
     const [mobileSelecting, setMobileSelecting] = useState(false);
 
@@ -30,6 +33,13 @@ export const FileSelection = ({
             setCoordinates({x: touch.clientX, y: touch.clientY});
         }
     };
+
+    const handleDelete = () => {
+        deleteObject(selectedIds);
+        setSelectionMode(false);
+        setSelectedIds([]);
+    }
+
 
     useEffect(() => {
             containerRef.current.addEventListener("touchstart", handleClick);
@@ -114,214 +124,59 @@ export const FileSelection = ({
         }
     }
 
-    // const FileUploadForm = () => {
-    //     const [files, setFiles] = useState([]);
-    //     const [progress, setProgress] = useState(0);
-    //     const [isUploading, setIsUploading] = useState(false);
-    //     const [isDragging, setIsDragging] = useState(false); // Состояние для отслеживания перетаскивания
-    //
-    //     const fileInputRef = useRef(null);
-    //     const folderInputRef = useRef(null);
-    //
-    //     // Обработчик выбора файлов/папок
-    //     const handleInputChange = (e, isFolder) => {
-    //         const newFiles = Array.from(e.target.files);
-    //
-    //         if (isFolder) {
-    //             // Добавляем информацию о пути для каждого файла
-    //             const filesWithPath = newFiles.map(file => ({
-    //                 file,
-    //                 path: file.webkitRelativePath, // сохраняем полный путь
-    //             }));
-    //
-    //             setFiles(prev => [...prev, ...filesWithPath]);
-    //         } else {
-    //             // Для обычных файлов (без папок)
-    //             const filesWithoutPath = newFiles.map(file => ({
-    //                 file,
-    //                 path: file.name, // используем только имя файла
-    //             }));
-    //
-    //             setFiles(prev => [...prev, ...filesWithoutPath]);
-    //         }
-    //     };
-    //
-    //     // Обработчик перетаскивания файлов
-    //     const handleDragOver = useCallback((e) => {
-    //         e.preventDefault();
-    //         setIsDragging(true);
-    //     }, []);
-    //
-    //     const handleDragLeave = useCallback((e) => {
-    //         e.preventDefault();
-    //         setIsDragging(false);
-    //     }, []);
-    //
-    //     const handleDrop = useCallback((e) => {
-    //         e.preventDefault();
-    //         setIsDragging(false);
-    //
-    //         const droppedItems = Array.from(e.dataTransfer.items);
-    //
-    //         const newFiles = [];
-    //         const processItem = async (item) => {
-    //             const entry = item.webkitGetAsEntry(); // Получаем Entry (FileEntry или DirectoryEntry)
-    //
-    //             if (entry) {
-    //                 if (entry.isFile) {
-    //                     // Если это файл
-    //                     const file = await new Promise((resolve) => entry.file(resolve));
-    //                     newFiles.push({
-    //                         file,
-    //                         path: file.name, // Используем имя файла
-    //                     });
-    //                 } else if (entry.isDirectory) {
-    //                     // Если это папка
-    //                     await readDirectory(entry, entry.name);
-    //                 }
-    //             }
-    //         };
-    //
-    //         const readDirectory = async (dirEntry, basePath) => {
-    //             const reader = dirEntry.createReader();
-    //             const entries = await new Promise((resolve) => reader.readEntries(resolve));
-    //
-    //             for (const entry of entries) {
-    //                 if (entry.isFile) {
-    //                     // Если это файл внутри папки
-    //                     const file = await new Promise((resolve) => entry.file(resolve));
-    //                     newFiles.push({
-    //                         file,
-    //                         path: `${basePath}/${file.name}`, // Сохраняем относительный путь
-    //                     });
-    //                 } else if (entry.isDirectory) {
-    //                     // Если это вложенная папка
-    //                     await readDirectory(entry, `${basePath}/${entry.name}`);
-    //                 }
-    //             }
-    //         };
-    //
-    //         // Обрабатываем все перетаскиваемые элементы
-    //         Promise.all(droppedItems.map((item) => processItem(item))).then(() => {
-    //             setFiles((prev) => [...prev, ...newFiles]);
-    //         });
-    //
-    //
-    //     }, []);
-    //
-    //     // Отправка файлов с сохранением структуры папок
-    //     const handleUpload = async () => {
-    //         if (!files.length || isUploading) return;
-    //
-    //         const formData = new FormData();
-    //
-    //         // Добавляем файлы в FormData с учетом их путей
-    //         files.forEach(({ file, path }) => {
-    //             formData.append('image', file);
-    //             // formData.append('paths', path); // отправляем путь как отдельное поле
-    //         });
-    //
-    //         try {
-    //             setIsUploading(true);
-    //
-    //             const response = await axios.post(API_IMAGE_UPLOAD, formData, {
-    //                 headers: {
-    //                     'Content-Type': 'multipart/form-data',
-    //                 },
-    //                 onUploadProgress: progressEvent => {
-    //                     const percent = Math.round(
-    //                         (progressEvent.loaded * 100) / progressEvent.total
-    //                     );
-    //                     setProgress(percent);
-    //                 },
-    //             });
-    //
-    //             console.log('Upload success:', response.data);
-    //             setFiles([]);
-    //             setProgress(0);
-    //         } catch (error) {
-    //             console.log('Upload failed:', error.message);
-    //         } finally {
-    //             setIsUploading(false);
-    //         }
-    //     };
-    //
-    //     return (
-    //         <div className="upload-container">
-    //             {/* Зона для Drag and Drop */}
-    //             <div
-    //                 className={`drop-zone ${isDragging ? 'dragging' : ''}`}
-    //                 onDragOver={handleDragOver}
-    //                 onDragLeave={handleDragLeave}
-    //                 onDrop={handleDrop}
-    //             >
-    //                 Перетащите файлы или папки сюда
-    //             </div>
-    //
-    //             <div className="input-buttons">
-    //                 {/* Input для файлов */}
-    //                 <input
-    //                     type="file"
-    //                     ref={fileInputRef}
-    //                     multiple
-    //                     onChange={(e) => handleInputChange(e, false)}
-    //                     style={{ display: 'none' }}
-    //                 />
-    //                 <button onClick={() => fileInputRef.current.click()}>
-    //                     Выбрать файлы
-    //                 </button>
-    //
-    //                 {/* Input для папки */}
-    //                 <input
-    //                     type="file"
-    //                     ref={folderInputRef}
-    //                     webkitdirectory="true"
-    //                     directory="true"
-    //                     onChange={(e) => handleInputChange(e, true)}
-    //                     style={{ display: 'none' }}
-    //                 />
-    //                 <button onClick={() => folderInputRef.current.click()}>
-    //                     Выбрать папку
-    //                 </button>
-    //             </div>
-    //
-    //             {/* Список выбранных файлов */}
-    //             {files.length > 0 && (
-    //                 <div className="file-list">
-    //                     <h4>Выбранные файлы:</h4>
-    //                     <ul>
-    //                         {files.map((file, index) => (
-    //                             <li key={index}>
-    //                                 {file.path}
-    //                             </li>
-    //                         ))}
-    //                     </ul>
-    //                 </div>
-    //             )}
-    //
-    //             {/* Прогресс и кнопка отправки */}
-    //             <div className="upload-controls">
-    //                 <button
-    //                     onClick={handleUpload}
-    //                     disabled={!files.length || isUploading}
-    //                 >
-    //                     {isUploading ? 'Идет загрузка...' : 'Начать загрузку'}
-    //                 </button>
-    //
-    //                 {isUploading && (
-    //                     <div className="progress-bar">
-    //                         <div
-    //                             className="progress-fill"
-    //                             style={{ width: `${progress}%` }}
-    //                         />
-    //                         <span>{progress}%</span>
-    //                     </div>
-    //                 )}
-    //             </div>
-    //         </div>
-    //     );
-    // };
 
+    //context
+
+    const [contextMenu, setContextMenu] = React.useState(null);
+
+    const handleOpenContext = (x, y) => {
+
+        setContextMenu(
+            contextMenu === null
+                ? {
+                    mouseX: x + 2,
+                    mouseY: y - 6,
+                }
+                : // repeated contextmenu when it is already open closes it with Chrome 84 on Ubuntu
+                  // Other native context menus might behave different.
+                  // With this behavior we prevent contextmenu from the backdrop to re-locale existing context menus.
+                null,
+        );
+    };
+
+    const handleClose = () => {
+        setContextMenu(null);
+    };
+
+    useEffect(() => {
+
+        const container = containerRef.current;
+
+        const handleContextMenu = (event) => {
+            event.preventDefault(); // Отменяем контекстное меню
+
+            // Получаем все элементы под курсором
+            const elementsUnderCursor = document.elementsFromPoint(event.clientX, event.clientY);
+            const cont = elementsUnderCursor.find(elem => elem.classList.contains('MuiContainer-root'));
+            if (!cont || event.clientY < 184) {
+                return;
+            }
+            // // Ищем элемент с классом 'selectable'
+            // if (el) {
+            //     if (selectedIds.length > 0 && selectedIds.includes(el.dataset.id)) {
+            handleOpenContext(event.clientX, event.clientY);
+            //     }
+            // }
+        };
+
+        // Добавляем слушатель
+        document.addEventListener('contextmenu', handleContextMenu, true);
+
+        // Удаляем слушатель при размонтировании или изменении selectedIds
+        return () => {
+            document.removeEventListener('contextmenu', handleContextMenu, true);
+        };
+    }, [selectedIds]); // Зависимость от selectedIds
 
 
     return (
@@ -340,7 +195,6 @@ export const FileSelection = ({
                     onSelect={
                         (e) => {
                             setSelectedIds([]);
-                            console.log(e.selected.map(el => el.dataset.id))
                             setSelectedIds(e.selected.map(el => el.dataset.id));
                         }
                     }
@@ -361,11 +215,92 @@ export const FileSelection = ({
                 `}
             </style>
 
+
+            <Menu
+                open={contextMenu !== null}
+                onClose={handleClose}
+                anchorReference="anchorPosition"
+                anchorPosition={
+                    contextMenu !== null
+                        ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+                        : undefined
+                }
+                sx={{
+                    width: 320,
+                    maxWidth: '100%',
+                    // backgroundColor: 'background.paper'
+                }}
+
+            >
+                {/*//todo вызов контекстного меню без выделения - сначала выделить.*/}
+                <List
+                    sx={{width: 320, maxWidth: '100%'}}
+                >
+                    <MenuItem
+                        disabled={selectedIds.length === 0 || isCopyMode}
+                        onClick={() => startCutting()}
+                    >
+                        <ListItemIcon>
+                            <ContentCut fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Вырезать</ListItemText>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Ctrl+X
+                        </Typography>
+                    </MenuItem>
+                    <MenuItem
+                        disabled={selectedIds.length === 0}
+                        onClick={() => startCopying()}
+                    >
+                        <ListItemIcon>
+                            <ContentCopy fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Копировать</ListItemText>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Ctrl+C
+                        </Typography>
+                    </MenuItem>
+                    <MenuItem
+                        disabled={!isCopyMode && !isCutMode}
+                    >
+                        <ListItemIcon>
+                            <ContentPaste fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Вставить</ListItemText>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Ctrl+V
+                        </Typography>
+                    </MenuItem>
+                    <Divider/>
+                    <MenuItem
+                        disabled={selectedIds.length === 0}
+                        onClick={handleDelete}
+                    >
+                        <ListItemIcon>
+                            <DeleteIcon fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Удалить</ListItemText>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Del
+                        </Typography>
+                    </MenuItem>
+                    <MenuItem>
+                        <ListItemIcon>
+                            <DriveFileRenameOutlineIcon fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Переименовать</ListItemText>
+
+                    </MenuItem>
+                </List>
+            </Menu>
+
+
             {
                 !isMob &&
                 <>
                     <Moveable
                         ref={moveableRef}
+                        clickable={false}
                         target={selectedIds
                             .map(id => document.querySelector(`[data-id="${id}"]`))
                             .filter(el => el !== null)}
@@ -376,13 +311,9 @@ export const FileSelection = ({
 
                         onRender={(e) => {
                             setShowIcon(true);
-
                             const x = e.clientX;
                             const y = e.clientY;
                             setIconCoord({x: x, y: y});
-
-                            const objs = e.target.dataset.id;
-                            // console.log('X: ' + x + ', Y: ' + y + ' -- ' + objs);
                         }}
                         onRenderGroup={e => {
                             setShowIcon(true);
@@ -391,7 +322,6 @@ export const FileSelection = ({
                             const objs = e.events.map(e => e.target.dataset.id);
                             setIconCoord({x: x, y: y});
 
-                            // console.log('X: ' + x + ', Y: ' + y + ' -- ' + objs);
                         }}
 
 

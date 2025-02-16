@@ -14,21 +14,17 @@ export const sendDownloadFile = async (downloadTask, updateTask, updateDownloadT
         let stats = await sendGetObjectStats(filePath);
         size = stats.size;
     }
-    console.log(size);
 
     const response = await fetch(fetchUrl, {
         method: 'GET',
         credentials: 'include',
     });
-    console.log(response);
-    console.log(response.headers.keys());
 
     if (!response.ok) {
         updateTask(downloadTask, "error", "Ошибка при скачивании. Попробуйте еще раз")
         return;
     }
 
-    const contentLength = response.headers.get('Content-Length');
 
     const updateSpeed = (speed) => {
         updateDownloadSpeed(downloadTask, speed);
@@ -64,7 +60,6 @@ export const sendDownloadFile = async (downloadTask, updateTask, updateDownloadT
         if (count === 100) {
             count = 0;
             const progress = (loadedSize / size) * 100;
-            // console.log(`Download progress: ${progress.toFixed(2)}%`);
             updateDownloadTask(downloadTask, progress);
         }
     }

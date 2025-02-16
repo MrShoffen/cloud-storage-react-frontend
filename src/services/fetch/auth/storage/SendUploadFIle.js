@@ -1,6 +1,7 @@
 import axios from "axios";
 import {API_UPLOAD_FILES} from "../../../../UrlConstants.jsx";
 import StorageExceedException from "../../../../exception/StorageExceedException.jsx";
+import bytes from "bytes";
 
 
 export async function sendUpload(files, updateDownloadTask, updateTask, uploadTask, currPath) {
@@ -23,6 +24,7 @@ export async function sendUpload(files, updateDownloadTask, updateTask, uploadTa
             },
             withCredentials: true,
             onUploadProgress: (progressEvent) => {
+                updateTask(uploadTask, "progress", "Загружаем... " + bytes( progressEvent.rate) + "/c");
                 if (progressEvent.progress === 1) {
                     updateTask(uploadTask, "progress", "Сохраняем в хранилище...")
                 }

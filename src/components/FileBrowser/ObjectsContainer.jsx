@@ -1,4 +1,4 @@
-import {Box} from "@mui/material";
+import {Box, Menu, MenuItem} from "@mui/material";
 import StorageTileObject from "./StorageObject/StorageTileObject.jsx";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import {AnimatePresence, motion} from "framer-motion";
@@ -21,8 +21,6 @@ export const ObjectsContainer = () => {
         bufferIds,
         startCopying,
         startCutting,
-        endCutting,
-        endCopying,
     } = useStorageSelection();
     const {deleteObject, pasteObjects} = useStorageOperations();
 
@@ -58,7 +56,6 @@ export const ObjectsContainer = () => {
     const containerRef = useRef(null);
     const moveableRef = useRef(null);
     const selectoRef = useRef(null);
-
 
     const handleKeyDown = (event) => {
         event.stopPropagation();
@@ -107,6 +104,9 @@ export const ObjectsContainer = () => {
 
     }, [folderContent])
 
+
+
+
     return (
         <AnimatePresence mode="wait">
 
@@ -124,6 +124,7 @@ export const ObjectsContainer = () => {
                     (filesView === 'regularTiles' || filesView === 'largeTiles')
                         ?
                         <Box
+
                             ref={containerRef}
                             className={"elements"}
                             onKeyDown={handleKeyDown}
@@ -191,6 +192,8 @@ export const ObjectsContainer = () => {
                 <FileSelection containerRef={containerRef} selectedIds={selectedIds} moveableRef={moveableRef}
                                selectoRef={selectoRef}
                                setSelectedIds={setSelectedIds}/>
+
+
             </motion.div>
 
         </AnimatePresence>
