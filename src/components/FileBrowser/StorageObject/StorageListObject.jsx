@@ -21,10 +21,10 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
     const hiddenFolderTag = object.name === '*empty-folder-tag*'
 
     const onClick = isMob ? () => {
-        // if (object.folder && !isSelectionMode && !copied && !cutted) {
-        //     goToFolder(object.name);
-        //     return;
-        // }
+        if (object.folder && !isSelectionMode && !copied && !cutted) {
+            goToFolder(object.name);
+            return;
+        }
         if (!isSelectionMode) {
             handlePreview(object);
         }
@@ -40,9 +40,9 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
     } : null;
 
     const onLongPress = isMob ? () => {
-        if (navigator.vibrate) {
-            navigator.vibrate(70);
-        }
+        // if (navigator.vibrate) {
+        //     navigator.vibrate(70);
+        // }
         if (!isSelectionMode && !isCutMode && !isCopyMode) {
             setSelectionMode(true);
         }

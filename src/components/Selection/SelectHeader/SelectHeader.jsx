@@ -1,5 +1,5 @@
 import {Container, Divider, List, ListItemIcon, ListItemText, MenuItem, Popper, Toolbar} from "@mui/material";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -13,6 +13,7 @@ import ContentCutIcon from "@mui/icons-material/ContentCut";
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import RenameModal from "../../../modals/FileChange/RenameModal.jsx";
 import {ContentCopy, ContentCut, ContentPaste} from "@mui/icons-material";
+import {isMobile} from "react-device-detect";
 
 const pathToName = (path) => {
     let sep = path.lastIndexOf("/", path.length - 2);
@@ -22,6 +23,8 @@ const pathToName = (path) => {
 
 export const SelectHeader = () => {
     const {deleteObject, downloadObjects, pasteObjects} = useStorageOperations();
+
+    const isMob = isMobile;
 
     const {
         isSelectionMode,
@@ -54,6 +57,7 @@ export const SelectHeader = () => {
 
     function handleRenameClick() {
         setModalRenameOpen(true);
+        setAnchorEl2(null);
     }
 
     const handleCloseRenameModal = () => {
@@ -86,55 +90,80 @@ export const SelectHeader = () => {
         setAnchorEl2(null);
     }
 
-    const handleClose = (event) => {
-        // event.preventDefault(); // Отменяем контекстное меню
+    const createAnchorElement = useCallback((container, x, y) => {
+        const anchorElement = document.createElement('div');
+        anchorElement.style.position = 'absolute';
+        anchorElement.style.left = `${x}px`;
+        anchorElement.style.top = `${y}px`;
+        container.appendChild(anchorElement);
+        return anchorElement;
+    }, []);
+
+    // Обработчик закрытия контекстного меню
+    const handleClose = useCallback((event) => {
+        const elementsUnderCursor = document.elementsFromPoint(event.clientX, event.clientY);
+        const contextPopper = elementsUnderCursor.find(elem => elem.classList.contains('MuiPopper-root'));
+        if (contextPopper) return;
+
+        //todo test experemental
+        const tileUnderCursor = elementsUnderCursor.find(elem => elem.classList.contains('selectable'));
+        const shouldStartDrag = tileUnderCursor && selectedIds.includes(tileUnderCursor.dataset.id)
+
+        if (!shouldStartDrag && (isSelectionMode || selectedIds.length > 0)) {
+            setSelectionMode(false);
+            setSelectedIds([]);
+        }
+        setAnchorEl2(null);
+    }, []);
+
+    // Обработчик контекстного меню
+    const handleContextMenu = useCallback((event) => {
 
         const elementsUnderCursor = document.elementsFromPoint(event.clientX, event.clientY);
-        console.log(elementsUnderCursor);
-        const cont = elementsUnderCursor.find(elem => elem.classList.contains('MuiPopper-root'));
-        if (cont) {
+        const container = document.querySelector(".MuiContainer-root .elements");
+        const cont = elementsUnderCursor.find(elem => elem.classList.contains('MuiContainer-root'));
+
+        if (!cont || event.clientY < 184) {
             return;
         }
+        event.preventDefault();
 
-        // setSelectedIds([]); //todo test it
-        setAnchorEl2(null);
-    };
+        const selectableItem = elementsUnderCursor.find(elem => elem.classList.contains('selectable'));
 
+        if (selectedIds.length === 1
+            && selectableItem
+            && selectableItem.dataset.id !== selectedIds[0]) {
+            setSelectedIds([selectableItem.dataset.id]);
+            setSelectionMode(true);
+        }
+
+        if (selectableItem && selectedIds.length === 0 && !isCutMode && !isCopyMode) {
+            setSelectedIds([selectableItem.dataset.id]);
+            setSelectionMode(true);
+
+        }
+
+        const containerRect = container.getBoundingClientRect();
+        const relativeX = event.clientX + 125;
+        const relativeY = event.clientY - containerRect.top + 190;
+
+        const anchorElement = createAnchorElement(container, relativeX, relativeY);
+        setAnchorEl2(anchorElement);
+    }, [selectedIds, isCutMode, isCopyMode, createAnchorElement]);
+
+    // Добавление и удаление обработчиков событий
     useEffect(() => {
+        if (!isMob) {
+            //todo test experemental mousedown
+            document.addEventListener('contextmenu', handleContextMenu, true);
+            document.addEventListener('mousedown', handleClose, true);
 
-        const handleContextMenu = (event) => {
-            event.preventDefault(); // Отменяем контекстное меню
-
-            // Получаем все элементы под курсором
-            const elementsUnderCursor = document.elementsFromPoint(event.clientX, event.clientY);
-            const cont = elementsUnderCursor.find(elem => elem.classList.contains('MuiContainer-root'));
-            if (!cont || event.clientY < 184) {
-                return;
-            }
-
-            const selectableItem = elementsUnderCursor.find(elem => elem.classList.contains('selectable'));
-
-            if (selectableItem && selectedIds.length == 0 && !isCutMode && !isCopyMode) {
-                setSelectedIds([selectableItem.dataset.id]);
-            }
-
-            const anchorElement = document.createElement('div');
-            anchorElement.style.position = 'absolute';
-            anchorElement.style.left = `${event.clientX}px`;
-            anchorElement.style.top = `${event.clientY}px`;
-            document.body.appendChild(anchorElement);
-
-            setAnchorEl2(anchorElement);
-        };
-
-        document.addEventListener('contextmenu', handleContextMenu, true);
-        document.addEventListener('click', handleClose, true);
-
-        return () => {
-            document.removeEventListener('contextmenu', handleContextMenu, true);
-            document.removeEventListener('click', handleClose, true);
-        };
-    }, [selectedIds]); // Зависимость от selectedIds
+            return () => {
+                document.removeEventListener('contextmenu', handleContextMenu, true);
+                document.removeEventListener('mousedown', handleClose, true);
+            };
+        }
+    }, [handleContextMenu, handleClose]);
 
 
     return (
@@ -146,6 +175,7 @@ export const SelectHeader = () => {
                 transform: 'translateX(-50%)',
                 top: isSelectionMode ? '-6px' : '-70px',
                 transition: 'top 0.2s ease-in-out',
+                userSelect: 'none'
             }}
             disableGutters>
             <Toolbar
@@ -158,6 +188,8 @@ export const SelectHeader = () => {
                     borderColor: 'info.dark',
                     ml: '8px',
                     mr: '8px',
+                    userSelect: 'none'
+
                 }}
             >
 
@@ -169,7 +201,9 @@ export const SelectHeader = () => {
                         left: 7,
                         width: '35px',
                         height: '35px',
-                        color: 'white'
+                        color: 'white',
+                        userSelect: 'none'
+
                     }}
                 >
 
@@ -212,7 +246,9 @@ export const SelectHeader = () => {
                         right: 190,
                         width: '35px',
                         height: '35px',
-                        color: 'white'
+                        color: 'white',
+                        userSelect: 'none'
+
                     }}
                 >
                     <DownloadIcon sx={{fontSize: '20px'}}/>
@@ -227,7 +263,9 @@ export const SelectHeader = () => {
                         right: 155,
                         width: '35px',
                         height: '35px',
-                        color: 'white'
+                        color: 'white',
+                        userSelect: 'none'
+
                     }}
                 >
                     <DriveFileRenameOutlineIcon sx={{fontSize: '20px'}}/>
@@ -241,7 +279,9 @@ export const SelectHeader = () => {
                         right: 120,
                         width: '35px',
                         height: '35px',
-                        color: 'white'
+                        color: 'white',
+                        userSelect: 'none'
+
                     }}
                 >
                     <DeleteIcon sx={{fontSize: '20px'}}/>
@@ -255,7 +295,9 @@ export const SelectHeader = () => {
                         right: 85,
                         width: '35px',
                         height: '35px',
-                        color: 'white'
+                        color: 'white',
+                        userSelect: 'none'
+
                     }}
                 >
                     <ContentCutIcon sx={{fontSize: '20px'}}/>
@@ -269,7 +311,9 @@ export const SelectHeader = () => {
                         right: 48,
                         width: '35px',
                         height: '35px',
-                        color: 'white'
+                        color: 'white',
+                        userSelect: 'none'
+
                     }}
                 >
                     <ContentCopyIcon sx={{fontSize: '20px'}}/>
@@ -285,6 +329,8 @@ export const SelectHeader = () => {
                         width: '30px',
                         height: '30px',
                         color: 'white',
+                        userSelect: 'none',
+
                         backgroundColor: 'error.main',
                         '&:hover': {
                             backgroundColor: 'error.dark',
@@ -303,7 +349,7 @@ export const SelectHeader = () => {
                 open={anchorEl2 !== null}
                 // onClose={handleClose}
                 anchorEl={anchorEl2}
-                placement='bottom-start'
+                // placement='top-start'
                 // transition
                 sx={{
                     backgroundColor: 'background.paper',
