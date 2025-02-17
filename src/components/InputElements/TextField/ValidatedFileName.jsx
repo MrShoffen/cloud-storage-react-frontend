@@ -20,7 +20,7 @@ export default function ValidatedFileName({filename, setFilename, filenameError,
         }
 
         if (value && !/^[^/\\:*?"<>|]+$/.test(value)) {
-            errMessage += 'Недопустимые символы в пароле. ';
+            errMessage += 'Недопустимые символы в имени. ';
             isValid = false;
         }
 

@@ -39,6 +39,7 @@ export const ObjectName = ({object}) => {
                     pl: '3px',
                     pr: '3px',
                     userSelect: 'none',
+                    pointerEvents: 'none',
                     color: 'text.secondary',
                     fontSize: '15px',
                     whiteSpace: 'nowrap',

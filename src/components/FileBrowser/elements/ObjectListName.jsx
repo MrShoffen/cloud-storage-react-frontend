@@ -43,6 +43,8 @@ export const ObjectListName = ({object}) => {
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
+                        pointerEvents: 'none',
+
                         userSelect: 'none',
                         '&:hover': {
                             cursor: 'default',
@@ -64,6 +66,8 @@ export const ObjectListName = ({object}) => {
                     fontSize: '12px',
                     color: 'text.secondary',
                     whiteSpace: 'nowrap',
+                    pointerEvents: 'none',
+
                     userSelect: 'none',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
@@ -86,6 +90,8 @@ export const ObjectListName = ({object}) => {
                         color: 'text.secondary',
                         whiteSpace: 'nowrap',
                         userSelect: 'none',
+                        pointerEvents: 'none',
+
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         '&:hover': {

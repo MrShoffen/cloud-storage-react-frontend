@@ -114,7 +114,7 @@ export const SelectHeader = () => {
 
             const selectableItem = elementsUnderCursor.find(elem => elem.classList.contains('selectable'));
 
-            if(selectableItem && selectedIds.length == 0){
+            if (selectableItem && selectedIds.length == 0 && !isCutMode && !isCopyMode) {
                 setSelectedIds([selectableItem.dataset.id]);
             }
 
@@ -135,7 +135,6 @@ export const SelectHeader = () => {
             document.removeEventListener('click', handleClose, true);
         };
     }, [selectedIds]); // Зависимость от selectedIds
-
 
 
     return (
@@ -174,7 +173,7 @@ export const SelectHeader = () => {
                     }}
                 >
 
-                         <CheckBoxOutlinedIcon sx={{fontSize: '20px'}}/>
+                    <CheckBoxOutlinedIcon sx={{fontSize: '20px'}}/>
 
                 </IconButton>
 
@@ -298,7 +297,7 @@ export const SelectHeader = () => {
             <RenameModal open={modalRenameOpen}
                          onClose={handleCloseRenameModal}
                          selectedIds={selectedIds}
-                        clearSelectionMode={clearSelectionMode}/>
+                         clearSelectionMode={clearSelectionMode}/>
 
             <Popper
                 open={anchorEl2 !== null}
@@ -318,7 +317,7 @@ export const SelectHeader = () => {
                 {/*//todo вызов контекстного меню без выделения - сначала выделить.*/}
                 <List
                     sx={{
-                        width:250,
+                        width: 250,
                         // border: '1px solid',
                         borderRadius: 2,
                         boxShadow: 5,
@@ -378,7 +377,7 @@ export const SelectHeader = () => {
                     <MenuItem
                         disabled={selectedIds.length !== 1}
 
-                    onClick={handleRenameClick}
+                        onClick={handleRenameClick}
                     >
                         <ListItemIcon>
                             <DriveFileRenameOutlineIcon fontSize="small"/>

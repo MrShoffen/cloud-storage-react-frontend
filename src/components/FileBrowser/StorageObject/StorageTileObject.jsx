@@ -46,9 +46,9 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
     };
 
     const onLongPress = isMob ? () => {
-        if (navigator.vibrate) {
-            navigator.vibrate(70);
-        }
+        // if (navigator.vibrate) {
+        //     navigator.vibrate(70);
+        // }
         if (!isSelectionMode && !isCutMode && !isCopyMode) {
             setSelectionMode(true);
         }
