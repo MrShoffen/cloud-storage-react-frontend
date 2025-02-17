@@ -21,7 +21,7 @@ export const FileSelection = ({
 
     const {moveObjects, deleteObject, } = useStorageOperations();
 
-    const {isSelectionMode, setSelectionMode, isCopyMode, isCutMode, startCopying, startCutting} = useStorageSelection();
+    const {isSelectionMode, setSelectionMode, isCopyMode, isCutMode,} = useStorageSelection();
 
     const [mobileSelecting, setMobileSelecting] = useState(false);
 
@@ -34,11 +34,7 @@ export const FileSelection = ({
         }
     };
 
-    const handleDelete = () => {
-        deleteObject(selectedIds);
-        setSelectionMode(false);
-        setSelectedIds([]);
-    }
+
 
 
     useEffect(() => {
@@ -127,56 +123,6 @@ export const FileSelection = ({
 
     //context
 
-    const [contextMenu, setContextMenu] = React.useState(null);
-
-    const handleOpenContext = (x, y) => {
-
-        setContextMenu(
-            contextMenu === null
-                ? {
-                    mouseX: x + 2,
-                    mouseY: y - 6,
-                }
-                : // repeated contextmenu when it is already open closes it with Chrome 84 on Ubuntu
-                  // Other native context menus might behave different.
-                  // With this behavior we prevent contextmenu from the backdrop to re-locale existing context menus.
-                null,
-        );
-    };
-
-    const handleClose = () => {
-        setContextMenu(null);
-    };
-
-    useEffect(() => {
-
-        const container = containerRef.current;
-
-        const handleContextMenu = (event) => {
-            event.preventDefault(); // Отменяем контекстное меню
-
-            // Получаем все элементы под курсором
-            const elementsUnderCursor = document.elementsFromPoint(event.clientX, event.clientY);
-            const cont = elementsUnderCursor.find(elem => elem.classList.contains('MuiContainer-root'));
-            if (!cont || event.clientY < 184) {
-                return;
-            }
-            // // Ищем элемент с классом 'selectable'
-            // if (el) {
-            //     if (selectedIds.length > 0 && selectedIds.includes(el.dataset.id)) {
-            handleOpenContext(event.clientX, event.clientY);
-            //     }
-            // }
-        };
-
-        // Добавляем слушатель
-        document.addEventListener('contextmenu', handleContextMenu, true);
-
-        // Удаляем слушатель при размонтировании или изменении selectedIds
-        return () => {
-            document.removeEventListener('contextmenu', handleContextMenu, true);
-        };
-    }, [selectedIds]); // Зависимость от selectedIds
 
 
     return (
@@ -216,83 +162,6 @@ export const FileSelection = ({
             </style>
 
 
-            <Menu
-                open={contextMenu !== null}
-                onClose={handleClose}
-                anchorReference="anchorPosition"
-                anchorPosition={
-                    contextMenu !== null
-                        ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
-                        : undefined
-                }
-                sx={{
-                    width: 320,
-                    maxWidth: '100%',
-                    // backgroundColor: 'background.paper'
-                }}
-
-            >
-                {/*//todo вызов контекстного меню без выделения - сначала выделить.*/}
-                <List
-                    sx={{width: 320, maxWidth: '100%'}}
-                >
-                    <MenuItem
-                        disabled={selectedIds.length === 0 || isCopyMode}
-                        onClick={() => startCutting()}
-                    >
-                        <ListItemIcon>
-                            <ContentCut fontSize="small"/>
-                        </ListItemIcon>
-                        <ListItemText>Вырезать</ListItemText>
-                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                            Ctrl+X
-                        </Typography>
-                    </MenuItem>
-                    <MenuItem
-                        disabled={selectedIds.length === 0}
-                        onClick={() => startCopying()}
-                    >
-                        <ListItemIcon>
-                            <ContentCopy fontSize="small"/>
-                        </ListItemIcon>
-                        <ListItemText>Копировать</ListItemText>
-                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                            Ctrl+C
-                        </Typography>
-                    </MenuItem>
-                    <MenuItem
-                        disabled={!isCopyMode && !isCutMode}
-                    >
-                        <ListItemIcon>
-                            <ContentPaste fontSize="small"/>
-                        </ListItemIcon>
-                        <ListItemText>Вставить</ListItemText>
-                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                            Ctrl+V
-                        </Typography>
-                    </MenuItem>
-                    <Divider/>
-                    <MenuItem
-                        disabled={selectedIds.length === 0}
-                        onClick={handleDelete}
-                    >
-                        <ListItemIcon>
-                            <DeleteIcon fontSize="small"/>
-                        </ListItemIcon>
-                        <ListItemText>Удалить</ListItemText>
-                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                            Del
-                        </Typography>
-                    </MenuItem>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <DriveFileRenameOutlineIcon fontSize="small"/>
-                        </ListItemIcon>
-                        <ListItemText>Переименовать</ListItemText>
-
-                    </MenuItem>
-                </List>
-            </Menu>
 
 
             {

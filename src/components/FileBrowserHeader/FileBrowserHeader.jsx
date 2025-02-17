@@ -1,4 +1,16 @@
-import {Box, Button, Card, CircularProgress, Container, Divider, IconButton} from "@mui/material";
+import {
+    Box,
+    Button,
+    Card,
+    CircularProgress,
+    Container,
+    Divider,
+    IconButton,
+    List,
+    ListItemIcon, ListItemText,
+    Menu,
+    MenuItem, Popper
+} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {CustomBread} from "./Breadcrumbs/CustomBread.jsx";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
@@ -15,6 +27,9 @@ import ContentCutIcon from "@mui/icons-material/ContentCut";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
 import AddIcon from '@mui/icons-material/Add';
 import {FolderMenu} from "./FolderMenu/FolderMenu.jsx";
+import {ContentCopy, ContentCut, ContentPaste} from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 
 export const FileBrowserHeader = () => {
 
@@ -31,11 +46,18 @@ export const FileBrowserHeader = () => {
         isCutMode,
         bufferIds,
         endCopying,
-        endCutting
+        endCutting,
+        selectedIds,
+        setSelectedIds,
+        setSelectionMode,
+        startCopying, startCutting
     } = useStorageSelection();
 
 
-    const {pasteObjects} = useStorageOperations();
+    const {pasteObjects, deleteObject} = useStorageOperations();
+
+
+
 
     function handleBack() {
         goToPrevFolder();
@@ -64,6 +86,88 @@ export const FileBrowserHeader = () => {
             scrollBoxRef.current.scrollLeft = 500;
         }
     }, [currentFolder, folderContentLoading]);
+
+
+//context
+
+    const [anchorEl2, setAnchorEl2] = useState(null);
+
+    const handleDelete = () => {
+        deleteObject(selectedIds);
+        setSelectionMode(false);
+        setSelectedIds([]);
+        setAnchorEl2(null);
+    }
+
+    const handleCopy = () => {
+        startCopying();
+        setAnchorEl2(null);
+    }
+
+
+    const handleCut = () => {
+        startCutting();
+        setAnchorEl2(null);
+    }
+
+    const handlePaste = () => {
+        pasteObjects();
+        setAnchorEl2(null);
+    }
+
+    const handleClose = (event) => {
+        event.preventDefault(); // Отменяем контекстное меню
+
+        const elementsUnderCursor = document.elementsFromPoint(event.clientX, event.clientY);
+        const cont = elementsUnderCursor.find(elem => elem.classList.contains('MuiPopper-root'));
+        if (cont) {
+            return;
+        }
+
+        setAnchorEl2(null);
+    };
+
+    useEffect(() => {
+
+        // const container = containerRef.current;
+
+        const handleContextMenu = (event) => {
+            event.preventDefault(); // Отменяем контекстное меню
+
+            // Получаем все элементы под курсором
+            const elementsUnderCursor = document.elementsFromPoint(event.clientX, event.clientY);
+            const cont = elementsUnderCursor.find(elem => elem.classList.contains('MuiContainer-root'));
+            if (!cont || event.clientY < 184) {
+                return;
+            }
+
+            const selectableItem = elementsUnderCursor.find(elem => elem.classList.contains('selectable'));
+
+            if(selectableItem && selectedIds.length == 0){
+                setSelectedIds([selectableItem.dataset.id]);
+            }
+
+            const anchorElement = document.createElement('div');
+            anchorElement.style.position = 'absolute';
+            anchorElement.style.left = `${event.clientX}px`;
+            anchorElement.style.top = `${event.clientY}px`;
+            document.body.appendChild(anchorElement);
+
+            setAnchorEl2(anchorElement);
+        };
+
+
+
+        // Добавляем слушатель
+        document.addEventListener('contextmenu', handleContextMenu, true);
+        document.addEventListener('click', handleClose, true);
+
+        // Удаляем слушатель при размонтировании или изменении selectedIds
+        return () => {
+            document.removeEventListener('contextmenu', handleContextMenu, true);
+            document.removeEventListener('click', handleClose, true);
+        };
+    }, [selectedIds]); // Зависимость от selectedIds
 
 
     return (
@@ -256,6 +360,90 @@ export const FileBrowserHeader = () => {
             </Box>
             <FileMenu anchorEl={anchorEl} handleCloseMenu={handleCloseMenu}/>
             <FolderMenu anchorEl={anchorElFolder} handleCloseMenu={handleCloseFolderMenu}/>
+
+
+            <Popper
+                open={anchorEl2 !== null}
+                // onClose={handleClose}
+                anchorEl={anchorEl2}
+                placement='bottom-start'
+                // transition
+                sx={{
+                    backgroundColor: 'background.paper',
+                    width: 250,
+                    maxWidth: '100%',
+                    zIndex: 200,
+                    // backgroundColor: 'background.paper'
+                }}
+
+            >
+                {/*//todo вызов контекстного меню без выделения - сначала выделить.*/}
+                <List
+                    sx={{
+                        width:250,
+                        backgroundColor: 'paper',
+                        maxWidth: '100%'
+                    }}
+                >
+                    <MenuItem
+                        disabled={selectedIds.length === 0 || isCopyMode}
+                        onClick={handleCut}
+                    >
+                        <ListItemIcon>
+                            <ContentCut fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Вырезать</ListItemText>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Ctrl+X
+                        </Typography>
+                    </MenuItem>
+                    <MenuItem
+                        disabled={selectedIds.length === 0}
+                        onClick={handleCopy}
+                    >
+                        <ListItemIcon>
+                            <ContentCopy fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Копировать</ListItemText>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Ctrl+C
+                        </Typography>
+                    </MenuItem>
+                    <MenuItem
+                        disabled={!isCopyMode && !isCutMode}
+                        onClick={handlePaste}
+                    >
+                        <ListItemIcon>
+                            <ContentPaste fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Вставить</ListItemText>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Ctrl+V
+                        </Typography>
+                    </MenuItem>
+                    <Divider/>
+                    <MenuItem
+                        disabled={selectedIds.length === 0}
+                        onClick={handleDelete}
+                    >
+                        <ListItemIcon>
+                            <DeleteIcon fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Удалить</ListItemText>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Del
+                        </Typography>
+                    </MenuItem>
+                    <MenuItem>
+                        <ListItemIcon>
+                            <DriveFileRenameOutlineIcon fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Переименовать</ListItemText>
+
+                    </MenuItem>
+                </List>
+            </Popper>
+
 
         </Container>
     )

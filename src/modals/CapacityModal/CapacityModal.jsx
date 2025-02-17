@@ -14,6 +14,7 @@ export const CapacityModal = () => {
 
     const plan = auth.user.storagePlan;
     const maxCapacity = plan === 'BASIC' ? 1 : (plan === 'STANDARD' ? 2 : 4);
+    const maxCapByte = (plan === 'BASIC' ? 1024 : (plan === 'STANDARD' ? 2048 : 4096))*1024*1024;
 
     const [showModal, setShowModal] = useState(true);
 
@@ -93,7 +94,7 @@ export const CapacityModal = () => {
                     color: 'rgb(230,230,230)',
                 }}>
                 <LinearProgress variant="determinate"
-                                value={storageUsed * 100 / (2048 * 1024 * 1024)}
+                                value={storageUsed * 100 / (maxCapByte)}
                                 sx={{
                                     width: '100%',
                                     height: 10,

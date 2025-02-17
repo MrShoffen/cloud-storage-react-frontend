@@ -8,6 +8,7 @@ import view from "../../assets/help/view.mp4";
 import navigation from "../../assets/help/navigation.mp4";
 import header from "../../assets/help/header.mp4";
 import tasks from "../../assets/help/tasks.mp4";
+import context from "../../assets/help/context.mp4";
 
 
 export const UsageHint = () => {
@@ -74,6 +75,13 @@ export const UsageHint = () => {
             </Box>
             <video width="640"  playsInline height="360" autoPlay loop muted style={{maxWidth: '640px', width: '100%'}}>
                 <source src={header} type="video/mp4"/>
+                Ваш браузер не поддерживает видео.
+            </video>
+            <Typography sx={{width: '100%', textAlign: 'center', mt:3, fontSize: '18px'}}>
+                Так же эти операции доступны при вызове контекстного меню (правая кнопка мыши или длительный клик на телефоне)
+            </Typography>
+            <video width="640"  playsInline height="360" autoPlay loop muted style={{maxWidth: '640px', width: '100%'}}>
+                <source src={context} type="video/mp4"/>
                 Ваш браузер не поддерживает видео.
             </video>
             <Typography sx={{width: '100%', textAlign: 'center', mt: 4, fontSize: '18px'}}>
