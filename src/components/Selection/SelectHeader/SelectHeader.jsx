@@ -1,5 +1,5 @@
-import {Container, Toolbar} from "@mui/material";
-import React, {useState} from "react";
+import {Container, Divider, List, ListItemIcon, ListItemText, MenuItem, Popper, Toolbar} from "@mui/material";
+import React, {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,6 +12,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import RenameModal from "../../../modals/FileChange/RenameModal.jsx";
+import {ContentCopy, ContentCut, ContentPaste} from "@mui/icons-material";
 
 const pathToName = (path) => {
     let sep = path.lastIndexOf("/", path.length - 2);
@@ -20,7 +21,7 @@ const pathToName = (path) => {
 }
 
 export const SelectHeader = () => {
-    const {deleteObject, downloadObjects} = useStorageOperations();
+    const {deleteObject, downloadObjects, pasteObjects} = useStorageOperations();
 
     const {
         isSelectionMode,
@@ -29,6 +30,8 @@ export const SelectHeader = () => {
         setSelectedIds,
         startCutting,
         startCopying,
+        isCopyMode,
+        isCutMode
     } = useStorageSelection();
 
     const clearSelectionMode = () => {
@@ -44,6 +47,7 @@ export const SelectHeader = () => {
     async function handleDownload() {
         downloadObjects(selectedIds[0]);
         clearSelectionMode()
+        setAnchorEl2(null);
     }
 
     const [modalRenameOpen, setModalRenameOpen] = useState(false);
@@ -56,6 +60,84 @@ export const SelectHeader = () => {
         setModalRenameOpen(false);
     };
 
+
+    const [anchorEl2, setAnchorEl2] = useState(null);
+
+    const handleDeleteContext = () => {
+        deleteObject(selectedIds);
+        setSelectionMode(false);
+        setSelectedIds([]);
+        setAnchorEl2(null);
+    }
+
+    const handleCopy = () => {
+        startCopying();
+        setAnchorEl2(null);
+    }
+
+
+    const handleCut = () => {
+        startCutting();
+        setAnchorEl2(null);
+    }
+
+    const handlePaste = () => {
+        pasteObjects();
+        setAnchorEl2(null);
+    }
+
+    const handleClose = (event) => {
+        // event.preventDefault(); // Отменяем контекстное меню
+
+        const elementsUnderCursor = document.elementsFromPoint(event.clientX, event.clientY);
+        console.log(elementsUnderCursor);
+        const cont = elementsUnderCursor.find(elem => elem.classList.contains('MuiPopper-root'));
+        if (cont) {
+            return;
+        }
+
+        // setSelectedIds([]); //todo test it
+        setAnchorEl2(null);
+    };
+
+    useEffect(() => {
+
+        const handleContextMenu = (event) => {
+            event.preventDefault(); // Отменяем контекстное меню
+
+            // Получаем все элементы под курсором
+            const elementsUnderCursor = document.elementsFromPoint(event.clientX, event.clientY);
+            const cont = elementsUnderCursor.find(elem => elem.classList.contains('MuiContainer-root'));
+            if (!cont || event.clientY < 184) {
+                return;
+            }
+
+            const selectableItem = elementsUnderCursor.find(elem => elem.classList.contains('selectable'));
+
+            if(selectableItem && selectedIds.length == 0){
+                setSelectedIds([selectableItem.dataset.id]);
+            }
+
+            const anchorElement = document.createElement('div');
+            anchorElement.style.position = 'absolute';
+            anchorElement.style.left = `${event.clientX}px`;
+            anchorElement.style.top = `${event.clientY}px`;
+            document.body.appendChild(anchorElement);
+
+            setAnchorEl2(anchorElement);
+        };
+
+        document.addEventListener('contextmenu', handleContextMenu, true);
+        document.addEventListener('click', handleClose, true);
+
+        return () => {
+            document.removeEventListener('contextmenu', handleContextMenu, true);
+            document.removeEventListener('click', handleClose, true);
+        };
+    }, [selectedIds]); // Зависимость от selectedIds
+
+
+
     return (
         <Container
             sx={{
@@ -64,7 +146,6 @@ export const SelectHeader = () => {
                 left: '50%',
                 transform: 'translateX(-50%)',
                 top: isSelectionMode ? '-6px' : '-70px',
-                // top: '-6px',
                 transition: 'top 0.2s ease-in-out',
             }}
             disableGutters>
@@ -218,6 +299,110 @@ export const SelectHeader = () => {
                          onClose={handleCloseRenameModal}
                          selectedIds={selectedIds}
                         clearSelectionMode={clearSelectionMode}/>
+
+            <Popper
+                open={anchorEl2 !== null}
+                // onClose={handleClose}
+                anchorEl={anchorEl2}
+                placement='bottom-start'
+                // transition
+                sx={{
+                    backgroundColor: 'background.paper',
+                    width: 250,
+                    maxWidth: '100%',
+                    zIndex: 200,
+                    // backgroundColor: 'background.paper'
+                }}
+
+            >
+                {/*//todo вызов контекстного меню без выделения - сначала выделить.*/}
+                <List
+                    sx={{
+                        width:250,
+                        // border: '1px solid',
+                        borderRadius: 2,
+                        boxShadow: 5,
+                        backgroundColor: 'paper',
+                        maxWidth: '100%'
+                    }}
+                >
+                    <MenuItem
+                        disabled={selectedIds.length === 0 || isCopyMode}
+                        onClick={handleCut}
+                    >
+                        <ListItemIcon>
+                            <ContentCut fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Вырезать</ListItemText>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Ctrl+X
+                        </Typography>
+                    </MenuItem>
+                    <MenuItem
+                        disabled={selectedIds.length === 0}
+                        onClick={handleCopy}
+                    >
+                        <ListItemIcon>
+                            <ContentCopy fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Копировать</ListItemText>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Ctrl+C
+                        </Typography>
+                    </MenuItem>
+                    <MenuItem
+                        disabled={!isCopyMode && !isCutMode}
+                        onClick={handlePaste}
+                    >
+                        <ListItemIcon>
+                            <ContentPaste fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Вставить</ListItemText>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Ctrl+V
+                        </Typography>
+                    </MenuItem>
+                    <Divider/>
+                    <MenuItem
+                        disabled={selectedIds.length === 0}
+                        onClick={handleDeleteContext}
+                    >
+                        <ListItemIcon>
+                            <DeleteIcon fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Удалить</ListItemText>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Del
+                        </Typography>
+                    </MenuItem>
+                    <MenuItem
+                        disabled={selectedIds.length !== 1}
+
+                    onClick={handleRenameClick}
+                    >
+                        <ListItemIcon>
+                            <DriveFileRenameOutlineIcon fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Переименовать</ListItemText>
+
+                    </MenuItem>
+                    <Divider/>
+                    <MenuItem
+                        disabled={selectedIds.length !== 1}
+
+                        onClick={handleDownload}
+                    >
+                        <ListItemIcon>
+                            <DownloadIcon fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText>Скачать</ListItemText>
+
+                    </MenuItem>
+
+
+                </List>
+            </Popper>
+
         </Container>
 
 
