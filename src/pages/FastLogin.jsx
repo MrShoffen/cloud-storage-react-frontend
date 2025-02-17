@@ -50,7 +50,7 @@ export default function FastLogin() {
 
 
     async function registerFake() {
-        const registerData = {username: username, password: username, avatarUrl: image, storagePlan: "STANDARD"};
+        const registerData = {username: username, password: username, avatarUrl: image, storagePlan: 'STANDARD'};
 
         await sendRegistrationForm(registerData);
 
