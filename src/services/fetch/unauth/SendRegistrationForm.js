@@ -3,6 +3,7 @@ import {throwSpecifyException} from "../../../exception/ThrowSpecifyException.js
 
 
 export const sendRegistrationForm = async (registrationData) =>{
+    console.log(registrationData);
     const response = await fetch(API_REGISTRATION, {
         method: 'POST',
         headers: {
