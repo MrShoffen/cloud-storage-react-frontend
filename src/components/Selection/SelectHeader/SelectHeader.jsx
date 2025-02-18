@@ -463,17 +463,19 @@ export const SelectHeader = () => {
 
                     }
 
-                    <MenuItem
-                        disabled={selectedIds.length !== 1}
+                    {!isSearchMode &&
+                        <MenuItem
+                            disabled={selectedIds.length !== 1}
 
-                        onClick={handleRenameClick}
-                    >
-                        <ListItemIcon>
-                            <DriveFileRenameOutlineIcon fontSize="small"/>
-                        </ListItemIcon>
-                        <ListItemText>Переименовать</ListItemText>
+                            onClick={handleRenameClick}
+                        >
+                            <ListItemIcon>
+                                <DriveFileRenameOutlineIcon fontSize="small"/>
+                            </ListItemIcon>
+                            <ListItemText>Переименовать</ListItemText>
 
-                    </MenuItem>
+                        </MenuItem>
+                    }
                     <Divider/>
                     <MenuItem
                         disabled={selectedIds.length !== 1}
