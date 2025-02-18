@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Box, Container, Divider} from "@mui/material";
+import {Box, Container} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";

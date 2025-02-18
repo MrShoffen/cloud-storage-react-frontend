@@ -8,6 +8,7 @@ import {FileTasksModal} from "../modals/FileTasksModal/FileTasksModal.jsx";
 import * as React from "react";
 import {FileUploadDraggableArea} from "../components/InputElements/Upload/FileUploadDraggableArea.jsx";
 import {CapacityModal} from "../modals/CapacityModal/CapacityModal.jsx";
+import {SearchBrowserHeader} from "../components/SearchBrowserHeader/SearchBrowserHeader.jsx";
 
 const LoadingBox = () => {
     return (
@@ -16,7 +17,7 @@ const LoadingBox = () => {
                 width: '100%',
                 pt: 10,
                 display: 'flex',
-                justifyContent: 'center', // Центрируем по горизонтали
+                justifyContent: 'center',
                 alignItems: 'center',
             }}
         >
@@ -27,7 +28,7 @@ const LoadingBox = () => {
 
 export default function Files() {
 
-    const {folderContentLoading, loadFolder, folderContent, isRootFolder} = useStorageNavigation();
+    const {folderContentLoading, loadFolder, folderContent, isRootFolder, isSearchMode} = useStorageNavigation();
     const location = useLocation();
 
 
@@ -38,15 +39,15 @@ export default function Files() {
         loadFolder(decodedUrl);
     };
 
-    // Загружаем папку при монтировании компонента
+
     useEffect(() => {
         loadFolderFromPath();
     }, []);
 
-    // Отслеживаем изменения в пути (включая нажатие кнопки "Назад")
+
     useEffect(() => {
         loadFolderFromPath();
-    }, [location.pathname]); // Зависимость от location.pathname
+    }, [location.pathname]);
 
     const navigate = useNavigate();
     useEffect(() => {
@@ -55,7 +56,7 @@ export default function Files() {
                     navigate(("/cloud-storage/files/"))
                 , 500)
         }
-    }, [folderContent]); // Зависимость от location.pathname
+    }, [folderContent]);
 
 
     const dragRef = useRef();
@@ -69,7 +70,9 @@ export default function Files() {
 
         }}>
 
-            <FileBrowserHeader/>
+            {!isSearchMode ?
+                <FileBrowserHeader/> : <SearchBrowserHeader/>
+            }
 
 
             <Container disableGutters sx={{mt: 23, width: '100%'}}>

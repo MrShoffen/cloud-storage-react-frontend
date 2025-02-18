@@ -1,19 +1,7 @@
-import {
-    Box,
-    Button,
-    Card,
-    CircularProgress,
-    Container,
-    Divider,
-    IconButton
-} from "@mui/material";
+import {Box, Button, Card, Container, Divider, IconButton} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import {CustomBread} from "./Breadcrumbs/CustomBread.jsx";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React, {useEffect, useRef, useState} from "react";
-import {FileMenu} from "./FileMenu/FileMenu.jsx";
 import CloseIcon from "@mui/icons-material/Close";
 import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
@@ -21,16 +9,20 @@ import {useStorageSelection} from "../../context/Storage/StorageSelectionProvide
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
-import AddIcon from '@mui/icons-material/Add';
-import {FolderMenu} from "./FolderMenu/FolderMenu.jsx";
+import SearchOffIcon from '@mui/icons-material/SearchOff';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {FileMenu} from "../FileBrowserHeader/FileMenu/FileMenu.jsx";
 
-export const FileBrowserHeader = () => {
+export const SearchBrowserHeader = () => {
 
     const {
         isRootFolder,
         goToPrevFolder,
         currentFolder,
-        currentPath,
+        isSearchMode,
+        searchName,
+        setSearchName,
+        setSearchedContent,
         folderContentLoading,
     } = useStorageNavigation();
 
@@ -40,20 +32,15 @@ export const FileBrowserHeader = () => {
         bufferIds,
         endCopying,
         endCutting,
-        selectedIds,
-        setSelectedIds,
-        setSelectionMode,
-        startCopying, startCutting
     } = useStorageSelection();
 
 
     const {pasteObjects, deleteObject} = useStorageOperations();
 
 
-
-
-    function handleBack() {
-        goToPrevFolder();
+    function handleEndSearch() {
+        setSearchName("");
+        setSearchedContent([]);
     }
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -122,17 +109,10 @@ export const FileBrowserHeader = () => {
                             display: "flex",
                             overflowX: "auto",
                             maxWidth: "100%",
-                            "&::-webkit-scrollbar": {height: "3px"},
-                            "&::-webkit-scrollbar-thumb": {backgroundColor: "#888", borderRadius: "3px"},
-                            scrollbarWidth: "thin",
-                            '&::-webkit-scrollbar-track': {
-                                backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                            },
                         }}
                     >
-                        {folderContentLoading ?
-                            <CircularProgress sx={{mt: 1, ml: 1}} size={30}/> :
-                            <CustomBread/>}
+                        <Typography width='100%' mt={1} variant="h5" textAlign="center">
+                            Результаты поиска</Typography>
                     </Box>
 
                     <Divider sx={{m: 0}}/>
@@ -147,18 +127,17 @@ export const FileBrowserHeader = () => {
                     >
 
 
-                        {!isRootFolder &&
-                            <Button onClick={handleBack} variant='contained' sx={{
-                                minHeight: '38px',
-                                minWidth: '38px',
-                                p: 0,
-                                width: '38px',
-                                height: '38px',
-                                borderRadius: '50%'
-                            }}>
-                                <ArrowBackIcon/>
-                            </Button>
-                        }
+                        <Button onClick={handleEndSearch} variant='contained' sx={{
+                            minHeight: '38px',
+                            minWidth: '38px',
+                            p: 0,
+                            width: '38px',
+                            height: '38px',
+                            borderRadius: '50%'
+                        }}>
+                            <SearchOffIcon/>
+                        </Button>
+
 
                         {!isCopyMode && !isCutMode ?
                             <Box sx={{
@@ -178,7 +157,7 @@ export const FileBrowserHeader = () => {
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                 }}>
-                                    {!folderContentLoading && (currentFolder ? currentFolder.slice(0, -1) : 'Корневой каталог')}
+                                    {searchName}
 
                                 </Typography>
                             </Box>
@@ -238,7 +217,7 @@ export const FileBrowserHeader = () => {
                                 </Typography>
 
                                 <IconButton
-
+                                    disabled={isSearchMode}
                                     onClick={pasteObjects}
                                     sx={{
                                         position: 'absolute',
@@ -257,23 +236,17 @@ export const FileBrowserHeader = () => {
                                 </IconButton>
                             </Box>
                         }
-                        <IconButton onClick={handleOpenFolderMenu} variant='contained' sx={{ml: 'auto'}}>
-                            <AddIcon/>
+
+
+                        <IconButton onClick={handleOpenMenu} variant='contained' sx={{ml: 'auto'}}>
+                            <MoreVertIcon/>
                         </IconButton>
-
-                        {!isCopyMode && !isCutMode &&
-
-                            <IconButton onClick={handleOpenMenu} variant='contained' sx={{ml: '0'}}>
-                                <MoreVertIcon/>
-                            </IconButton>
-                        }
-
 
                     </Box>
                 </Card>
             </Box>
-            <FileMenu anchorEl={anchorEl} handleCloseMenu={handleCloseMenu}/>
-            <FolderMenu anchorEl={anchorElFolder} handleCloseMenu={handleCloseFolderMenu}/>
+            <FileMenu anchorEl={anchorEl} handleCloseMenu={handleCloseMenu} showViewVariants={false}/>
+
 
         </Container>
     )

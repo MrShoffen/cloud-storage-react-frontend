@@ -282,7 +282,8 @@ export const FileOperationsProvider = ({children}) => {
 
     const executeDownloadTask = async (downloadTask) => {
         updateTask(downloadTask, "progress", "Скачиваем...")
-        let size = getObjectByPath(downloadTask.operation.source).size;
+        let obj = getObjectByPath(downloadTask.operation.source);
+        let size = obj ? obj.size : 0;
         try {
             await sendDownloadFile(downloadTask, updateTask, updateDownloadTask, size, updateDownloadSpeed);
 

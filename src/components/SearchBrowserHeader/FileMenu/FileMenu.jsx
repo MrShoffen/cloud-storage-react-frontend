@@ -19,7 +19,7 @@ import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import SortByAlphaIcon from '@mui/icons-material/SortByAlpha';
 
-export const FileMenu = ({anchorEl, handleCloseMenu, showViewVariants = true}) => {
+export const FileMenu = ({anchorEl, handleCloseMenu}) => {
     const {
         filesView, turnLargeTiles, turnRegularTiles, turnList,
     } = useStorageView();
@@ -85,82 +85,76 @@ export const FileMenu = ({anchorEl, handleCloseMenu, showViewVariants = true}) =
 
     const fileMenu = () => {
         return (<>
-            {showViewVariants &&
-                <>
+            <List sx={{minWidth: '350px'}} disablePadding component="nav" aria-label="main mailbox folders">
+                <ListSubheader id="nested-list-subheader"
+                               sx={{
+                                   backgroundColor: 'transparent',
+                                   backdropFilter: 'blur(9px)',
+                                   WebkitBackdropFilter: 'blur(9px)',
+                                   maxHeight: '25px',
+                                   marginBottom: '20px',
+                                   marginTop: '-10px'
+                               }}
+                >
+                    Вид
+                </ListSubheader>
+                <ListItemButton
+                    selected={filesView === 'list'}
+                    onClick={turnList}
+                    sx={{maxHeight: '45px',}}
+                >
+                    <ListItemIcon>
+                        <ListIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Список"/>
+                    {filesView === 'list' && (
+                        <CheckIcon
+                            sx={{
+                                position: 'absolute', right: '16px',
+                                color: 'primary.dark',
+                            }}
+                        />)}
+                </ListItemButton>
 
-                    <List sx={{minWidth: '350px'}} disablePadding component="nav" aria-label="main mailbox folders">
+                <ListItemButton
+                    selected={filesView === 'regularTiles'}
+                    onClick={turnRegularTiles}
+                    sx={{maxHeight: '45px',}}
+                >
+                    <ListItemIcon>
+                        <RegularTile/>
+                    </ListItemIcon>
+                    <ListItemText primary="Плитка"/>
+                    {filesView === 'regularTiles' && (
+                        <CheckIcon
+                            sx={{
+                                position: 'absolute', right: '16px',
+                                color: 'primary.dark',
+                            }}
+                        />)}
 
-                        <ListSubheader id="nested-list-subheader"
-                                       sx={{
-                                           backgroundColor: 'transparent',
-                                           backdropFilter: 'blur(9px)',
-                                           WebkitBackdropFilter: 'blur(9px)',
-                                           maxHeight: '25px',
-                                           marginBottom: '20px',
-                                           marginTop: '-10px'
-                                       }}
-                        >
-                            Вид
-                        </ListSubheader>
-                        <ListItemButton
-                            selected={filesView === 'list'}
-                            onClick={turnList}
-                            sx={{maxHeight: '45px',}}
-                        >
-                            <ListItemIcon>
-                                <ListIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Список"/>
-                            {filesView === 'list' && (
-                                <CheckIcon
-                                    sx={{
-                                        position: 'absolute', right: '16px',
-                                        color: 'primary.dark',
-                                    }}
-                                />)}
-                        </ListItemButton>
+                </ListItemButton>
 
-                        <ListItemButton
-                            selected={filesView === 'regularTiles'}
-                            onClick={turnRegularTiles}
-                            sx={{maxHeight: '45px',}}
-                        >
-                            <ListItemIcon>
-                                <RegularTile/>
-                            </ListItemIcon>
-                            <ListItemText primary="Плитка"/>
-                            {filesView === 'regularTiles' && (
-                                <CheckIcon
-                                    sx={{
-                                        position: 'absolute', right: '16px',
-                                        color: 'primary.dark',
-                                    }}
-                                />)}
+                <ListItemButton
+                    selected={filesView === 'largeTiles'}
+                    onClick={turnLargeTiles}
+                    sx={{maxHeight: '45px',}}
+                >
+                    <ListItemIcon>
+                        <LargeTile/>
+                    </ListItemIcon>
+                    <ListItemText primary="Крупная плитка"/>
+                    {filesView === 'largeTiles' && (
+                        <CheckIcon
+                            sx={{
+                                position: 'absolute', right: '16px',
+                                color: 'primary.dark',
+                            }}
+                        />)}
+                </ListItemButton>
 
-                        </ListItemButton>
-
-                        <ListItemButton
-                            selected={filesView === 'largeTiles'}
-                            onClick={turnLargeTiles}
-                            sx={{maxHeight: '45px',}}
-                        >
-                            <ListItemIcon>
-                                <LargeTile/>
-                            </ListItemIcon>
-                            <ListItemText primary="Крупная плитка"/>
-                            {filesView === 'largeTiles' && (
-                                <CheckIcon
-                                    sx={{
-                                        position: 'absolute', right: '16px',
-                                        color: 'primary.dark',
-                                    }}
-                                />)}
-                        </ListItemButton>
-
-                    </List>
-                    <Divider sx={{mb: '14px', pt: 1}}/>
-                </>
-            }
+            </List>
+            <Divider sx={{mb: '14px', pt: 1}}/>
 
             <List sx={{minWidth: '350px'}} disablePadding component="nav" aria-label="main mailbox folders">
                 <ListSubheader id="nested-list-subheader"

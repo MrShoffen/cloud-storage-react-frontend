@@ -2,15 +2,12 @@ import Selecto from "react-selecto";
 import Moveable from "react-moveable";
 import * as React from "react";
 import {useEffect, useRef, useState} from "react";
-import {Box, Divider, List, ListItemIcon, ListItemText, Menu, MenuItem} from "@mui/material";
+import {Box} from "@mui/material";
 import {isMobile} from "react-device-detect";
 import {useStorageSelection} from "../../context/Storage/StorageSelectionProvider.jsx";
 import {FileFormatIcon} from "../../assets/FileFormatIcon.jsx";
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
-import {ContentCopy, ContentCut, ContentPaste} from "@mui/icons-material";
-import Typography from "@mui/material/Typography";
-import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
-import DeleteIcon from "@mui/icons-material/Delete";
+import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 
 export const FileSelection = ({
                                   containerRef,
@@ -20,6 +17,7 @@ export const FileSelection = ({
     const isMob = isMobile;
 
     const {moveObjects, deleteObject, } = useStorageOperations();
+    const {isSearchMode} = useStorageNavigation();
 
     const {isSelectionMode, setSelectionMode, isCopyMode, isCutMode,} = useStorageSelection();
 
@@ -165,7 +163,7 @@ export const FileSelection = ({
 
 
             {
-                !isMob &&
+                !isMob && !isSearchMode &&
                 <>
                     <Moveable
                         ref={moveableRef}

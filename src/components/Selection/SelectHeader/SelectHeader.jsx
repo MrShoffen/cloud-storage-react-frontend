@@ -1,4 +1,4 @@
-import {Container, Divider, List, ListItemIcon, ListItemText, MenuItem, Popper, Toolbar} from "@mui/material";
+import {Box, Container, Divider, List, ListItemIcon, ListItemText, MenuItem, Popper, Toolbar} from "@mui/material";
 import React, {useCallback, useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
@@ -14,6 +14,8 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import RenameModal from "../../../modals/FileChange/RenameModal.jsx";
 import {ContentCopy, ContentCut, ContentPaste} from "@mui/icons-material";
 import {isMobile} from "react-device-detect";
+import {useStorageNavigation} from "../../../context/Storage/StorageNavigationProvider.jsx";
+import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 
 const pathToName = (path) => {
     let sep = path.lastIndexOf("/", path.length - 2);
@@ -36,6 +38,8 @@ export const SelectHeader = () => {
         isCopyMode,
         isCutMode
     } = useStorageSelection();
+
+    const {isSearchMode, setSearchedContent, loadFolder} = useStorageNavigation();
 
     const clearSelectionMode = () => {
         setSelectionMode(false);
@@ -88,6 +92,18 @@ export const SelectHeader = () => {
     const handlePaste = () => {
         pasteObjects();
         setAnchorEl2(null);
+    }
+
+    const handleGoToFolder = () => {
+        setAnchorEl2(null);
+        setSearchedContent([]);
+        const path = selectedIds[0];
+        const last = path.lastIndexOf("/");
+
+        const toGo = last === -1 ? "" : path.substring(0, last + 1);
+        console.log(toGo);
+
+        loadFolder(toGo);
     }
 
     const createAnchorElement = useCallback((container, x, y) => {
@@ -236,109 +252,116 @@ export const SelectHeader = () => {
 
                 </Typography>
 
+                <Box sx={{display: 'flex', ml: 'auto'}}>
+                    <IconButton
+                        onClick={handleDownload}
+                        sx={{
+                            display: selectedIds.length === 1 ? 'flex' : 'none',
 
-                <IconButton
-                    onClick={handleDownload}
-                    sx={{
-                        display: selectedIds.length === 1 ? 'flex' : 'none',
-                        position: 'absolute',
-                        bottom: 14,
-                        right: 190,
-                        width: '35px',
-                        height: '35px',
-                        color: 'white',
-                        userSelect: 'none'
+                            width: '35px',
+                            height: '35px',
+                            color: 'white',
+                            userSelect: 'none'
 
-                    }}
-                >
-                    <DownloadIcon sx={{fontSize: '20px'}}/>
-                </IconButton>
+                        }}
+                    >
+                        <DownloadIcon sx={{fontSize: '20px'}}/>
+                    </IconButton>
 
-                <IconButton
-                    onClick={handleRenameClick}
-                    sx={{
-                        display: selectedIds.length === 1 ? 'flex' : 'none',
-                        position: 'absolute',
-                        bottom: 14,
-                        right: 155,
-                        width: '35px',
-                        height: '35px',
-                        color: 'white',
-                        userSelect: 'none'
+                    <IconButton
+                        onClick={handleRenameClick}
+                        sx={{
+                            display: selectedIds.length === 1 ? 'flex' : 'none',
 
-                    }}
-                >
-                    <DriveFileRenameOutlineIcon sx={{fontSize: '20px'}}/>
-                </IconButton>
+                            width: '35px',
+                            height: '35px',
+                            color: 'white',
+                            userSelect: 'none'
 
-                <IconButton
-                    onClick={handleDelete}
-                    sx={{
-                        position: 'absolute',
-                        bottom: 14,
-                        right: 120,
-                        width: '35px',
-                        height: '35px',
-                        color: 'white',
-                        userSelect: 'none'
+                        }}
+                    >
+                        <DriveFileRenameOutlineIcon sx={{fontSize: '20px'}}/>
+                    </IconButton>
 
-                    }}
-                >
-                    <DeleteIcon sx={{fontSize: '20px'}}/>
-                </IconButton>
+                    {!isSearchMode ?
+                        <IconButton
+                            onClick={handleDelete}
+                            sx={{
 
-                <IconButton
-                    onClick={startCutting}
-                    sx={{
-                        position: 'absolute',
-                        bottom: 14,
-                        right: 85,
-                        width: '35px',
-                        height: '35px',
-                        color: 'white',
-                        userSelect: 'none'
+                                width: '35px',
+                                height: '35px',
+                                color: 'white',
+                                userSelect: 'none'
 
-                    }}
-                >
-                    <ContentCutIcon sx={{fontSize: '20px'}}/>
-                </IconButton>
+                            }}
+                        >
+                            <DeleteIcon sx={{fontSize: '20px'}}/>
+                        </IconButton>
+                        :
+                        selectedIds.length === 1 && <IconButton
+                            onClick={handleGoToFolder}
+                            sx={{
 
-                <IconButton
-                    onClick={startCopying}
-                    sx={{
-                        position: 'absolute',
-                        bottom: 14,
-                        right: 48,
-                        width: '35px',
-                        height: '35px',
-                        color: 'white',
-                        userSelect: 'none'
+                                width: '35px',
+                                height: '35px',
+                                color: 'white',
+                                userSelect: 'none'
 
-                    }}
-                >
-                    <ContentCopyIcon sx={{fontSize: '20px'}}/>
-                </IconButton>
+                            }}
+                        >
+                            <DriveFileMoveIcon sx={{fontSize: '20px'}}/>
+                        </IconButton>
+                    }
+
+                    <IconButton
+                        onClick={startCutting}
+                        sx={{
+
+                            width: '35px',
+                            height: '35px',
+                            color: 'white',
+                            userSelect: 'none'
+
+                        }}
+                    >
+                        <ContentCutIcon sx={{fontSize: '20px'}}/>
+                    </IconButton>
+
+                    <IconButton
+                        onClick={startCopying}
+                        sx={{
+
+                            width: '35px',
+                            height: '35px',
+                            color: 'white',
+                            userSelect: 'none'
+
+                        }}
+                    >
+                        <ContentCopyIcon sx={{fontSize: '20px'}}/>
+                    </IconButton>
 
 
-                <IconButton
-                    onClick={clearSelectionMode}
-                    sx={{
-                        position: 'absolute',
-                        bottom: 16,
-                        right: 10,
-                        width: '30px',
-                        height: '30px',
-                        color: 'white',
-                        userSelect: 'none',
+                    <IconButton
+                        onClick={clearSelectionMode}
+                        sx={{
 
-                        backgroundColor: 'error.main',
-                        '&:hover': {
-                            backgroundColor: 'error.dark',
-                        }
-                    }}
-                >
-                    <CloseIcon sx={{fontSize: '25px'}}/>
-                </IconButton>
+                            width: '30px',
+                            height: '30px',
+                            color: 'white',
+                            userSelect: 'none',
+
+                            backgroundColor: 'error.main',
+                            '&:hover': {
+                                backgroundColor: 'error.dark',
+                            }
+                        }}
+                    >
+                        <CloseIcon sx={{fontSize: '25px'}}/>
+                    </IconButton>
+                </Box>
+
+
             </Toolbar>
             <RenameModal open={modalRenameOpen}
                          onClose={handleCloseRenameModal}
@@ -395,8 +418,9 @@ export const SelectHeader = () => {
                             Ctrl+C
                         </Typography>
                     </MenuItem>
+
                     <MenuItem
-                        disabled={!isCopyMode && !isCutMode}
+                        disabled={!isCopyMode && !isCutMode || isSearchMode}
                         onClick={handlePaste}
                     >
                         <ListItemIcon>
@@ -407,19 +431,38 @@ export const SelectHeader = () => {
                             Ctrl+V
                         </Typography>
                     </MenuItem>
+
                     <Divider/>
-                    <MenuItem
-                        disabled={selectedIds.length === 0}
-                        onClick={handleDeleteContext}
-                    >
-                        <ListItemIcon>
-                            <DeleteIcon fontSize="small"/>
-                        </ListItemIcon>
-                        <ListItemText>Удалить</ListItemText>
-                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                            Del
-                        </Typography>
-                    </MenuItem>
+
+                    {!isSearchMode ?
+                        <MenuItem
+                            disabled={selectedIds.length === 0}
+                            onClick={handleDeleteContext}
+                        >
+                            <ListItemIcon>
+                                <DeleteIcon fontSize="small"/>
+                            </ListItemIcon>
+                            <ListItemText>Удалить</ListItemText>
+                            <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                                Del
+                            </Typography>
+                        </MenuItem>
+                        :
+                        <MenuItem
+                            disabled={selectedIds.length !== 1}
+                            onClick={handleGoToFolder}
+                        >
+                            <ListItemIcon>
+                                <DriveFileMoveIcon fontSize="small"/>
+                            </ListItemIcon>
+                            <ListItemText>Перейти к папке</ListItemText>
+                            <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                                Del
+                            </Typography>
+                        </MenuItem>
+
+                    }
+
                     <MenuItem
                         disabled={selectedIds.length !== 1}
 

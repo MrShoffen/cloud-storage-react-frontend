@@ -1,7 +1,6 @@
-import {Box, Card, Container, Divider} from "@mui/material";
+import {Box, Container, Divider} from "@mui/material";
 import {FilePageButton} from "../components/FilePageButton/FilePageButton.jsx";
 import {useAuthContext} from "../context/Auth/AuthContext.jsx";
-import {UsageHint} from "../components/hints/UsageHint.jsx";
 import Typography from "@mui/material/Typography";
 import {useNavigate} from "react-router-dom";
 
@@ -74,7 +73,9 @@ export default function Index() {
                         Spring Boot (Data JPA, Validation, Web and Test starters)<br/>
                         Liquibase<br/>
                         PostgreSQL Database<br/>
-                        Docker and Docker Compose
+                        Docker and Docker Compose<br/>
+                        Minio java sdk<br/>
+                        Redis
 
                     </Typography>
                 </Typography>

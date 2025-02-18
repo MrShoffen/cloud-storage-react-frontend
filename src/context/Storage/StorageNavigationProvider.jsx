@@ -45,7 +45,7 @@ export const StorageNavigationProvider = ({children}) => {
     const [folderContent, setFolderContent] = useState([]);
 
     const createSpoofObject = (object) => {
-        setFolderContent( [...folderContent, object])
+        setFolderContent([...folderContent, object])
     }
 
 
@@ -84,6 +84,12 @@ export const StorageNavigationProvider = ({children}) => {
         setFolderContentLoading(false);
     }
 
+    const [searchedContent, setSearchedContent] = React.useState([]);
+
+    const isSearchMode = searchedContent.length > 0;
+
+    const [searchName, setSearchName] = useState("");
+
     // const isPasteAllowed = () => {
     //     const folderPathes = folderContent.map(obj => obj.path);
     //     let filtered = bufferIds.filter(path => folderPathes.includes(path));
@@ -106,6 +112,12 @@ export const StorageNavigationProvider = ({children}) => {
             loadFolder,
             currentPathRef,
             createSpoofObject,
+
+            searchedContent,
+            setSearchedContent,
+            isSearchMode,
+            searchName,
+            setSearchName,
 
             getObjectByPath
         }}>

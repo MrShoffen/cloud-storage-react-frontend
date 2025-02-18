@@ -1,4 +1,4 @@
-import {Box, Menu, MenuItem} from "@mui/material";
+import {Box} from "@mui/material";
 import StorageTileObject from "./StorageObject/StorageTileObject.jsx";
 import {useStorageNavigation} from "../../context/Storage/StorageNavigationProvider.jsx";
 import {AnimatePresence, motion} from "framer-motion";
@@ -11,10 +11,11 @@ import {useStorageSelection} from "../../context/Storage/StorageSelectionProvide
 import {useStorageOperations} from "../../context/Files/FileOperationsProvider.jsx";
 import {UsageHint} from "../hints/UsageHint.jsx";
 import FilePreviewModal from "../../modals/FilePreviewModal/FilePreviewModal.jsx";
+import SearchObject from "./StorageObject/SearchObject.jsx";
 
 export const ObjectsContainer = () => {
 
-    const {folderContent, folderPath} = useStorageNavigation();
+    const {folderContent, folderPath, searchedContent, isSearchMode} = useStorageNavigation();
     const {filesView, sortFolder} = useStorageView();
     const {
         selectedIds, setSelectedIds, setSelectionMode,
@@ -105,8 +106,6 @@ export const ObjectsContainer = () => {
     }, [folderContent])
 
 
-
-
     return (
         <AnimatePresence mode="wait">
 
@@ -120,8 +119,9 @@ export const ObjectsContainer = () => {
             >
                 <FilePreviewModal open={previewModal} onClose={handleClosePreview} object={objectPreview}/>
 
+
                 {
-                    (filesView === 'regularTiles' || filesView === 'largeTiles')
+                    (filesView === 'regularTiles' || filesView === 'largeTiles') && !isSearchMode
                         ?
                         <Box
 
@@ -140,20 +140,26 @@ export const ObjectsContainer = () => {
                                 },
                             }}
 
-                            onScroll={() => {
-                                selectoRef.current.checkScroll();
-                            }}
-
                         >
-                            {folderContent
-                                &&
-                                sortFolder(folderContent).map(
-                                    (item) => <StorageTileObject selectedIds={selectedIds}
-                                                                 bufferIds={bufferIds}
-                                                                 object={item}
-                                                                 style={filesView}
-                                                                 handlePreview={handleOpenPreview}
-                                    />)}
+                            {
+                                folderContent && !isSearchMode ?
+                                    sortFolder(folderContent).map(
+                                        (item) => <StorageTileObject selectedIds={selectedIds}
+                                                                     bufferIds={bufferIds}
+                                                                     object={item}
+                                                                     style={filesView}
+                                                                     handlePreview={handleOpenPreview}
+                                        />)
+                                    :
+                                    sortFolder(searchedContent).map(
+                                        (item) => <SearchObject object={item}
+                                                                style={filesView}
+                                                                bufferIds={bufferIds}
+                                                                handlePreview={handleOpenPreview}
+                                                                selectedIds={selectedIds}/>)
+
+                            }
+
                         </Box>
                         :
                         <Box
@@ -173,14 +179,22 @@ export const ObjectsContainer = () => {
                                 },
                             }}
                         >
-                            {folderContent
-                                &&
+                            {folderContent && !isSearchMode ?
+
                                 sortFolder(folderContent).map(
                                     (item) => <StorageListObject object={item}
                                                                  style={filesView}
                                                                  bufferIds={bufferIds}
                                                                  handlePreview={handleOpenPreview}
-                                                                 selectedIds={selectedIds}/>)}
+                                                                 selectedIds={selectedIds}/>)
+                                :
+                                sortFolder(searchedContent).map(
+                                    (item) => <SearchObject object={item}
+                                                            style={filesView}
+                                                            bufferIds={bufferIds}
+                                                            handlePreview={handleOpenPreview}
+                                                            selectedIds={selectedIds}/>)
+                            }
                         </Box>
                 }
 

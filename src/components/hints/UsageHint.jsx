@@ -107,6 +107,10 @@ export const UsageHint = () => {
                     <Box sx={{display: 'flex', justifyContent: 'center'}}>
                         <img src={combo} alt="combo" style={{width: '100%', maxWidth: '640px'}}/>
                     </Box>
+                    <Typography sx={{width: '100%', textAlign: 'center', mt: 4, fontSize: '18px'}}>
+                        При выполнении поиска - буфер обмена и выделение так же работают. Можно скопировать, вырезать, скачать объекты.
+                        Затем вернуться в обычный режим и переместить/вставить объекты.
+                    </Typography>
 
                     <Divider sx={{ml: -10, mr: -10, mt: 2, mb: 2}}/>
 
@@ -204,6 +208,10 @@ export const UsageHint = () => {
                             Ваш браузер не поддерживает видео.
                         </video>
                     </Box>
+                    <Typography sx={{width: '100%', textAlign: 'center', mt: 4, fontSize: '18px'}}>
+                        При выполнении поиска - буфер обмена и выделение так же работает. Можно скопировать, вырезать, скачать объекты.
+                        Затем вернуться в обычный режим и переместить/вставить объекты.
+                    </Typography>
                     <Divider sx={{m: 2, ml: -10, mr: -10}}/>
 
                     <Typography variant="h4"

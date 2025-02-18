@@ -15,6 +15,14 @@ export const StorageSelectionProvider = ({children}) => {
 
     const [bufferIds, setBufferIds] = useState([]);
 
+    // useEffect(() => {
+    //     if(selectedIds.length > 0) {
+    //         setSelectionMode(true);
+    //     } else {
+    //         setSelectionMode(false);
+    //     }
+    //
+    // },[selectedIds])
 
     const startCopying = () => {
         setBufferIds(selectedIds);

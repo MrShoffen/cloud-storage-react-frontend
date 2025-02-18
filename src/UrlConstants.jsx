@@ -15,11 +15,12 @@ export const API_LOGOUT = API_BASE_URL + API_CONTEXT + '/auth/logout';
 
 export const API_FILES = API_BASE_URL + API_CONTEXT + '/resources';
 export const API_FILES_LIST = API_FILES + '/files';
-export const API_MOVE_FILES = API_BASE_URL + API_CONTEXT + '/resources/move';
-export const API_COPY_FILES = API_BASE_URL + API_CONTEXT + '/resources/copy';
-export const API_DOWNLOAD_FILES  = API_BASE_URL + API_CONTEXT + '/resources/download';
-export const API_UPLOAD_FILES  = API_BASE_URL + API_CONTEXT + '/resources/upload';
-export const API_FILES_PREVIEW  = API_BASE_URL + API_CONTEXT + '/resources/preview';
+export const API_MOVE_FILES = API_FILES + '/move';
+export const API_COPY_FILES = API_FILES + '/copy';
+export const API_DOWNLOAD_FILES  = API_FILES + '/download';
+export const API_UPLOAD_FILES  = API_FILES+ '/upload';
+export const API_FILES_PREVIEW  = API_FILES + '/preview';
+export const API_FILES_SEARCH  = API_FILES + '/search';
 
 
 export const API_USER_INFO = API_BASE_URL + API_CONTEXT + '/users/me';

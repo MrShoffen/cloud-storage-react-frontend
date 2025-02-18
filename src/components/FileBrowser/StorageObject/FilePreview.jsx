@@ -1,10 +1,8 @@
-import ReactPlayer from "react-player";
 import {Box, CircularProgress} from "@mui/material";
 import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
 import React, {useEffect, useState} from "react";
 import {API_PREVIEW} from "../../../UrlConstants.jsx";
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import CircleIcon from '@mui/icons-material/Circle';
 import {useCustomThemeContext} from "../../../context/GlobalThemeContext/CustomThemeProvider.jsx";
 
 

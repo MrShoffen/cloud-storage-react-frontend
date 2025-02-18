@@ -9,7 +9,6 @@ import {useStorageSelection} from "../../../context/Storage/StorageSelectionProv
 import {FileFormatIcon} from "../../../assets/FileFormatIcon.jsx";
 import ContentCutIcon from '@mui/icons-material/ContentCut';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import {API_PREVIEW} from "../../../UrlConstants.jsx";
 import {sendGetPreview} from "../../../services/fetch/auth/storage/SendGetPreview.js";
 import {FilePreview} from "./FilePreview.jsx";
 
@@ -46,9 +45,9 @@ export default function StorageTileObject({object, style, selectedIds, bufferIds
     };
 
     const onLongPress = isMob ? () => {
-        // if (navigator.vibrate) {
-        //     navigator.vibrate(70);
-        // }
+        if (navigator.vibrate) {
+            navigator.vibrate(70);
+        }
         if (!isSelectionMode && !isCutMode && !isCopyMode) {
             setSelectionMode(true);
         }

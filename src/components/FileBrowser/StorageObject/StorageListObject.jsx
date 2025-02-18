@@ -40,9 +40,9 @@ export default function StorageListObject({object, style, selectedIds, bufferIds
     } : null;
 
     const onLongPress = isMob ? () => {
-        // if (navigator.vibrate) {
-        //     navigator.vibrate(70);
-        // }
+        if (navigator.vibrate) {
+            navigator.vibrate(70);
+        }
         if (!isSelectionMode && !isCutMode && !isCopyMode) {
             setSelectionMode(true);
         }
