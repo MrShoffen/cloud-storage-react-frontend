@@ -120,9 +120,11 @@ export const SearchBrowserHeader = () => {
                     >
 
 
-                        <Button onClick={handleEndSearch} variant='contained' sx={{
-                            minHeight: '38px',
-                            minWidth: '38px',
+                        <Button onClick={handleEndSearch}   sx={{
+                            minHeight: '42px',
+                            minWidth: '42px',
+                            background: 'linear-gradient(90deg, rgba(180,73,100,1) 0%, rgba(250,30,30,1) 100%)',
+                            color: 'white',
                             p: 0,
                             width: '38px',
                             height: '38px',

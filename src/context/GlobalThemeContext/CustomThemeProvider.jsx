@@ -185,7 +185,7 @@ export const CustomThemeProvider = ({children}) => {
         setInterval(async () => {
             const db = await openDB();
             await cleanExpiredData(db, 3600000);
-        }, 1200000);
+        }, 3600000);
     }, []);
 
 

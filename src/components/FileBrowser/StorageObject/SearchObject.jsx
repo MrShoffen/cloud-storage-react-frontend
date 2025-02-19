@@ -1,5 +1,5 @@
 import {Box, Card} from "@mui/material";
-import React from "react";
+import React, {useEffect} from "react";
 import {useStorageNavigation} from "../../../context/Storage/StorageNavigationProvider.jsx";
 import {useLongPress} from "../../Selection/hook/useLongPress.jsx";
 import {isMobile} from "react-device-detect";
@@ -11,6 +11,8 @@ import ContentCutIcon from "@mui/icons-material/ContentCut";
 import Typography from "@mui/material/Typography";
 import bytes from "bytes";
 import {formatDate} from "../../../services/util/Utils.js";
+import {sendGetPreview} from "../../../services/fetch/auth/storage/SendGetPreview.js";
+import {FilePreview} from "./FilePreview.jsx";
 
 const isMob = isMobile;
 
@@ -23,7 +25,7 @@ const highlightSubstring = (text, substring) => {
 
     return parts.map((part, index) =>
         part.toLowerCase() === substring.toLowerCase() ? (
-            <span key={index} style={{ backgroundColor: 'gray',  }}>
+            <span key={index} style={{backgroundColor: 'gray',}}>
         {part}
       </span>
         ) : (
@@ -68,6 +70,35 @@ export default function SearchObject({object, selectedIds, bufferIds, handlePrev
 
     } : null;
 
+    const [preview, setPreview] = React.useState("");
+    useEffect(() => {
+        if (!preview && object.path && allowedPictureFormat(object)) {
+            getPreview(object.path);
+        }
+
+
+    }, []);
+
+    const allowedPictureFormat = (object) => {
+        if (object.folder) {
+            return false;
+        }
+        let dotIndex = object.path.lastIndexOf(".");
+        let format = object.path.substring(dotIndex + 1);
+
+        return format === 'jpg' || format === 'png'
+            || format === 'gif' || format === 'jpeg' || format === 'bmp'
+            || format === 'mp4' || format === 'webm' || format === 'mov';
+
+    }
+
+    const getPreview = async (path) => {
+        let previewUrl = await sendGetPreview(path);
+        // console.log(previewUrl);
+        setPreview(previewUrl);
+
+    }
+
     const longPressEvent = useLongPress(onLongPress, onClick);
 
     const selected = selectedIds.includes(object.path);
@@ -103,7 +134,14 @@ export default function SearchObject({object, selectedIds, bufferIds, handlePrev
                     elevation={0}
                 >
                     <Box sx={{position: 'absolute', width: '40px', left: 8, bottom: 10,}}>
-                        <FileFormatIcon name={object.name} style={''}/>
+
+                        {preview ?
+                            <Box sx={{ position: 'absolute', transform: 'translate(0%,-80%)', scale: 1.3, top: '0' }}>
+                                <FilePreview preview={preview} name={object.name}/>
+                            </Box>
+                            :
+                            <FileFormatIcon name={object.name} style={''}/>
+                        }
                         {copied && <ContentCopyIcon
                             sx={{color: 'black', position: 'absolute', fontSize: '15px', bottom: 11, left: 3}}/>}
                         {cutted && <ContentCutIcon
@@ -129,7 +167,7 @@ export default function SearchObject({object, selectedIds, bufferIds, handlePrev
                             },
                         }}
                     >
-                        {highlightSubstring(object.name,searchName)}
+                        {highlightSubstring(object.name, searchName)}
                     </Typography>
                     <Typography
                         sx={{
