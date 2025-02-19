@@ -6,8 +6,6 @@ import bytes from "bytes";
 
 export async function sendUpload(files, updateDownloadTask, updateTask, uploadTask, currPath) {
 
-    console.log(currPath);
-    console.log(files + ' === ' + currPath)
     const formData = new FormData();
     files.forEach(({file, path}) => {
         formData.append("object", file, path);
@@ -15,7 +13,7 @@ export async function sendUpload(files, updateDownloadTask, updateTask, uploadTa
     formData.append("path", currPath);
 
 
-    let shouldReadProgress = true;
+
 
     try {
         const response = await axios.post(API_UPLOAD_FILES, formData, {
@@ -43,7 +41,6 @@ export async function sendUpload(files, updateDownloadTask, updateTask, uploadTa
         }
     } catch (error) {
         if( error.response && error.response.data.status === 413){
-            console.log(error.response.data.detail);
             throw new StorageExceedException(error.response.data.detail);
         }
         updateTask(uploadTask, "error", "Ошибка при загрузке. Попробуйте позже");
@@ -51,53 +48,3 @@ export async function sendUpload(files, updateDownloadTask, updateTask, uploadTa
 
 
 }
-
-export const handleUpload = async (files, currentPath, uploadTask, updateUploadTask, updateTask) => {
-
-    //     const size = files.length;
-    //
-    //
-    // const filesWithoutFolder = [];
-    // const innerFolders = {};
-    //
-    // files.forEach(({file, path}) => {
-    //     const fileName = path; // Предполагаем, что file - это объект с полем name
-    //     const firstSlash = fileName.indexOf("/");
-    //
-    //     if (firstSlash === -1) {
-    //         filesWithoutFolder.push({file, path});
-    //     } else {
-    //         const prefix = fileName.substring(0, firstSlash + 1);
-    //         if (!innerFolders[prefix]) {
-    //             innerFolders[prefix] = [];
-    //         }
-    //         innerFolders[prefix].push({file, path});
-    //     }
-    // });
-    //
-    // const firstForm = new FormData();
-    // filesWithoutFolder.forEach(({file, path}) => {
-    //     firstForm.append("object", file, path);
-    // })
-    // firstForm.append("folder",  currentPath);
-    // await fetchData(firstForm, updateUploadTask, uploadTask);
-    //
-    //
-    // for (const prefix of Object.keys(innerFolders)) {
-    //
-    //     const filesInFolder = innerFolders[prefix];
-    //
-    //     const form = new FormData();
-    //     filesInFolder.forEach(({file, path}) => {
-    //         form.append("object", file,  path);
-    //     })
-    //
-    //     form.append("folder", currentPath);
-    //     await fetchData(form, updateUploadTask, uploadTask);
-    // }
-    //
-    // console.log(filesWithoutFolder);
-    // console.log(innerFolders);
-
-
-};

@@ -43,9 +43,8 @@ export const ObjectsContainer = () => {
     const [previewModal, setPreviewModal] = React.useState(false);
 
     const handleClosePreview = () => {
-        console.log('closing');
         setPreviewModal(false);
-        let offsetTop = containerRef.current.offsetTop;
+
 
         window.scrollTo({
             top: 0,
@@ -73,7 +72,6 @@ export const ObjectsContainer = () => {
 
         if ((event.ctrlKey || event.metaKey) && (key === "c" || key === "с" || key === "C" || key === "С")) {
             event.preventDefault();
-            console.log("Ctrl + C pressed");
             if (selectedIds.length > 0) {
                 startCopying();
             }
@@ -99,7 +97,7 @@ export const ObjectsContainer = () => {
     const [showHint, setShowHint] = useState(false);
 
     useEffect(() => {
-        if ((folderContent === null || folderContent.length == 0) && folderPath.length == 1) {
+        if ((folderContent === null || folderContent.length === 0) && folderPath.length === 1) {
             setTimeout(() => setShowHint(true), 300);
         }
 

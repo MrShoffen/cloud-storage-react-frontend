@@ -12,7 +12,6 @@ export const authenticationMenuItems = () => {
         <>
             <MenuItem onClick={() => {
                 navigate("/cloud-storage/login");
-                handleClose()
             }}>
                 <ListItemIcon>
                     <LoginIcon fontSize="small"/>
@@ -20,7 +19,6 @@ export const authenticationMenuItems = () => {
             </MenuItem>
             <MenuItem onClick={() => {
                 navigate("/cloud-storage/registration");
-                handleClose()
             }}>
                 <ListItemIcon>
                     <PersonAddIcon fontSize="small"/>

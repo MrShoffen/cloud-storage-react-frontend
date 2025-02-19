@@ -54,7 +54,6 @@ export default function ValidatedAvatarInput({setAvatarUrl, initialAvatarUrl = '
                 setAvatarUrl(avatar.imageUrl);
                 setAvatarError(false)
                 setAvatarErrorMessage('')
-                console.log(avatar);
                 setTimeout(() => {
                     setAvatarLoading(false);
                     showSuccess("Аватар успешно загружен", 5000);

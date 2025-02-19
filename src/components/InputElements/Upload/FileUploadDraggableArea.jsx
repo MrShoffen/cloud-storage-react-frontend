@@ -42,7 +42,6 @@ export const FileUploadDraggableArea = ({dragRef, isDragging, setIsDragging}) =>
         dragCounter.current = 0;
 
         const droppedItems = Array.from(e.dataTransfer.items);
-        console.log(droppedItems);
         const newFiles = [];
 
         const processItem = async (item) => {

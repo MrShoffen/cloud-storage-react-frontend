@@ -103,7 +103,7 @@ export const CustomThemeProvider = ({children}) => {
         await cleanExpiredData(db, 3600000);
     }
 
-    function getFromDB(key) {
+    const getFromDB = (key) => {
         return new Promise((resolve, reject) => {
             const transaction = db.transaction(STORE_NAME, 'readonly');
             const store = transaction.objectStore(STORE_NAME);
@@ -123,7 +123,7 @@ export const CustomThemeProvider = ({children}) => {
         });
     }
 
-    function saveToDB(key, value) {
+    const saveToDB = (key, value) => {
         return new Promise((resolve, reject) => {
             const transaction = db.transaction(STORE_NAME, 'readwrite');
             const store = transaction.objectStore(STORE_NAME);

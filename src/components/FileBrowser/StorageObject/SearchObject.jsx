@@ -32,7 +32,7 @@ const highlightSubstring = (text, substring) => {
     );
 };
 
-export default function SearchObject({object, style, selectedIds, bufferIds, handlePreview}) {
+export default function SearchObject({object, selectedIds, bufferIds, handlePreview}) {
 
     const {goToFolder, searchName} = useStorageNavigation();
     const {setSelectionMode, isSelectionMode, isCutMode, isCopyMode} = useStorageSelection();

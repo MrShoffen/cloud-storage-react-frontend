@@ -36,7 +36,6 @@ export const FolderMenu = ({anchorEl, handleCloseMenu}) => {
 
     const handleInputChange = (e, isFolder) => {
         const newFiles = Array.from(e.target.files);
-        console.log(newFiles);
         if (isFolder) {
             const filesWithPath = newFiles.map((file) => ({
                 file,

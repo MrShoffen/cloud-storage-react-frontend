@@ -51,7 +51,7 @@ export default function Files() {
 
     const navigate = useNavigate();
     useEffect(() => {
-        if ((!folderContent || folderContent.length == 0) && !folderContentLoading && !isRootFolder) {
+        if ((!folderContent || folderContent.length === 0) && !folderContentLoading && !isRootFolder) {
             setTimeout(() =>
                     navigate(("/cloud-storage/files/"))
                 , 500)

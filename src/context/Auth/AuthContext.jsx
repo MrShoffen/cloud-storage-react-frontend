@@ -44,7 +44,6 @@ export const AuthProvider = ({children}) => {
             try {
                 const user = await checkSession();
                 if (user !== auth.user) {
-                    console.log(user);
                     login(user);
                 }
             } catch (error) {

@@ -47,7 +47,6 @@ export default function FilePreviewModal({
 
     const getContentViewer = (format) => {
         let src = API_PREVIEW + preview;
-        console.log(object);
 
         if (format === 'jpg' || format === 'png'
             || format === 'gif' || format === 'jpeg' || format === 'bmp') {

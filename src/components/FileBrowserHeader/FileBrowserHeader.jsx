@@ -30,7 +30,6 @@ export const FileBrowserHeader = () => {
         isRootFolder,
         goToPrevFolder,
         currentFolder,
-        currentPath,
         folderContentLoading,
     } = useStorageNavigation();
 
@@ -39,15 +38,11 @@ export const FileBrowserHeader = () => {
         isCutMode,
         bufferIds,
         endCopying,
-        endCutting,
-        selectedIds,
-        setSelectedIds,
-        setSelectionMode,
-        startCopying, startCutting
+        endCutting
     } = useStorageSelection();
 
 
-    const {pasteObjects, deleteObject} = useStorageOperations();
+    const {pasteObjects} = useStorageOperations();
 
 
 

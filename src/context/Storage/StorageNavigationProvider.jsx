@@ -10,7 +10,7 @@ export const useStorageNavigation = () => useContext(CloudStorageContext);
 
 
 export const StorageNavigationProvider = ({children}) => {
-    const {setSelectedIds, bufferIds} = useStorageSelection();
+    const {setSelectedIds} = useStorageSelection();
 
     const [folderContentLoading, setFolderContentLoading] = useState(false);
     const [folderPath, setFolderPath] = React.useState([""]);
@@ -59,7 +59,6 @@ export const StorageNavigationProvider = ({children}) => {
         let content = await sendGetFolderContent(fullPath);
         setFolderContent(content);
 
-        console.log(content);
         window.history.pushState(null, "", '/cloud-storage/files/' + fullPath);
     }
 
@@ -68,7 +67,6 @@ export const StorageNavigationProvider = ({children}) => {
         setFolderContentLoading(true);
         let content = await sendGetFolderContent(url);
         setFolderContent(content);
-        console.log(content);
 
         window.history.pushState(null, "", '/cloud-storage/files/' + url);
 

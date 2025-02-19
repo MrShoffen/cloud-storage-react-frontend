@@ -6,11 +6,10 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import {useCustomThemeContext} from "../../../context/GlobalThemeContext/CustomThemeProvider.jsx";
 
 
-
 function VideoThumbnail({videoUrl}) {
     const [thumbnail, setThumbnail] = useState(null);
 
-    const { getFromDB, saveToDB} = useCustomThemeContext();
+    const {getFromDB, saveToDB} = useCustomThemeContext();
 
     async function fetchThumb() {
         if (!videoUrl) return;
@@ -57,8 +56,8 @@ function VideoThumbnail({videoUrl}) {
         };
     }
 
-    useEffect( () => {
-         fetchThumb();
+    useEffect(() => {
+        fetchThumb();
 
     }, [videoUrl]);
 
@@ -73,7 +72,7 @@ function VideoThumbnail({videoUrl}) {
                              maxWidth: '100%',
                              maxHeight: '100%',
                              width: 'auto',
-                            // scale: '2',
+                             // scale: '2',
                              borderRadius: '8px',
                              height: 'auto',
                              objectFit: 'cover',
@@ -106,7 +105,7 @@ function VideoThumbnail({videoUrl}) {
                 </Box>
 
             ) : (
-                <CircularProgress />
+                <CircularProgress/>
             )}
         </div>
     );

@@ -94,7 +94,7 @@ export const CapacityModal = () => {
                     color: 'rgb(230,230,230)',
                 }}>
                 <LinearProgress variant="determinate"
-                                value={storageUsed * 100 / (maxCapByte)}
+                                value={(storageUsed * 100 / (maxCapByte)) >= 100 ? 100 : (storageUsed * 100 / (maxCapByte))}
                                 sx={{
                                     width: '100%',
                                     height: 10,

@@ -42,7 +42,7 @@ export const FileOperationsProvider = ({children}) => {
     }
 
     const checkConflicts = (ids) => {
-        if (ids.length == 1 && nameAlreadyExists(ids[0])) {
+        if (ids.length === 1 && nameAlreadyExists(ids[0])) {
             setConflictedIds(ids);
             setNameConflict(true);
             return true;
@@ -59,7 +59,6 @@ export const FileOperationsProvider = ({children}) => {
 
     const identicalTasks = (task1) => {
         const pendingTasks = tasks.filter((task) => task.status === "pending" || task.status === "progress");
-        console.log(pendingTasks);
         let filtered = pendingTasks.filter((task) => task.operation.source === task1.operation.source);
         return filtered.length > 0;
     }
@@ -141,7 +140,6 @@ export const FileOperationsProvider = ({children}) => {
             })
             .filter(({task}) => !identicalTasks(task));
 
-        console.log(uniqueTasks);
         setTasks(tasks => [...tasks, ...uniqueTasks.map(({task}) => task)]);
         setNewTasksAdded(true);
 
@@ -243,7 +241,6 @@ export const FileOperationsProvider = ({children}) => {
     const downloadObjects = (objectPath) => {
         const task = createTask(objectPath, null, "download", "В очереди на скачивание");
         if (identicalTasks(task)) {
-            console.log('im here')
             return;
         }
 
@@ -372,7 +369,6 @@ export const FileOperationsProvider = ({children}) => {
                 case e instanceof StorageExceedException:
                     updateTask(task, "error", e.message);
                     throw e;
-                    break;
                 default:
                     updateTask(task, "error", e.message);
 
@@ -397,19 +393,16 @@ export const FileOperationsProvider = ({children}) => {
             return;
         }
 
-        console.log(bufferIds)
 
         if (checkConflicts(bufferIds)) {
             return;
         }
 
         if (isCutMode) {
-            console.log(bufferIds);
             moveObjects(bufferIds, currentPath);
             endCutting();
         }
         if (isCopyMode) {
-            console.log(bufferIds);
             copyObjects(bufferIds, currentPath);
             endCopying();
         }
@@ -437,11 +430,8 @@ export const FileOperationsProvider = ({children}) => {
             endCopying();
         } else {
             const path = conflictedIds[0];
-            console.log(path);
             let sep = path.lastIndexOf("/", path.length - 2);
             const newPath = path.substring(0, sep + 1) + newName;
-            console.log(newName);
-            console.log(newPath);
             moveObjectInternal(selectedIds, newPath);
         }
 
@@ -454,17 +444,14 @@ export const FileOperationsProvider = ({children}) => {
         let activeTasks = tasks.filter((task) => task.status === "pending" || task.status === "progress");
 
         const handleBeforeUnload = (event) => {
-            // Отменяем событие и показываем предупреждение
             if (activeTasks.length > 0) {
                 event.preventDefault();
-                event.returnValue = ''; // Это необходимо для поддержки старых браузеров
+                event.returnValue = '';
             }
         };
 
-        // Добавляем обработчик события beforeunload
         window.addEventListener('beforeunload', handleBeforeUnload);
 
-        // Убираем обработчик при размонтировании компонента
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };

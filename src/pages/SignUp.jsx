@@ -38,7 +38,6 @@ export const SignUp = () => {
 
         const requestData = {username, password, avatarUrl, storagePlan};
 
-        console.log(requestData);
         try {
             setRegistrationLoading(true);
             await sendRegistrationForm(requestData);

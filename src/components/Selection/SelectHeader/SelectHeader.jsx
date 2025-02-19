@@ -17,11 +17,7 @@ import {isMobile} from "react-device-detect";
 import {useStorageNavigation} from "../../../context/Storage/StorageNavigationProvider.jsx";
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 
-const pathToName = (path) => {
-    let sep = path.lastIndexOf("/", path.length - 2);
-    return path.substring(sep + 1);
 
-}
 
 export const SelectHeader = () => {
     const {deleteObject, downloadObjects, pasteObjects} = useStorageOperations();
@@ -101,7 +97,6 @@ export const SelectHeader = () => {
         const last = path.lastIndexOf("/");
 
         const toGo = last === -1 ? "" : path.substring(0, last + 1);
-        console.log(toGo);
 
         loadFolder(toGo);
     }
@@ -115,13 +110,11 @@ export const SelectHeader = () => {
         return anchorElement;
     }, []);
 
-    // Обработчик закрытия контекстного меню
     const handleClose = useCallback((event) => {
         const elementsUnderCursor = document.elementsFromPoint(event.clientX, event.clientY);
         const contextPopper = elementsUnderCursor.find(elem => elem.classList.contains('MuiPopper-root'));
         if (contextPopper) return;
 
-        //todo test experemental
         const tileUnderCursor = elementsUnderCursor.find(elem => elem.classList.contains('selectable'));
         const shouldStartDrag = tileUnderCursor && selectedIds.includes(tileUnderCursor.dataset.id)
 
@@ -167,7 +160,6 @@ export const SelectHeader = () => {
         setAnchorEl2(anchorElement);
     }, [selectedIds, isCutMode, isCopyMode, createAnchorElement]);
 
-    // Добавление и удаление обработчиков событий
     useEffect(() => {
         if (!isMob) {
             //todo test experemental mousedown

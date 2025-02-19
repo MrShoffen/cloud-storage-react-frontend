@@ -16,7 +16,7 @@ export const FileSelection = ({
                               }) => {
     const isMob = isMobile;
 
-    const {moveObjects, deleteObject, } = useStorageOperations();
+    const {moveObjects,  } = useStorageOperations();
     const {isSearchMode} = useStorageNavigation();
 
     const {isSelectionMode, setSelectionMode, isCopyMode, isCutMode,} = useStorageSelection();
@@ -186,7 +186,7 @@ export const FileSelection = ({
                             setShowIcon(true);
                             const x = e.events[0].clientX;
                             const y = e.events[0].clientY;
-                            const objs = e.events.map(e => e.target.dataset.id);
+                            e.events.map(e => e.target.dataset.id);
                             setIconCoord({x: x, y: y});
 
                         }}

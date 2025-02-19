@@ -54,7 +54,7 @@ export default function SecurityModal({open, onClose}) {
         setConfirmPassword('')
     };
 
-    const navigate = useNavigate();
+    useNavigate();
 
 
     const handlePasswordClick = () => {

@@ -14,7 +14,7 @@ export default function FastLogin() {
     const {login, auth} = useAuthContext();
 
 
-    const [loginInProgress, setLoginInProgress] = useState(false);
+    const [loginInProgress] = useState(false);
     const [registrationInProgress, setRegistrationInProgress] = useState(true);
 
     const [image, setImage] = useState("");

@@ -16,8 +16,6 @@ import {FileMenu} from "../FileBrowserHeader/FileMenu/FileMenu.jsx";
 export const SearchBrowserHeader = () => {
 
     const {
-        isRootFolder,
-        goToPrevFolder,
         currentFolder,
         isSearchMode,
         searchName,
@@ -35,7 +33,7 @@ export const SearchBrowserHeader = () => {
     } = useStorageSelection();
 
 
-    const {pasteObjects, deleteObject} = useStorageOperations();
+    const {pasteObjects} = useStorageOperations();
 
 
     function handleEndSearch() {
@@ -51,13 +49,8 @@ export const SearchBrowserHeader = () => {
         setAnchorEl(event.currentTarget);
     }
 
-    const [anchorElFolder, setAnchorElFolder] = useState(null);
-    const handleCloseFolderMenu = () => {
-        setAnchorElFolder(null);
-    }
-    const handleOpenFolderMenu = (event) => {
-        setAnchorElFolder(event.currentTarget);
-    }
+
+
 
     const scrollBoxRef = useRef(null);
 
