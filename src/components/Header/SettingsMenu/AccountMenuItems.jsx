@@ -16,7 +16,7 @@ export const accountMenuItems = (openProfileModal, openSecurityModal) => {
             await sendLogout();
             logout();
             setTimeout(() => {
-                navigate("/cloud-storage/login");
+                navigate("/login");
                 showInfo("Выход успешно выполнен", 4000);
             }, 400);
         } catch (error) {
@@ -39,7 +39,7 @@ export const accountMenuItems = (openProfileModal, openSecurityModal) => {
                 Настройки безопасности
             </MenuItem>
             <Divider/>
-            <MenuItem onClick={() =>navigate("/cloud-storage/help")}>
+            <MenuItem onClick={() =>navigate("/help")}>
                 <ListItemIcon>
                     <Help fontSize="small"/>
                 </ListItemIcon>

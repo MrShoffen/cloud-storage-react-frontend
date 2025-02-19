@@ -41,7 +41,7 @@ export const SignUp = () => {
         try {
             setRegistrationLoading(true);
             await sendRegistrationForm(requestData);
-            navigate("/cloud-storage/login");
+            navigate("/login");
             showSuccess("Регистрация успешно выполнена", 5000);
         } catch (error) {
             switch (true) {
@@ -177,7 +177,7 @@ export const SignUp = () => {
                                     }}>
                             Уже зарегистрированы?{' '}
                             <Link sx={{color: '#1976d2', cursor: 'pointer'}}
-                                  onClick={() => navigate("/cloud-storage/login")}>
+                                  onClick={() => navigate("/login")}>
                                 Войти
                             </Link>
                         </Typography>

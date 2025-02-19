@@ -7,7 +7,7 @@ const AvailableAfterLoginRoute = ({children}) => {
 
     return auth.isAuthenticated
         ? children
-        : <Navigate to="/cloud-storage/login"/>;
+        : <Navigate to="/login"/>;
 
 };
 

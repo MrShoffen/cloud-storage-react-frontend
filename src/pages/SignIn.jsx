@@ -121,7 +121,7 @@ export const SignIn = () => {
                                     }}>
                             Еще нет аккаунта?{' '}
                             <Link sx={{color: '#1976d2', cursor: 'pointer'}}
-                                  onClick={() => navigate("/cloud-storage/registration")}>
+                                  onClick={() => navigate("/registration")}>
                                 Регистрация
                             </Link>
                         </Typography>

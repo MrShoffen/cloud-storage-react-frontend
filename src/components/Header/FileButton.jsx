@@ -9,7 +9,7 @@ export const FileButton = () => {
     return (
         <Button
 
-            onClick={() => navigate('/cloud-storage/files')}
+            onClick={() => navigate('/files')}
             sx={{
                 display: {xs: 'none', sm: "flex"},
                 minWidth: 40,

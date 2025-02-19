@@ -11,14 +11,14 @@ export const authenticationMenuItems = () => {
     return (
         <>
             <MenuItem onClick={() => {
-                navigate("/cloud-storage/login");
+                navigate("/login");
             }}>
                 <ListItemIcon>
                     <LoginIcon fontSize="small"/>
                 </ListItemIcon> Вход
             </MenuItem>
             <MenuItem onClick={() => {
-                navigate("/cloud-storage/registration");
+                navigate("/registration");
             }}>
                 <ListItemIcon>
                     <PersonAddIcon fontSize="small"/>
@@ -26,7 +26,7 @@ export const authenticationMenuItems = () => {
                 Регистрация
             </MenuItem>
             <Divider/>
-            <MenuItem onClick={() =>navigate("/cloud-storage/help")}>
+            <MenuItem onClick={() =>navigate("/help")}>
 
                 <ListItemIcon>
                     <Help fontSize="small"/>

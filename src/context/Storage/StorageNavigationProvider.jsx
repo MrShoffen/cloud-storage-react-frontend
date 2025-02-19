@@ -59,7 +59,7 @@ export const StorageNavigationProvider = ({children}) => {
         let content = await sendGetFolderContent(fullPath);
         setFolderContent(content);
 
-        window.history.pushState(null, "", '/cloud-storage/files/' + fullPath);
+        window.history.pushState(null, "", '/files/' + fullPath);
     }
 
     const loadFolder = async (url = "") => {
@@ -68,7 +68,7 @@ export const StorageNavigationProvider = ({children}) => {
         let content = await sendGetFolderContent(url);
         setFolderContent(content);
 
-        window.history.pushState(null, "", '/cloud-storage/files/' + url);
+        window.history.pushState(null, "", '/files/' + url);
 
         if (url === "") {
             setFolderContentLoading(false);

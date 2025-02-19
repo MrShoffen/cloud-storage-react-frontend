@@ -8,7 +8,7 @@ export const FilePageButton = () => {
     return(
         <Button color="secondary"
              variant="contained"
-             onClick={() => navigate("/cloud-storage/files")}
+             onClick={() => navigate("/files")}
         sx={{
             position: 'fixed',
             display: {xs: 'flex', sm: "none"},

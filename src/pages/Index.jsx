@@ -39,7 +39,7 @@ export default function Index() {
                 <Box >
                     <Typography  variant="body1" className="col-lg-8 themed-grid-col text-center">
                         Подробнее с функционалом можно познакомиться на странице
-                        <Typography fontWeight="bold" onClick={() => navigate("/cloud-storage/help")}
+                        <Typography fontWeight="bold" onClick={() => navigate("/help")}
                         sx={{
                             cursor: "pointer",
                             color: 'info.main',

@@ -49,7 +49,7 @@ export const AuthProvider = ({children}) => {
             } catch (error) {
                 logout();
                 setTimeout(() => {
-                    navigate("/cloud-storage/login");
+                    navigate("/login");
                     showError("Session is expired! Please login again", 4000)
                 }, 300)
             }

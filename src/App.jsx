@@ -20,7 +20,7 @@ function App() {
         <BrowserRouter>
             <GlobalProvider>
                 <Routes>
-                    <Route path="cloud-storage" element={<BaseLayout/>}>
+                    <Route element={<BaseLayout/>}>
                         <Route index element={<Index/>}/>
 
                         <Route path="*" element={<ErrorPage />}/>

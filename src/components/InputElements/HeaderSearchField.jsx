@@ -34,7 +34,7 @@ export const HeaderSearchField = () => {
         if (findList.length > 0) {
             setSearchName(searchText.trim());
             setSearchedContent(findList);
-            navigate("/cloud-storage/files");
+            navigate("/files");
         } else {
             showInfo("По вашему запросу ничего не найдено", 3000);
         }

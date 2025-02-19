@@ -33,7 +33,7 @@ export default function Files() {
 
 
     const loadFolderFromPath = () => {
-        let extracted = location.pathname.replace(/^\/cloud-storage\/files/, '');
+        let extracted = location.pathname.replace(/^\/files/, '');
         extracted = extracted.replace('/', '');
         let decodedUrl = decodeURIComponent(extracted);
         loadFolder(decodedUrl);
@@ -53,7 +53,7 @@ export default function Files() {
     useEffect(() => {
         if ((!folderContent || folderContent.length === 0) && !folderContentLoading && !isRootFolder) {
             setTimeout(() =>
-                    navigate(("/cloud-storage/files/"))
+                    navigate(("/files/"))
                 , 500)
         }
     }, [folderContent]);

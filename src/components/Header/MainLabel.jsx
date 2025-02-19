@@ -19,7 +19,7 @@ export default function MainLabel() {
                 }
             }}
             onClick={() => {
-                navigate("/cloud-storage/");
+                navigate("/");
             }}
         >
             <Box>
